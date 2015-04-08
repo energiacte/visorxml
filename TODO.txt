@@ -1,0 +1,57 @@
+TODO del VisorXML
+=================
+
+[x] Localización: uso de comas para separar decimales en informe XML
+
+  - | replace('.',',')
+  - Flask-Babel
+
+    - babel.numbers.format_number(number, locale='es_ES')
+    - babel.numbers.format_decimal(number, locale='es_ES')
+
+  - locale
+
+    >>> locale.setlocale(locale.LC_ALL, "")
+    'English_United States.1252'
+    >>> locale.format('%d', 12345, True)
+    '12,345'
+
+[x] Hacer imagen de escala con número incluido
+
+- Meter imágenes y planos en ejemplo terciario
+
+- Comprobaciones básicas: que haya algo en nombre, provincia, ccaa, etc
+
+- Imprimir informe en PDF:
+
+  - http://pythonhosted.org/Flask-WeasyPrint/
+  - emitir informe en PDF
+
+- Zonas restringidas de gestión:
+
+  - http://pythonhosted.org/Flask-User/
+  - archivos subidos: ver registro, borrar, etc
+
+- Usar base de datos para guardar registro:
+
+  - http://pythonhosted.org/Flask-SQLAlchemy/
+  - sustituir registro de archivos subidos con BBDD SQLite
+
+- Permitir edición online del informe
+
+  - Flask-PageDown / Markdown / Bleach
+
+- Informe distinto al de certificación
+
+  - Tartas por servicios
+  - Consumos por vectores y servicios...
+
+- Comparador de soluciones
+
+Pensar
+======
+
+- Elementos adiabáticos V/H, ParticionInterior V/H
+- Perfiles de usuario
+
+

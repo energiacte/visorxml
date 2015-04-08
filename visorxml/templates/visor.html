@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Informes de eficiencia energética en XML - Visor de informes{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>Visor de informes en formato XML</h1>
+</div>
+<div class="page">
+
+  {% if informe and session['filename'] %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Visor de informe de resultados en XML</div>
+    <div class="panel-body">
+      <p>Informe activo: <b>{{ session['filename'] }}</b></p>
+      <p>Estado de validación: {% if session['validationerrors'] %}SE HAN ENCONTRADO ERRORES {% else %}SIN ERRORES DE VALIDACIÓN{% endif %}</p>
+    </div>
+  </div>
+
+  {% if not session['validationerrors'] %}
+
+  {% if 'text' in modo %}
+  <pre>{{informe.astext}}</pre>
+  {% endif %}
+  {% if 'html' in modo %}
+  {{ informe.ashtml|safe }}
+  {% endif %}
+  {% if 'raw' in modo %}
+  <pre>{{ informe.data }}</pre>
+  {% endif %}
+  {% if 'data' in modo %}
+  {% include 'informe.html' %}
+  {% endif %}
+
+  {% else %}
+  <div class="alert alert-danger">
+    <p>El archivo no ha sido validado o contiene errores. Debe validar un informe XML para poder visualizarlo.</p>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="alert alert-danger">
+    <p>Debe  <a href="{{ url_for('validador')}}" class="alert-link">seleccionar un archivo de informe XML y validarlo</a> para proceder a su visualización. </p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

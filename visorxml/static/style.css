@@ -1,0 +1,33 @@
+/* body            { font-family: sans-serif; background: #eee; } */
+/* a, h1, h2       { color: #377ba8; } */
+/* h1, h2          { font-family: 'Georgia', serif; margin: 0; } */
+/* h1              { border-bottom: 2px solid #eee; } */
+/* h2              { font-size: 1.2em; } */
+
+/* .page           { margin: 2em auto; width: 35em; border: 5px solid #ccc; */
+/*                   padding: 0.8em; background: white; } */
+/* .entries        { list-style: none; margin: 0; padding: 0; } */
+/* .entries li     { margin: 0.8em 1.2em; } */
+/* .entries li h2  { margin-left: -1em; } */
+/* .add-entry      { font-size: 0.9em; border-bottom: 1px solid #ccc; } */
+/* .add-entry dl   { font-weight: bold; } */
+/* .metanav        { text-align: right; font-size: 0.8em; padding: 0.3em; */
+/*                   margin-bottom: 1em; background: #fafafa; } */
+/* .flash          { background: #cee5F5; padding: 0.5em; */
+/*                   border: 1px solid #aacbe2; } */
+/* .error          { background: #f0d6d6; padding: 0.5em; } */
+
+.top-buffer { margin-top:20px; }
+
+/* Informe */
+
+.informe h5 {font-weight: bold}
+.informe table {border-collapse: separate; width: 100%; border-width:0px}
+.informe table, .informe table th, .informe table tr, .informe table tr td {border: 1px solid grey;}
+.informe table td.info {font-size:12px; font-style: italic; text-align:center}
+.informe td {padding: 0.1em 0.5em;}
+.informe .title {background-color: #fde9d9; text-align:center; font-weight:bold}
+.informe .num {text-align: right}
+.informe table.top .title {text-align:left;}
+.informe .total {background-color: #fbd4b4; font-weight:bold}
+.informe .calc {color:green;} /* Elementos calculados */

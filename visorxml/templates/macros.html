@@ -1,0 +1,46 @@
+{# Macros con utilidades varias #}
+
+{% macro shownum(value) -%}
+  {% if value is number %}{{ '%0.2f'|format(value)|replace('.', ',')  }}{% else %}-{% endif %}
+{%- endmacro %}
+
+{% macro showint(value) -%}
+  {% if value is number %}{{ '%i'|format(value) }}{% else %}-{% endif %}
+{%- endmacro %}
+
+{% macro showcalif(value) -%}
+  {% if value %}{{ value }}{% else %}-{% endif %}
+{%- endmacro %}
+
+{% macro showdif(valueorig, valuedest) -%}
+  {% if valueorig is number and valuedest is number %}
+    {% set res1 = valueorig - valuedest %}
+    {% set res2 = 100.0 * res1 / valueorig %}
+    {{- '%0.2f (%0.2f%%)'|format(res1, res2)|replace('.', ',') -}}
+  {% else %}-{% endif %}
+{%- endmacro %}
+
+{% macro showescala(value, calif) -%}
+<svg width="175" height="120">
+  <g id="layer1" stroke="none">
+    {% set ypos = 11 + 17 * {'A':0, 'B':1, 'C':2, 'D':3, 'E':4, 'F':5, 'G':6}[calif] %}
+    <path d="m 174,{{ ypos - 11 }} -53,0 -11,7 11,7 53,0 z" fill="#black" />
+    <text x="170" y="{{ ypos }}" id="calif"
+         style="font-size:12px;font-weight:bold;text-align:end;text-anchor:end;fill:white">{{ shownum(value) }} {{ calif }}</text>
+    <path d="m 0,0 57,0 7,7 -7,7 -57,0 z" fill="#00a651" />
+    <path d="m 0,17 64,0 7,7 -7,7 -64,0 z" fill="#4cb847" />
+    <path d="m 0,34 71,0 7,7 -7,7 -71,0 z" fill="#bfd630" />
+    <path d="m 0,51 78,0 7,7 -7,7 -78,0 z" fill="#fff100" />
+    <path d="m 0,68 85,0 7,7 -7,7 -85,0 z" fill="#feb811" />
+    <path d="m 0,85 92,0 7,7 -7,7 -92,0 z" fill="#f36f23" />
+    <path d="m 0,102 99,0 7,7 -7,7 -99,0 z" fill="#ee1c25" />
+    <text x="45" y="11" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">A</text>
+    <text x="52" y="28" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">B</text>
+    <text x="59" y="45" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">C</text>
+    <text x="66" y="62" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">D</text>
+    <text x="73" y="79" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">E</text>
+    <text x="80" y="96" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">F</text>
+    <text x="87" y="113" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">G</text>
+  </g>
+</svg>
+{%- endmacro %}
