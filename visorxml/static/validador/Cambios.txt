@@ -27,8 +27,29 @@
 12-03-2015
 ----------
 
-- Se elimina la necesidad de definir valores para calefacción en algunos elementos
-  debido a situaciones producidas en zonas alfa.
+- Se elimina la obligatoriedad de definir valores para calefacción (zonas alfa).
 - Se elimina la necesidad de definir valores para todos los servicios, ya que en el consumo
   de energía final pueden no tener sentido.
 - Se elimina la necesidad de definir un generador de calefacción (zona alfa)
+
+08-04-2015
+----------
+
+- Nuevo elemento <Telefono> (opcional)
+- Se permite la codificación de imágenes JPEG en Base64 (URI: data:image/jpeg;base64,datos_archivo_jpeg_base64)
+- Tamaño máximo recomendado de las imágenes 800x600px (3" x 2" a 300ppp)
+- Nuevo elemento <DemandaDiariaACS> (obligatorio)
+- Nuevos tipos de cerramientos opacos: ParticionInteriorVertical, ParticionInteriorHorizontal, Adiabatico
+- Nuevo elemento <Orientacion> para Cerramientos opacos y huecos
+- Nueva sección <PuentesTermicos> (opcional)
+- Nuevas etiquetas <RendimientoEstacional>, <RendimientoEstacionalCalor> y <RendimientoEstacionalFrio> para los sistemas
+- Nueva sección <EnergiasRenovables>
+- Nuevo elemento <Nombre> (opcional) de las medidas de mejora
+- Nueva sección <EnergiaFinal> de las medidas de mejora
+- Nueva etiqueta <CosteEstimado> (opcional) de las medidas de mejora
+- Nueva etiqueta <OtrosDatos> (opcional) de las medidas de mejora
+- Nuevas secciones <EscalaGlobal>, <EscalaCalefaccion> y <EscalaRefrigeracion> para las secciones de calificación
+- Nuevas etiquetas <ConsumoElectrico>, <ConsumoOtros>, <TotalConsumoElectrico>, <TotalConsumoOtros> en sección de emisiones
+
+TODO: Permitir en visorxml añadir puentes térmicos, teléfono y usar jpeg
+      Faltan meter las cosas que no tenemos del informe

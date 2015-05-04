@@ -11,6 +11,7 @@
 		<Provincia>Málaga</Provincia>
 		<ComunidadAutonoma>Andalucía</ComunidadAutonoma>
 		<Email>pedro.p.l@ppla.info</Email>
+        <Telefono>+34993947038</Telefono>
 		<Titulacion>Arquitecto</Titulacion>
 		<Fecha>12/03/2015</Fecha>
 	</DatosDelCertificador>
@@ -47,6 +48,7 @@
 		<DensidadFuentesInternas>5.77</DensidadFuentesInternas>
 		<VentilacionUsoResidencial>0.63</VentilacionUsoResidencial>
 		<VentilacionTotal>0.63</VentilacionTotal>
+        <DemandaDiariaACS>150</DemandaDiariaACS>
 	</DatosGeneralesyGeometria>
 	<DatosEnvolventeTermica>
 		<CerramientosOpacos>
@@ -375,6 +377,7 @@
 			<Tipo>Caldera eléctrica o de combustible</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
+			<RendimientoEstacional>0.61</RendimientoEstacional>
 			<VectorEnergetico>ElectricidadPeninsular</VectorEnergetico>
 			<ModoDeObtencion>PorDefecto</ModoDeObtencion>
 		</Generador>
@@ -385,6 +388,7 @@
 			<Tipo>XXX - Caldera eléctrica o de combustible</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
+			<RendimientoEstacional>0.71</RendimientoEstacional>
 			<VectorEnergetico>ElectricidadPeninsular</VectorEnergetico>
 			<ModoDeObtencion>Usuario</ModoDeObtencion>
 		</Generador>
@@ -395,6 +399,7 @@
 			<Tipo>Caldera eléctrica o de combustible</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
+			<RendimientoEstacional>0.87</RendimientoEstacional>
 			<VectorEnergetico>ElectricidadPeninsular</VectorEnergetico>
 			<ModoDeObtencion>PorDefecto</ModoDeObtencion>
 		</Instalacion>
@@ -475,6 +480,10 @@
 		<Calefaccion>2.71</Calefaccion>
 		<Refrigeracion>4.19</Refrigeracion>
 		<ACS>1.58</ACS>
+        <ConsumoElectrico>5.35</ConsumoElectrico>
+        <ConsumoOtros>2.12</ConsumoOtros>
+        <TotalConsumoElectrico>5350</TotalConsumoElectrico>
+        <TotalConsumoOtros>2120</TotalConsumoOtros>
 	</EmisionesCO2>
 	<Calificacion>
 		<EmisionesCO2>
@@ -482,16 +491,48 @@
 			<Calefaccion>A</Calefaccion>
 			<Refrigeracion>B</Refrigeracion>
 			<ACS>B</ACS>
+            <EscalaGlobal>
+				<A>12.10</A>
+                <B>23.35</B>
+                <C>45.56</C>
+                <D>67.89</D>
+                <E>96.12</E>
+                <F>120.23</F>
+            </EscalaGlobal>
 		</EmisionesCO2>
 		<Demanda>
 			<Calefaccion>A</Calefaccion>
 			<Refrigeracion>A</Refrigeracion>
+            <EscalaCalefaccion>
+				<A>2.10</A>
+                <B>13.35</B>
+                <C>25.56</C>
+                <D>47.89</D>
+                <E>66.12</E>
+                <F>82.23</F>
+			</EscalaCalefaccion>
+			<EscalaRefrigeracion>
+				<A>2.00</A>
+                <B>5.35</B>
+                <C>8.56</C>
+                <D>14.89</D>
+                <E>23.12</E>
+                <F>35.23</F>
+			</EscalaRefrigeracion>
 		</Demanda>
 		<EnergiaPrimariaNoRenovable>
 			<Global>B</Global>
 			<Calefaccion>A</Calefaccion>
 			<Refrigeracion>B</Refrigeracion>
 			<ACS>B</ACS>
+           <EscalaGlobal>
+				<A>12.10</A>
+                <B>23.35</B>
+                <C>45.56</C>
+                <D>67.89</D>
+                <E>96.12</E>
+                <F>120.23</F>
+            </EscalaGlobal>
 		</EnergiaPrimariaNoRenovable>
 	</Calificacion>
 	<Demanda>

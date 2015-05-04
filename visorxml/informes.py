@@ -44,12 +44,13 @@ TAGS = {
         'CalificacionEnergiaPrimariaNoRenovable',
         'CalificacionEmisionesCO2', #Calificacion
         'Sistema', #SistemasSecundariosCalefaccionRefrigeracion
-        'Visita'), #PruebasComprobacionesInspecciones
+        'Visita', #PruebasComprobacionesInspecciones
+        'EscalaGlobal', 'EscalaCalefaccion', 'EscalaRefrigeracion'), # v2
     'INT': (
         'NumeroDePlantasBajoRasante',
         'PorcentajeSuperficieHabitableCalefactada',
         'PorcentajeSuperficieHabitableRefrigerada',
-        'N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'), # DatosGenerales
+        'N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'), # DatosGenerales # XXX: E es también un float!
     'FLOAT': (
         'SuperficieHabitable', 'VolumenEspacioHabitable', 'Compacidad',
         'DensidadFuentesInternas', 'VentilacionUsoResidencial',
@@ -65,13 +66,16 @@ TAGS = {
         'Conjunta', 'Calefaccion08', 'Refrigeracion08', 'Conjunta08',
         'Ahorro08', 'GlobalDiferenciaSituacionInicial', #Demanda
         'LimiteCalefaccionVivienda', 'LimiteRefrigeracionVivienda',
-        'LimiteAhorroOtrosUsos', 'LimiteViviendaGlobalEPNR'), #Exigencias
+        'LimiteAhorroOtrosUsos', 'LimiteViviendaGlobalEPNR', #Exigencias
+        'DemandaDiariaACS', 'RendimientoEstacional',
+        'ConsumoElectrico', 'ConsumoOtros',
+        'TotalConsumoElectrico', 'TotalConsumoOtros', 'A', 'B', 'C', 'D', 'E', 'F'), #v2 #XXX: E es también un int
     'FLOAT_OR_TEXT': (
         'Global', 'Calefaccion', 'Refrigeracion', 'ACS', 'Iluminacion'),
     'TEXT': (
         'NombreyApellidos', 'NIF', 'RazonSocial', 'NIFEntidad',
         'Domicilio', 'Municipio', 'CodigoPostal', 'Provincia',
-        'ComunidadAutonoma', 'Email', 'Telefono', 'Titulacion', 'Fecha', #Certificador
+        'ComunidadAutonoma', 'Email', 'Titulacion', 'Fecha', #Certificador
         'NombreDelEdificio', 'Direccion', 'ZonaClimatica', 'AnoConstruccion',
         'ReferenciaCatastral', 'TipoDeEdificio', 'NormativaVigente',
         'Procedimiento', 'AlcanceInformacionXML', #IdentificacionEdificio
@@ -83,7 +87,8 @@ TAGS = {
         'EnfriamientoGratuito', 'TipoControl', 'ServicioAsociado', #Sistema
         'NivelDeAcondicionamiento', 'PerfilDeUso', #Espacio
         'Iluminacion', #EmisionesCO2
-        'Descripcion', 'FechaVisita', 'Datos'), #Medida
+        'Descripcion', 'FechaVisita', 'Datos', #Medida
+        'Telefono'), #v2
     'IMG': ('Imagen', 'Plano'),
 }
 

@@ -11,6 +11,7 @@
 		<Provincia>Madrid</Provincia>
 		<ComunidadAutonoma>Comunidad de Madrid</ComunidadAutonoma>
 		<Email>joseperez@perez.es</Email>
+        <Telefono>+34993947038</Telefono>
 		<Titulacion>Arquitecto</Titulacion>
 		<Fecha>17/01/2014</Fecha>
 	</DatosDelCertificador>
@@ -52,6 +53,7 @@
 		<DensidadFuentesInternas>9.85</DensidadFuentesInternas>
         <VentilacionUsoResidencial>0.65</VentilacionUsoResidencial>
         <VentilacionTotal>0.85</VentilacionTotal>
+        <DemandaDiariaACS>150</DemandaDiariaACS>
 	</DatosGeneralesyGeometria>
 	<DatosEnvolventeTermica>
 		<CerramientosOpacos>
@@ -141,6 +143,7 @@
 				<Tipo>Bomba de calor 4 tubos</Tipo>
 				<PotenciaNominal>1</PotenciaNominal>
 				<RendimientoNominal>4.50</RendimientoNominal>
+				<RendimientoEstacional>3.21</RendimientoEstacional>
 				<VectorEnergetico>ElectricidadPeninsular</VectorEnergetico>
 				<ModoDeObtencion>Usuario</ModoDeObtencion>
 			</Generador>
@@ -148,7 +151,8 @@
 				<Nombre>Caldera001</Nombre>
 				<Tipo>Caldera calefacción combustión estándar</Tipo>
 				<PotenciaNominal>1.60</PotenciaNominal>
-				<RendimientoNominal>0.00</RendimientoNominal>
+				<RendimientoNominal>0.90</RendimientoNominal>
+				<RendimientoEstacional>0.41</RendimientoEstacional>
 				<VectorEnergetico>GasNatural</VectorEnergetico>
 				<ModoDeObtencion>Usuario</ModoDeObtencion>
 			</Generador>
@@ -159,6 +163,7 @@
 				<Tipo>Bomba de calor 4 tubos</Tipo>
 				<PotenciaNominal>3</PotenciaNominal>
 				<RendimientoNominal>4.50</RendimientoNominal>
+				<RendimientoEstacional>3.21</RendimientoEstacional>
 				<VectorEnergetico>ElectricidadPeninsular</VectorEnergetico>
 				<ModoDeObtencion>Usuario</ModoDeObtencion>
 			</Generador>
@@ -169,6 +174,7 @@
 				<Tipo>Caldera Estándar</Tipo>
 				<PotenciaNominal>3.25</PotenciaNominal>
 				<RendimientoNominal>0.93</RendimientoNominal>
+				<RendimientoEstacional>0.21</RendimientoEstacional>
 				<VectorEnergetico>GasNatural</VectorEnergetico>
 				<ModoDeObtencion>Usuario</ModoDeObtencion>
             </Instalacion>
@@ -182,6 +188,8 @@
 				<PotenciaFrio>60.10</PotenciaFrio>
 				<RendimientoCalor>0.80</RendimientoCalor>
 				<RendimientoFrio>3.50</RendimientoFrio>
+				<RendimientoEstacionalCalor>0.63</RendimientoEstacionalCalor>
+				<RendimientoEstacionalFrio>2.81</RendimientoEstacionalFrio>
 				<EnfriamientoEvaporativo>No</EnfriamientoEvaporativo>
 				<RecuperacionEnergia>No</RecuperacionEnergia>
 				<EnfriamientoGratuito>Si</EnfriamientoGratuito>
@@ -386,6 +394,10 @@
 			<Refrigeracion>58.50</Refrigeracion>
 			<ACS>15.54</ACS>
 			<Iluminacion>8.50</Iluminacion>
+            <ConsumoElectrico>12.01</ConsumoElectrico>
+            <ConsumoOtros>3.10</ConsumoOtros>
+            <TotalConsumoElectrico>12010</TotalConsumoElectrico>
+            <TotalConsumoOtros>3100</TotalConsumoOtros>
 	</EmisionesCO2>
 	<Calificacion>
 		<EmisionesCO2>
@@ -394,10 +406,34 @@
 			<Refrigeracion>A</Refrigeracion>
 			<ACS>G</ACS>
 			<Iluminacion>A</Iluminacion>
+            <EscalaGlobal>
+				<A>12.10</A>
+                <B>23.35</B>
+                <C>45.56</C>
+                <D>67.89</D>
+                <E>96.12</E>
+                <F>120.23</F>
+            </EscalaGlobal>
 		</EmisionesCO2>
 		<Demanda>
 			<Calefaccion>G</Calefaccion>
 			<Refrigeracion>C</Refrigeracion>
+            <EscalaCalefaccion>
+				<A>2.10</A>
+                <B>13.35</B>
+                <C>25.56</C>
+                <D>47.89</D>
+                <E>66.12</E>
+                <F>82.23</F>
+			</EscalaCalefaccion>
+			<EscalaRefrigeracion>
+				<A>2.00</A>
+                <B>5.35</B>
+                <C>8.56</C>
+                <D>14.89</D>
+                <E>23.12</E>
+                <F>35.23</F>
+			</EscalaRefrigeracion>
 		</Demanda>
 		<EnergiaPrimariaNoRenovable>
 			<Global>D</Global>
@@ -405,11 +441,22 @@
 			<Refrigeracion>A</Refrigeracion>
 			<ACS>A</ACS>
 			<Iluminacion>A</Iluminacion>
+            <EscalaGlobal>
+				<A>12.10</A>
+                <B>23.35</B>
+                <C>45.56</C>
+                <D>67.89</D>
+                <E>96.12</E>
+                <F>120.23</F>
+            </EscalaGlobal>
 		</EnergiaPrimariaNoRenovable>
 	</Calificacion>
 	<MedidasDeMejora>
        <Medida>
-			<Descripcion>Mejora de aislamiento fachada + cambio a caldera de condensación</Descripcion>
+           <Nombre>Aislamiento de fachada y cambio de caldera</Nombre>
+           <Descripcion>Mejora de aislamiento fachada + cambio a caldera de condensación</Descripcion>
+           <CosteEstimado>23.456€(PEM)</CosteEstimado>
+           <OtrosDatos>No se ha considerado el coste de los medios auxiliares (andamios)</OtrosDatos>
 			<Demanda>
 				<Global>183.10</Global>
 				<GlobalDiferenciaSituacionInicial>34.00</GlobalDiferenciaSituacionInicial>
@@ -420,6 +467,14 @@
 				<Calefaccion>D</Calefaccion>
 				<Refrigeracion>D</Refrigeracion>
 			</CalificacionDemanda>
+			<EnergiaFinal>
+				<Global>287.9</Global>
+				<Calefaccion>188.48</Calefaccion>
+				<Refrigeracion>43.56</Refrigeracion>
+				<ACS>10</ACS>
+				<Iluminacion>20.55</Iluminacion>
+			</EnergiaFinal>
+
 			<EnergiaPrimariaNoRenovable>
 				<Global>387.9</Global>
 				<GlobalDiferenciaSituacionInicial>34.00</GlobalDiferenciaSituacionInicial>
