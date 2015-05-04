@@ -7,8 +7,10 @@ VENV:=~/.virtualenvs/visorxml
 SITEDIR:=${VENV}/lib/python2.7/site-packages
 
 run: venv
-	. ${VENV}/bin/activate; \
+	if [ `echo ${VIRTUAL_ENV}|grep visorxml` ]; then echo 'Entorno virtual activo'; else . ${VENV}/bin/activate; fi && \
 	PYTHONPATH=. ./visorxml/runserver.py;
+#	. ${VENV}/bin/activate; \
+#	PYTHONPATH=. ./visorxml/runserver.py;
 
 venv: requirements.txt
 	test -d ${VENV} || virtualenv --no-site-packages ${VENV}
