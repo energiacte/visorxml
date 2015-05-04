@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!--Tipos de datos-->
+<xs:simpleType name="dectype2digits"><xs:restriction base="xs:decimal"><xs:pattern value="\d*(\.\d{1,2})?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="dectype3digits"><xs:restriction base="xs:decimal"><xs:pattern value="\d*(\.\d{1,3})?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="dectype4digits"><xs:restriction base="xs:decimal"><xs:pattern value="\d*(\.\d{1,4})?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeCalificacion"><xs:restriction base="xs:string"><xs:pattern value="([A-G])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeSiNo"><xs:restriction base="xs:string"><xs:pattern value="Si|No"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeModoDeObtencion"><xs:restriction base="xs:string"><xs:pattern value="Usuario|PorDefecto|Estimado"/></xs:restriction></xs:simpleType>
+
+<!--Primer Nivel - Bloques generales -->
+<xs:element name="DatosEnergeticosDelEdificio">
+  <xs:complexType>
+    <xs:all>
+      <xs:element name="DatosDelCertificador" type="DatosDelCertificadorType"/>
+      <xs:element name="IdentificacionEdificio" type="IdentificacionEdificioType"/>
+      <xs:element name="DatosGeneralesyGeometria" type="DatosGeneralesyGeometriaType"/>
+      <xs:element name="DatosEnvolventeTermica" type="DatosEnvolventeTermicaType"/>
+      <xs:element name="InstalacionesTermicas" type="InstalacionesTermicasType"/>
+      <xs:element name="InstalacionesIluminacion" type="InstalacionesIluminacionType" minOccurs="0"/><!--Solo terciario-->
+      <xs:element name="CondicionesFuncionamientoyOcupacion" type="CondicionesFuncionamientoyOcupacionType" minOccurs="0"/><!--Solo terciario-->
+      <xs:element name="Demanda" type="DemandaType"/>
+      <xs:element name="Consumo" type="ConsumoType"/>
+      <xs:element name="EmisionesCO2" type="ValorType"/>
+      <xs:element name="Calificacion" type="CalificacionType"/>
+      <xs:element name="MedidasDeMejora" type="MedidasDeMejoraType" minOccurs="0"/><!--Solo certificación-->
+      <xs:element name="PruebasComprobacionesInspecciones" type="PruebasComprobacionesInspeccionesType" minOccurs="0"/><!--Solo certificación-->
+      <xs:element name="DatosPersonalizados" minOccurs="0"><!--Campo opcional no validado-->
+        <xs:complexType>
+        <xs:sequence>
+            <xs:any processContents="skip" maxOccurs="unbounded"/>
+        </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="version" type="xs:string" use="required" fixed="1.0" />
+  </xs:complexType>
+</xs:element>
+
+<!--Segundo Nivel DatosDelCertificador-->
+<xs:complexType name="DatosDelCertificadorType">
+  <xs:all>
+    <xs:element type="xs:string" name="NombreyApellidos"/><!-- Nombre y apellidos del técnico certificador -->
+    <xs:element type="xs:string" name="NIF"/><!-- NIF o NIE del técnico certificador -->
+    <xs:element type="xs:string" name="RazonSocial" minOccurs="0"/><!--Razón social de la entidad certificadora-->
+    <xs:element type="xs:string" name="NIFEntidad" minOccurs="0"/><!--NIF de la entidad certificadora-->
+    <xs:element type="xs:string" name="Domicilio"/><!-- Dirección postal correspondiente al domicilio del certificador o entidad certificadora  -->
+    <xs:element type="xs:string" name="Municipio"/><!-- Municipio del domicilio -->
+    <xs:element type="xs:string" name="CodigoPostal"/><!-- Código postal del domicilio -->
+    <xs:element type="xs:string" name="Provincia"/><!-- Provincia del domicilio -->
+    <xs:element type="xs:string" name="ComunidadAutonoma"/><!-- Comunidad autónoma del domicilio -->
+    <xs:element type="xs:string" name="Email"/><!-- Correo electrónico de contacto -->
+    <xs:element type="xs:string" name="Titulacion"/><!-- Titulación del certificador -->
+    <xs:element type="xs:string" name="Fecha"/><!-- Fecha de emisión del certificado -->
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel IdentificacionDelEdificio-->
+<xs:complexType name="IdentificacionEdificioType">
+  <xs:all>
+      <xs:element name="NombreDelEdificio" type="xs:string" /><!-- Identificación del edificio -->
+      <xs:element name="Direccion" type="xs:string" /><!-- Dirección postal del edificio -->
+      <xs:element name="Municipio" type="xs:string" /><!-- Municipio correspondiente al edificio -->
+      <xs:element name="CodigoPostal" type="xs:string" /><!-- Código postal correspondiente al edificio -->
+      <xs:element name="Provincia" type="xs:string" /><!-- Provincia de localización del edificio -->
+      <xs:element name="ComunidadAutonoma" type="xs:string" /><!-- Comunidad autónoma de localización del edificio -->
+      <xs:element name="ZonaClimatica" type="xs:string" /><!-- Zona climática en la que se sitúa el edificio -->
+      <xs:element name="AnoConstruccion" type="xs:string" /><!-- Año de construcción del edificio -->
+      <xs:element name="ReferenciaCatastral" type="xs:string" /><!-- Referencia o referencias catastrales, separadas por comas -->
+      <xs:element name="TipoDeEdificio"><!-- Tipo de edificio o parte del edificio certificado -->
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+            <xs:enumeration value="ViviendaUnifamiliar"/>
+            <xs:enumeration value="BloqueDeViviendaCompleto"/>
+            <xs:enumeration value="ViviendaIndvidualEnBloque"/>
+            <xs:enumeration value="EdificioUsoTerciario"/>
+            <xs:enumeration value="LocalUsoTerciario"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NormativaVigente" type="xs:string" /><!-- Normativa vigente en el momento de construcción o rehabilitación del edificio o local -->
+    <xs:element name="Procedimiento" type="xs:string" /><!-- Procedimiento aplicado para la calificación energética y verificación del cumplimiento del DB-HE -->
+    <xs:element name="AlcanceInformacionXML"><!-- Alcance de la información incluida en este XML. Indica si la información ha sido generada con el objetivo de la verificación del DB-HE y/o certificación energética -->
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CertificacionExistente"/>
+          <xs:enumeration value="VerificacionExistente"/>
+          <xs:enumeration value="CertificacionVerificacionExistente"/>
+          <xs:enumeration value="CertificacionNuevo"/>
+          <xs:enumeration value="VerificacionNuevo"/>
+          <xs:enumeration value="CertificacionVerificacionNuevo"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel DatosGeneralesyGeometria-->
+<xs:complexType name="DatosGeneralesyGeometriaType">
+  <xs:all>
+    <xs:element name="NumeroDePlantasSobreRasante" type="xs:string"/>
+    <xs:element name="NumeroDePlantasBajoRasante" type="xs:integer"/>
+    <xs:element name="SuperficieHabitable" type="dectype2digits"/>
+    <xs:element name="VolumenEspacioHabitable" type="dectype2digits"/>
+    <xs:element name="Compacidad" type="dectype2digits"/>
+    <xs:element name="PorcentajeSuperficieHabitableCalefactada" type="xs:integer"/>
+    <xs:element name="PorcentajeSuperficieHabitableRefrigerada" type="xs:integer"/>
+    <xs:element name="PorcentajeSuperficieAcristalada">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="N" type="xs:integer" minOccurs="0"/>
+            <xs:element name="NE" type="xs:integer" minOccurs="0"/>
+            <xs:element name="E" type="xs:integer" minOccurs="0"/>
+            <xs:element name="SE" type="xs:integer" minOccurs="0"/>
+            <xs:element name="S" type="xs:integer" minOccurs="0"/>
+            <xs:element name="SO" type="xs:integer" minOccurs="0"/>
+            <xs:element name="O" type="xs:integer" minOccurs="0"/>
+            <xs:element name="NO" type="xs:integer" minOccurs="0"/>
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Imagen" type="xs:string" minOccurs="0"/><!--Campo opcional-->
+    <xs:element name="Plano" type="xs:string" minOccurs="0"/><!--Campo opcional-->
+    <xs:element name="DensidadFuentesInternas" type="dectype2digits" minOccurs="0"/><!--En vivienda es constante-->
+    <xs:element name="VentilacionUsoResidencial" type="dectype2digits" minOccurs="0"/><!--Solo uso vivienda-->
+    <xs:element name="VentilacionTotal" type="dectype2digits"/>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel DatosEnvolventeTermica-->
+<xs:complexType name="DatosEnvolventeTermicaType">
+    <xs:all>
+
+    <xs:element name="CerramientosOpacos">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Elemento" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Nombre" type="xs:string"/>
+                        <xs:element name="Tipo">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="Fachada|Cubierta|Suelo"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="Superficie" type="dectype2digits"/>
+                        <xs:element name="Transmitancia" type="dectype2digits"/>
+                        <xs:element name="ModoDeObtencion" type="stringtypeModoDeObtencion"/>
+                        <xs:element name="Capas" minOccurs="0">
+                            <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Capa" maxOccurs="unbounded" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Material" type="xs:string"/>
+                                            <xs:element name="Espesor" type="dectype4digits"/>
+                                            <xs:choice minOccurs="1" maxOccurs="1">
+                                            <xs:element name="ConductividadTermica" type="dectype3digits"/>
+                                            <xs:element name="ResistenciaTermica" type="dectype2digits"/>
+                                            </xs:choice>
+                                            <xs:element name="Densidad" type="dectype2digits"/>
+                                            <xs:element name="FactorResistenciaVapor" type="dectype2digits"/>
+                                            <xs:element name="CalorEspecifico" type="dectype2digits"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HuecosyLucernarios">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Elemento" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="Nombre" type="xs:string"/>
+                    <xs:element name="Tipo">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="Hueco|Lucernario"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="Superficie" type="dectype2digits"/>
+                    <xs:element name="Transmitancia" type="dectype2digits"/>
+                    <xs:element name="FactorSolar" type="dectype2digits"/>
+                    <xs:element name="ModoDeObtencionTransmitancia" type="stringtypeModoDeObtencion"/>
+                    <xs:element name="ModoDeObtencionFactorSolar" type="stringtypeModoDeObtencion"/>
+                  </xs:all>
+                </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel InstalacionesTermicas-->
+<xs:complexType name="InstalacionesTermicasType">
+  <xs:all>
+      <xs:element name="GeneradoresDeCalefaccion" minOccurs="0">
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Generador" type="ElementoType" maxOccurs="unbounded" />
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GeneradoresDeRefrigeracion" minOccurs="0">
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Generador" type="ElementoType" maxOccurs="unbounded" />
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="InstalacionesACS" minOccurs="0">
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Instalacion" type="ElementoType" maxOccurs="unbounded" />
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="SistemasSecundariosCalefaccionRefrigeracion" minOccurs="0"><!--Solo terciario-->
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Sistema" maxOccurs="unbounded">
+                <xs:complexType>
+                <xs:all>
+                    <xs:element name="Nombre" type="xs:string"/>
+                    <xs:element name="Tipo" type="xs:string"/>
+                    <xs:element name="ZonaAsociada" type="xs:string"/>
+                    <xs:element name="PotenciaCalor" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="PotenciaFrio" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="RendimientoCalor" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="RendimientoFrio" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="EnfriamientoEvaporativo" type="stringtypeSiNo" minOccurs="0"/>
+                    <xs:element name="RecuperacionEnergia" type="stringtypeSiNo" minOccurs="0"/>
+                    <xs:element name="EnfriamientoGratuito" type="stringtypeSiNo" minOccurs="0"/>
+                    <xs:element name="TipoControl" type="xs:string" minOccurs="0"/>
+                </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TorresyRefrigeracion" minOccurs="0"><!--Solo terciario-->
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Sistema" maxOccurs="unbounded">
+                <xs:complexType>
+                <xs:all>
+                    <xs:element name="Nombre" type="xs:string"/>
+                    <xs:element name="Tipo" type="xs:string"/>
+                    <xs:element name="ServicioAsociado" type="xs:string"/>
+                    <xs:element name="ConsumoDeEnergia" type="dectype2digits"/>
+                </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="VentilacionyBombeo" minOccurs="0"><!--Solo terciario-->
+        <xs:complexType>
+        <xs:sequence>
+            <xs:element name="Sistema" maxOccurs="unbounded">
+                <xs:complexType>
+                <xs:all>
+                    <xs:element name="Nombre" type="xs:string"/>
+                    <xs:element name="Tipo" type="xs:string"/>
+                    <xs:element name="ServicioAsociado" type="xs:string"/>
+                    <xs:element name="ConsumoDeEnergia" type="dectype2digits"/>
+                </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel InstalacionesIluminacion-->
+<xs:complexType name="InstalacionesIluminacionType">
+  <xs:sequence>
+    <xs:element name="PotenciaTotalInstalada" type="dectype2digits"/>
+    <xs:element name="Espacio" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Nombre" type="xs:string"/>
+            <xs:element name="PotenciaInstalada" type="dectype2digits"/>
+            <xs:element name="VEEI" type="dectype2digits"/>
+            <xs:element name="IluminanciaMedia" type="dectype2digits"/>
+            <xs:element name="ModoDeObtencion" type="stringtypeModoDeObtencion"/>
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:sequence>
+</xs:complexType>
+
+<!--Segundo Nivel CondicionesFuncionamientoyOcupacion-->
+<xs:complexType name="CondicionesFuncionamientoyOcupacionType">
+  <xs:sequence>
+    <xs:element name="Espacio" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Espacio" type="xs:string"/>
+            <xs:element name="Superficie" type="dectype2digits"/>
+            <xs:element name="NivelDeAcondicionamiento">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="Acondicionado|NoAcondicionado|NoHabitable"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="PerfilDeUso">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="nohabitable"/>
+                        <xs:enumeration value="residencial-24h-baja"/>
+                        <xs:enumeration value="noresidencial-8h-baja"/>
+                        <xs:enumeration value="noresidencial-8h-media"/>
+                        <xs:enumeration value="noresidencial-8h-alta"/>
+                        <xs:enumeration value="noresidencial-12h-baja"/>
+                        <xs:enumeration value="noresidencial-12h-media"/>
+                        <xs:enumeration value="noresidencial-12h-alta"/>
+                        <xs:enumeration value="noresidencial-16h-baja"/>
+                        <xs:enumeration value="noresidencial-16h-media"/>
+                        <xs:enumeration value="noresidencial-16h-alta"/>
+                        <xs:enumeration value="noresidencial-24h-baja"/>
+                        <xs:enumeration value="noresidencial-24h-media"/>
+                        <xs:enumeration value="noresidencial-24h-alta"/>
+                        <xs:enumeration value="perfildeusuario"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+        </xs:element>
+  </xs:sequence>
+</xs:complexType>
+
+<!--Segundo Nivel Demanda-->
+<xs:complexType name="DemandaType">
+  <xs:all>
+    <xs:element name="EdificioObjeto">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Global" type="dectype2digits"/>
+            <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Conjunta" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Calefaccion08" type="dectype2digits" minOccurs="0"/><!-- Terciario -->
+            <xs:element name="Refrigeracion08" type="dectype2digits" minOccurs="0"/><!-- Terciario -->
+            <xs:element name="Conjunta08" type="dectype2digits" minOccurs="0"/><!-- Terciario -->
+            <xs:element name="Ahorro08" type="dectype2digits" minOccurs="0"/><!-- Terciario -->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EdificioDeReferencia" minOccurs="0">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Global" type="dectype2digits"/>
+            <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Conjunta" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Calefaccion08" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Refrigeracion08" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Conjunta08" type="dectype2digits" minOccurs="0"/>
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Exigencias">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="LimiteCalefaccionVivienda" type="dectype2digits" minOccurs="0"/><!--Solo vivienda-->
+            <xs:element name="LimiteRefrigeracionVivienda" type="dectype2digits" minOccurs="0"/><!--Solo vivienda-->
+            <xs:element name="LimiteAhorroOtrosUsos" type="dectype2digits" minOccurs="0"/><!--Solo terciario-->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel Comsumo-->
+<xs:complexType name="ConsumoType">
+  <xs:all>
+    <xs:element name="FactoresdePaso">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="FinalAPrimariaNoRenovable" type="FactoresDePasoValorType"/>
+            <xs:element name="FinalAEmisiones" type="FactoresDePasoValorType"/>
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EnergiaFinalVectores">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="GasNatural" type="ValorType" minOccurs="0"/>
+            <xs:element name="GasoleoC" type="ValorType" minOccurs="0"/>
+            <xs:element name="GLP" type="ValorType" minOccurs="0"/>
+            <xs:element name="Carbon" type="ValorType" minOccurs="0"/>
+            <xs:element name="BiomasaOtros" type="ValorType" minOccurs="0"/>
+            <xs:element name="BiomasaPellet" type="ValorType" minOccurs="0"/>
+            <xs:element name="ElectricidadPeninsular" type="ValorType" minOccurs="0"/>
+            <xs:element name="ElectricidadBaleares" type="ValorType" minOccurs="0"/>
+            <xs:element name="ElectricidadCanarias" type="ValorType" minOccurs="0"/>
+            <xs:element name="ElectricidadCeutayMelilla" type="ValorType" minOccurs="0"/>
+            <xs:element name="Biocarburante" type="ValorType" minOccurs="0"/>
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EnergiaPrimariaNoRenovable" type="ValorType"/>
+    <xs:element name="Exigencias">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="LimiteViviendaGlobalEPNR" type="dectype2digits" minOccurs="0"/><!--Solo vivienda-->
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel Calificacion-->
+<xs:complexType name="CalificacionType">
+  <xs:all>
+    <xs:element name="EmisionesCO2">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Global" type="stringtypeCalificacion"/>
+            <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Demanda">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+                <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EnergiaPrimariaNoRenovable">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Global" type="stringtypeCalificacion"/>
+            <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!--Segundo Nivel MedidasDeMejora-->
+<xs:complexType name="MedidasDeMejoraType">
+  <xs:sequence>
+    <xs:element name="Medida" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Descripcion" type="xs:string"/>
+            <xs:element name="Demanda">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Global" type="dectype2digits"/>
+                        <xs:element name="GlobalDiferenciaSituacionInicial" type="dectype2digits"/>
+                        <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+                        <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CalificacionDemanda">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="EnergiaPrimariaNoRenovable">
+                <xs:complexType>
+                <xs:all>
+                    <xs:element name="Global" type="dectype2digits"/>
+                    <xs:element name="GlobalDiferenciaSituacionInicial" type="dectype2digits"/>
+                    <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="Iluminacion" type="dectype2digits" minOccurs="0"/><!--Solo terciario-->
+                </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CalificacionEnergiaPrimariaNoRenovable">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Global" type="stringtypeCalificacion"/>
+                        <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="EmisionesCO2">
+                <xs:complexType>
+                <xs:all>
+                    <xs:element name="Global" type="dectype2digits"/>
+                    <xs:element name="GlobalDiferenciaSituacionInicial" type="dectype2digits"/>
+                    <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+                    <xs:element name="Iluminacion" type="dectype2digits" minOccurs="0"/><!--Solo terciario-->
+                </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CalificacionEmisionesCO2">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Global" type="stringtypeCalificacion"/>
+                        <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+                        <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:sequence>
+</xs:complexType>
+
+<!--Segundo Nivel PruebasComprobacionesInspecciones-->
+<xs:complexType name="PruebasComprobacionesInspeccionesType">
+  <xs:sequence>
+      <xs:element name="Visita" maxOccurs="unbounded">
+      <xs:complexType>
+          <xs:all>
+            <xs:element name="FechaVisita" type="xs:string"/>
+            <xs:element name="Datos" type="xs:string"/>
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:sequence>
+</xs:complexType>
+
+<!--Tercer Nivel InstalacionesTermicas-GeneradoresDeCalefacción/GeneradoresDeRefrigeracion/InstalacionACS-Elemento-->
+<xs:complexType name="ElementoType">
+  <xs:all>
+    <xs:element name="Nombre" type="xs:string"/>
+    <xs:element name="Tipo" type="xs:string"/>
+    <xs:element name="PotenciaNominal" type="dectype2digits"/>
+    <xs:element name="RendimientoNominal" type="dectype2digits"/>
+    <xs:element name="VectorEnergetico">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="GasNatural"/>
+          <xs:enumeration value="GasoleoC"/>
+          <xs:enumeration value="GLP"/>
+          <xs:enumeration value="Carbon"/>
+          <xs:enumeration value="BiomasaPellet"/>
+          <xs:enumeration value="BiomasaOtros"/>
+          <xs:enumeration value="ElectricidadPeninsular"/>
+          <xs:enumeration value="ElectricidadBaleares"/>
+          <xs:enumeration value="ElectricidadCanarias"/>
+          <xs:enumeration value="ElectricidadCeutayMelilla"/>
+          <xs:enumeration value="Biocarburante"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:element>
+     <xs:element name="ModoDeObtencion" type="stringtypeModoDeObtencion"/>
+  </xs:all>
+</xs:complexType>
+
+<!--Tercer Nivel Consumo-FactoresDePaso-FinalAPrimariaNoRenovable/FinalAEmisiones-->
+<xs:complexType name="FactoresDePasoValorType">
+  <xs:all>
+    <xs:element name="GasNatural" type="dectype3digits"/>
+    <xs:element name="GasoleoC" type="dectype3digits"/>
+    <xs:element name="GLP" type="dectype3digits"/>
+    <xs:element name="Carbon" type="dectype3digits"/>
+    <xs:element name="BiomasaPellet" type="dectype3digits"/>
+    <xs:element name="BiomasaOtros" type="dectype3digits"/>
+    <xs:element name="ElectricidadPeninsular" type="dectype3digits"/>
+    <xs:element name="ElectricidadBaleares" type="dectype3digits"/>
+    <xs:element name="ElectricidadCanarias" type="dectype3digits"/>
+    <xs:element name="ElectricidadCeutayMelilla" type="dectype3digits"/>
+    <xs:element name="Biocarburante" type="dectype3digits" minOccurs="0"/>
+  </xs:all>
+</xs:complexType>
+
+<!--Tercer Nivel ValoresType-->
+<xs:complexType name="ValorType">
+  <xs:all>
+    <xs:element name="Global" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="Iluminacion" type="dectype2digits" minOccurs="0"/> <!--Solo terciario-->
+  </xs:all>
+</xs:complexType>
+
+</xs:schema>

@@ -90,6 +90,9 @@ TAGS = {
 XSDPATH = os.path.join(
     os.path.dirname(__file__),
     'static/validador/DatosEnergeticosDelEdificioSchema.xsd')
+XSDPATH1 = os.path.join(
+    os.path.dirname(__file__),
+    'static/validador/DatosEnergeticosDelEdificioSchemav1.xsd')
 
 class Bunch(dict):
     "Contenedor genérico"
@@ -105,9 +108,6 @@ class Bunch(dict):
 class InformeXML(object):
     """Clase que representa un informe de evaluación energética en XML"""
     TAGS = TAGS
-    # http://lxml.de/validation.html
-    SCHEMAFILE = open(XSDPATH)
-    xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(SCHEMAFILE))
     xmlparser = lxml.etree.XMLParser(resolve_entities=False, # no sustituye unicode a entidades
                                      remove_blank_text=True,
                                      ns_clean=True, # limpia namespaces
@@ -117,9 +117,15 @@ class InformeXML(object):
         self.xml = xmldata
         self._xmltree = None
         self._data = None
+        self.xmlschema = None
 
     def validate(self):
         """Valida el informe XML según el esquema XSD"""
+        # http://lxml.de/validation.html
+        if self.version == '1':
+            self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH1)))
+        else:
+            self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH)))
         self.xmlschema.validate(self.xmltree)
         errors = [(error.line, error.message.encode("utf-8"))
                   for error in self.xmlschema.error_log]
