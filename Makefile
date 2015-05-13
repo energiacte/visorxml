@@ -58,4 +58,8 @@ upload:
 	scp -r visorxml/ $(RUSER)@$(RHOST):${SITEDIR}
 	scp -r instance/visorxml.cfg $(RUSER)@$(RHOST):${VENV}/var/visorxml-instance/visorxml.cfg
 
+clean:
+	find visorxml/uploads -iname '*.xml' -exec rm -rf '{}' \;
+	cp /dev/null visorxml/uploads/visorxmlfiles.log
+
 .PHONY: run
