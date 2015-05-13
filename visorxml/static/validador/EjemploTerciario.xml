@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DatosEnergeticosDelEdificio version="1.0">
+<DatosEnergeticosDelEdificio version="2.0">
 	<DatosDelCertificador>
 		<NombreyApellidos>José Pérez Pérez</NombreyApellidos>
 		<NIF>0000000Z</NIF>
@@ -305,6 +305,23 @@
 			<PerfilDeUso>noresidencial-16h-media</PerfilDeUso>
 		</Espacio>
 	</CondicionesFuncionamientoyOcupacion>
+    <EnergiasRenovables>
+      <Termica>
+        <Sistema>
+          <Nombre>Caldera de biomasa</Nombre>
+          <DemandaACS>12.34</DemandaACS>
+          <ConsumoFinalACS>12.34</ConsumoFinalACS>
+        </Sistema>
+      </Termica>
+      <Electrica>
+        <Sistema>
+          <Nombre>Panel fotovoltaico</Nombre>
+          <EnergiaGeneradaAutoconsumida>158.54</EnergiaGeneradaAutoconsumida>
+        </Sistema>
+      </Electrica>
+      <ReduccionGlobalEnergiaPrimariaNoRenovable>14.2</ReduccionGlobalEnergiaPrimariaNoRenovable>
+      <ReduccionGlobalEmisionesCO2>43.34</ReduccionGlobalEmisionesCO2>
+    </EnergiasRenovables>
 	<Demanda>
 		<EdificioObjeto>
 			<Global>1212.12</Global>
