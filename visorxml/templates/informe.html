@@ -31,13 +31,6 @@
     <td class="title" width="15%">Año construcción</td>
     <td>{{ informe.data.IdentificacionEdificio.AnoConstruccion }}</td>
   </tr>
-  <!-- Datos que pide el HULC pero no incorporados al informe en PDF
-  <tr>
-    <td class="title">Superficie construida</td>
-    <td><strong style="color:red">¡El XML no define este campo!</strong></td>
-    <td class="title" width="15%">Altura total</td>
-    <td><strong style="color:red">¡El XML no define este campo!</strong></td>
-  </tr> -->
   <tr>
     <td class="title">Plantas sobre rasante</td>
     <td>{{ informe.data.DatosGeneralesyGeometria.NumeroDePlantasSobreRasante }}</td>
@@ -116,7 +109,7 @@
     <td class="title">e-mail</td>
     <td>{{ informe.data.DatosDelCertificador.Email }}</td>
     <td class="title">Teléfono</td>
-    <td>{{ informe.data.DatosDelCertificador.Telefono }}<strong style="color:red">¡El XML no define este campo!</strong></td>
+    <td>{{ informe.data.DatosDelCertificador.Telefono }}</td>
   </tr>
   <tr>
     <td class="title">Titulación habilitante según normativa vigente</td>
@@ -126,14 +119,6 @@
     <td class="title" colspan="2">Procedimiento reconocido de calificación energética utilizado y versión:</td>
     <td colspan="2">{{ informe.data.IdentificacionEdificio.Procedimiento }}</td>
   </tr>
-  <!-- Datos que pide el HULC pero no incorporados al informe en PDF
-  <tr>
-    <td class="title">Colegio</td>
-    <td><strong style="color:red">¡El XML no define este campo!</strong></td>
-    <td class="title">Número de colegiado</td>
-    <td><strong style="color:red">¡El XML no define este campo!</strong></td>
-  </tr>
-  -->
 </table>
 
 <br />
@@ -145,8 +130,8 @@
       <td class="title" align="center">EMISIONES DE DIÓXIDO DE CARBONO [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
     </tr>
      <tr>
-        <td>{% if informe.data.Consumo.EnergiaPrimariaNoRenovable.Global %}<img src="{{ informe.data.Consumo.EnergiaPrimariaNoRenovable.Global|escalasvg(informe.data.Calificacion.EnergiaPrimariaNoRenovable.Global) }}" />{% endif %}</td>
-        <td>{% if informe.data.EmisionesCO2.Global %}<img src="{{ informe.data.EmisionesCO2.Global|escalasvg(informe.data.Calificacion.EmisionesCO2.Global) }}" />{% endif %}</td>
+       <td align="center">{%- if informe.data.Consumo.EnergiaPrimariaNoRenovable.Global %}<img src="{{ informe.data.Consumo.EnergiaPrimariaNoRenovable.Global|escalasvg(informe, 'EnergiaPrimariaNoRenovable') }}" />{% endif -%}</td>
+        <td align="center">{%-if informe.data.EmisionesCO2.Global %}<img src="{{ informe.data.EmisionesCO2.Global|escalasvg(informe, 'EmisionesCO2') }}" />{% endif -%}</td>
      </tr>
 </table>
 
@@ -203,8 +188,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   </tr>
   <tr>
     <td align="center">
-      {% if informe.imagen %}
-      <img src="{{ informe.imagen }}" alt="Imagen general del edificio" width="90%" />
+      {% if informe.data.DatosGeneralesyGeometria.Imagen %}
+      <img src="{{ informe.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" width="90%" />
       {% else %}
       <img src="{{ url_for('static', filename='img/sinimagen.png')}}" alt="Imagen no definida o incorrecta" />
       {% endif %}
@@ -212,8 +197,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td align="center">
       {# informe.data.DatosGeneralesyGeometria.Plano #}
 
-      {% if informe.plano %}
-      <img src="{{ informe.plano }}" alt="Plano del edificio" width="90%" />
+      {% if informe.data.DatosGeneralesyGeometria.Plano %}
+      <img src="{{ informe.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" width="90%" />
       {% else %}
       <img src="{{ url_for('static', filename='img/sinimagen.png')}}" alt="Imagen no definida o incorrecta" />
       {% endif %}
@@ -227,7 +212,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
 
 <table>
   <tr>
-    <td width="25%" class="title">Nombre</td>
+    <td width="30%" class="title">Nombre</td>
     <td width="10%" class="title">Tipo</td>
     <td class="title">Superficie [m<sup>2</sup>]</td>
     <td class="title">Transmitancia [W/m<sup>2</sup>·K]</td>
@@ -248,7 +233,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
 
 <table>
   <tr>
-    <td width="20%" class="title">Nombre</td>
+    <td width="30%" class="title">Nombre</td>
     <td width="10%" class="title">Tipo</td>
     <td class="title">Superficie [m<sup>2</sup>]</td>
     <td class="title">Transmitancia [W/m<sup>2</sup>·K]</td>
@@ -291,7 +276,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td>{{ e.Nombre }}</td>
     <td>{{ e.Tipo }}</td>
     <td class="num">{{ shownum(e.PotenciaNominal) }}</td>
-    <td class="num">{{ shownum(e.RendimientoNominal) }}</td>
+    <td class="num">{{ shownum(e.RendimientoEstacional) }}</td>
     <td>{{ e.VectorEnergetico }}</td>
     <td>{{ e.ModoDeObtencion }}</td>
   </tr>
@@ -299,8 +284,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   <tr>
     <td class="total text-center">TOTALES</td>
     <td class="total"></td>
-    {% set totalgencal = informe.data.InstalacionesTermicas.GeneradoresDeCalefaccion|sum(attribute='PotenciaNominal',start=0) %}
-    <td class="total num calc">{{ shownum(totalgencal) }}</td>
+    <td class="total num calc">{{ shownum(informe.data.InstalacionesTermicas.totalpotenciageneradoresdecalefaccion) }}</td>
     <td class="total"></td>
     <td class="total"></td>
     <td class="total"></td>
@@ -325,7 +309,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td>{{ e.Nombre }}</td>
     <td>{{ e.Tipo }}</td>
     <td class="num">{{ shownum(e.PotenciaNominal) }}</td>
-    <td class="num">{{ shownum(e.RendimientoNominal) }}</td>
+    <td class="num">{{ shownum(e.RendimientoEstacional) }}</td>
     <td>{{ e.VectorEnergetico }}</td>
     <td>{{ e.ModoDeObtencion }}</td>
   </tr>
@@ -333,8 +317,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   <tr>
     <td class="total text-center">TOTALES</td>
     <td class="total"></td>
-    {% set totalgenref = informe.data.InstalacionesTermicas.GeneradoresDeRefrigeracion|sum(attribute='PotenciaNominal',start=0) %}
-    <td class="total num calc">{{ shownum(totalgenref) }}</td>
+    <td class="total num calc">{{ shownum(informe.data.InstalacionesTermicas.totalpotenciageneradoresderefrigeracion) }}</td>
     <td class="total"></td>
     <td class="total"></td>
     <td class="total"></td>
@@ -346,7 +329,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
 <table style="width:65%">
   <tr>
     <td width="45%" class="title">Demanda diaria de ACS a 60ºC (litros/dia)</td>
-    <td width="20%" class="num"><strong style="color:red">¡El XML no define este campo!</strong></td>
+    <td width="20%" class="num">{{ shownum(informe.data.DatosGeneralesyGeometria.DemandaDiariaACS) }}</td>
   </tr>
 </table>
 
@@ -369,7 +352,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td>{{ e.Nombre }}</td>
     <td>{{ e.Tipo }}</td>
     <td class="num">{{ shownum(e.PotenciaNominal) }}</td>
-    <td class="num">{{ shownum(e.RendimientoNominal) }}</td>
+    <td class="num">{{ shownum(e.RendimientoEstacional) }}</td>
     <td>{{ e.VectorEnergetico }}</td>
     <td>{{ e.ModoDeObtencion }}</td>
   </tr>
@@ -403,8 +386,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   <tr>
     <td class="num">{{ shownum(e.PotenciaCalor) }}</td>
     <td class="num">{{ shownum(e.PotenciaFrio) }}</td>
-    <td class="num">{{ shownum(e.RendimientoCalor) }}</td>
-    <td class="num">{{ shownum(e.RendimientoFrio) }}</td>
+    <td class="num">{{ shownum(e.RendimientoEstacionalCalor) }}</td>
+    <td class="num">{{ shownum(e.RendimientoEstacionalFrio) }}</td>
   </tr>
   <tr>
     <td class="title" width="25%">Enfriamiento gratuito</td>
@@ -444,8 +427,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="total text-center">TOTALES</td>
     <td class="total"></td>
     <td class="total"></td>
-    {% set totalcontorr = informe.data.InstalacionesTermicas.TorresyRefrigeracion|sum(attribute='ConsumoDeEnergia',start=0) %}
-    <td class="total num calc">{{ shownum(totalcontorr) }}</td>
+    <td class="total num calc">{{ shownum(informe.data.InstalacionesTermicas.totalconsumotorresyrefrigeracion) }}</td>
   </tr>
 </table>
 
@@ -471,14 +453,13 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="total text-center">TOTALES</td>
     <td class="total"></td>
     <td class="total"></td>
-    {% set totalcontrans = informe.data.InstalacionesTermicas.VentilacionyBombeo|sum(attribute='ConsumoDeEnergia',start=0) %}
-    <td class="total num calc">{{ shownum(totalcontrans) }}</td>
+    <td class="total num calc">{{ shownum(informe.data.InstalacionesTermicas.totalconsumoventilacionybombeo) }}</td>
   </tr>
 </table>
 
 <h4>4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)</h4>
 
-{% set ilumina = informe.data.InstalacionesIluminacion or [None] %}
+{% set ilumina = informe.data.InstalacionesIluminacion.Espacios or [None] %}
 <table>
   <tr>
     <td class="title" width="20%">Espacio</td>
@@ -487,8 +468,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title" width="20%">Iluminancia media [lux]</td>
     <td class="title" width="20%">Modo de obtención</td>
   </tr>
-{% for e in ilumina %}
-  {% if not e.PotenciaTotalInstalada %}
+  {% for e in ilumina %}
   <tr>
     <td>{{ e.Nombre }}</td>
     <td class="num">{{ shownum(e.PotenciaInstalada) }}</td>
@@ -496,11 +476,10 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="num">{{ shownum(e.IluminanciaMedia) }}</td>
     <td>{{ e.ModoDeObtencion }}</td>
   </tr>
-  {% endif %}
-{% endfor %}
+  {% endfor %}
   <tr>
     <td class="total text-center">TOTALES</td>
-    <td class="total num">{{ shownum(informe.potenciamediailum) }}</td>
+    <td class="total num">{{ shownum(informe.data.InstalacionesIluminacion.totalpotenciamedia) }}</td>
     <td class="total"></td>
     <td class="total"></td>
     <td class="total"></td>
@@ -539,20 +518,23 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title" width="20%">Refrigeración</td>
     <td class="title" width="20%">ACS</td>
   </tr>
-  <tr><td colspan="5" align="center"><strong style="color:red">¡El XML no define campos para las energías renovables!</strong></td></tr>
+  {% set renovablessistemastermicos = informe.data.EnergiasRenovables.Termica or [None] %}
+  {% for e in renovablessistemastermicos %}
   <tr>
-    <td>&nbsp;</td>
-    <td class="num">&nbsp;</td>
-    <td class="num">&nbsp;</td>
-    <td class="num">&nbsp;</td>
-    <td class="num">&nbsp;</td>
+    <td>{{ e.Nombre }}</td>
+    <td class="num">{{ shownum(e.ConsumoFinalCalefaccion) }}</td>
+    <td class="num">{{ shownum(e.ConsumoFinalRefrigeracion) }}</td>
+    <td class="num">{{ shownum(e.ConsumoFinalACS) }}</td>
+    <td class="num">{{ shownum(e.DemandaACS) }}</td>
   </tr>
+  {% endfor %}
+  {% set totaltermica = informe.data.EnergiasRenovables.totaltermica %}
   <tr>
     <td class="total text-center">TOTAL</td>
-    <td class="total num"><strong style="color:red">Calcular</strong></td>
-    <td class="total num"><strong style="color:red">Calcular</strong></td>
-    <td class="total num"><strong style="color:red">Calcular</strong></td>
-    <td class="total num"><strong style="color:red">Calcular</strong></td>
+    <td class="total num">{{ shownum(totaltermica.ConsumoFinalCalefaccion or None) }}</td>
+    <td class="total num">{{ shownum(totaltermica.ConsumoFinalRefrigeracion or None) }}</td>
+    <td class="total num">{{ shownum(totaltermica.ConsumoFinalACS or None) }}</td>
+    <td class="total num">{{ shownum(totaltermica.DemandaACS or None) }}</td>
   </tr>
 </table>
 
@@ -562,16 +544,16 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title">Nombre</td>
     <td class="title">Energía eléctrica generada y autoconsumida [kWh/año]</td>
   </tr>
+  {% set renovablessistemaselec = informe.data.EnergiasRenovables.Electrica or [None] %}
+  {% for e in renovablessistemaselec %}
   <tr>
-    <td colspan="2" align="center"><strong style="color:red">¡El XML no define campos para las energías renovables!</strong></td>
+    <td>{{ e.Nombre }}</td>
+    <td class="num">{{ shownum(e.EnergiaGeneradaAutoconsumida) }}</td>
   </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td class="num">&nbsp;</td>
-  </tr>
+  {% endfor %}
   <tr>
     <td class="total text-center">TOTAL</td>
-    <td class="total num"><strong style="color:red">Calcular</strong></td>
+    <td class="total num">{{ shownum(informe.data.EnergiasRenovables.totalelectrica or None) }}</td>
   </tr>
 </table>
 
@@ -586,7 +568,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td width="25%" class="title">Zona Climática</td>
     <td>{{ informe.data.IdentificacionEdificio.ZonaClimatica }}</td>
     <td width="25%" class="title">Uso</td>
-    <td>{{ informe.data.IdentificacionEdificio.NombreDelEdificio }}</td>
+    <td>{{ informe.data.IdentificacionEdificio.TipoDeEdificio }}</td>
   </tr>
 </table>
 
@@ -598,7 +580,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title" width="50%" colspan="4">INDICADORES PARCIALES</td>
   </tr>
   <tr>
-    <td rowspan="4" align="center"><img src="{{ informe.data.EmisionesCO2.Global|escalasvg(informe.data.Calificacion.EmisionesCO2.Global) }}" /></td>
+    <td rowspan="4" align="center"><img src="{{ informe.data.EmisionesCO2.Global|escalasvg(informe, 'EmisionesCO2') }}" /></td>
     <td class="title" width="25%" colspan="2">CALEFACCIÓN</td>
     <td class="title" width="25%" colspan="2">ACS</td>
   </tr>
@@ -639,14 +621,12 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   </tr>
   <tr>
     <td class="info">Emisiones CO<sub>2</sub> por consumo eléctrico</td>
-    <td class="num">{{ shownum(informe.emisionesdatos.EmisionesElec) }}</td>
-    {% set totsupemisioneselec = informe.emisionesdatos.EmisionesElec * informe.superficieacondicionada %}
-    <td class="calc num">{{ shownum(totsupemisioneselec) }}</td>
+    <td class="num">{{ shownum(informe.data.EmisionesCO2.ConsumoElectrico) }}</td>
+    <td class="num">{{ showint(informe.data.EmisionesCO2.TotalConsumoElectrico) }}</td>
   <tr>
     <td class="info">Emisiones CO<sub>2</sub> por otros combustibles</td>
-    <td class="num">{{ shownum(informe.emisionesdatos.EmisionesNoElec) }}</td>
-    {% set totsupemisionesnoelec = informe.emisionesdatos.EmisionesNoElec * informe.superficieacondicionada %}
-    <td class="calc num">{{ shownum(totsupemisionesnoelec) }}</td>
+    <td class="num">{{ shownum(informe.data.EmisionesCO2.ConsumoOtros) }}</td>
+    <td class="num">{{ showint(informe.data.EmisionesCO2.TotalConsumoOtros) }}</td>
   </tr>
 </table>
 
@@ -660,7 +640,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title" width="50%" colspan="4">INDICADORES PARCIALES</td>
   </tr>
   <tr>
-    <td width="30%" rowspan="4" align="center"><img src="{{ informe.data.Consumo.EnergiaPrimariaNoRenovable.Global|escalasvg(informe.data.Calificacion.EnergiaPrimariaNoRenovable.Global) }}" /></td>
+    <td width="30%" rowspan="4" align="center"><img src="{{ informe.data.Consumo.EnergiaPrimariaNoRenovable.Global|escalasvg(informe, 'EnergiaPrimariaNoRenovable') }}" />
+    </td>
     <td class="title" width="25%" colspan="2">CALEFACCIÓN</td>
     <td class="title" width="25%" colspan="2">ACS</td>
   </tr>
@@ -702,8 +683,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   </tr>
   <tr>
     <!-- XXX: ver aquí los casos de terciario con 08 ren/h -->
-    <td width="30%" align="center"><img src="{{ informe.data.Demanda.EdificioObjeto.Calefaccion|escalasvg(informe.data.Calificacion.Demanda.Calefaccion) }}" /></td>
-    <td width="30%" align="center"><img src="{{ informe.data.Demanda.EdificioObjeto.Refrigeracion|escalasvg(informe.data.Calificacion.Demanda.Refrigeracion) }}" /></td>
+    <td width="30%" align="center"><img src="{{ informe.data.Demanda.EdificioObjeto.Calefaccion|escalasvg(informe, 'DemandaCalefaccion') }}" /></td>
+    <td width="30%" align="center"><img src="{{ informe.data.Demanda.EdificioObjeto.Refrigeracion|escalasvg(informe, 'DemandaRefrigeracion') }}" /></td>
   </tr>
   <tr>
     <td class="info">Demanda de calefacción [kWh/m<sup>2</sup>·año]</td>
@@ -723,7 +704,7 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
 <table>
   <tr>
     <td class="title" colspan="2">Denominación:</td>
-    <td><strong style="color:red">¡Falta esta información en el XML! {{ medida.Nombre }}</strong></td>
+    <td>{{ medida.Nombre }}</strong></td>
   </tr>
 </table>
 
@@ -736,8 +717,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title">EMISIONES DE DIÓXIDO DE CARBONO [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
   </tr>
   <tr>
-    <td width="25%"><img src="{{ medida.EnergiaPrimariaNoRenovable.Global|escalasvg(medida.CalificacionEnergiaPrimariaNoRenovable.Global) }}" /></td>
-    <td width="25%"><img src="{{ medida.EmisionesCO2.Global|escalasvg(medida.CalificacionEmisionesCO2.Global) }}" /></td>
+    <td width="25%"><img src="{{ medida.EnergiaPrimariaNoRenovable.Global|escalasvg(informe, 'EnergiaPrimariaNoRenovable') }}" /></td>
+    <td width="25%"><img src="{{ medida.EmisionesCO2.Global|escalasvg(informe, 'EmisionesCO2') }}" /></td>
   </tr>
 </table>
 
@@ -750,8 +731,8 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
     <td class="title">DEMANDA DE REFRIGERACIÓN [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
   </tr>
   <tr>
-    <td width="25%"><img src="{{ medida.Demanda.Calefaccion|escalasvg(medida.CalificacionDemanda.Calefaccion) }}" /></td>
-    <td width="25%"><img src="{{ medida.Demanda.Refrigeracion|escalasvg(medida.CalificacionDemanda.Refrigeracion) }}" /></td>
+    <td width="25%"><img src="{{ medida.Demanda.Calefaccion|escalasvg(informe, 'DemandaCalefaccion') }}" /></td>
+    <td width="25%"><img src="{{ medida.Demanda.Refrigeracion|escalasvg(informe, 'DemandaRefrigeracion') }}" /></td>
   </tr>
 </table>
 
@@ -780,16 +761,16 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
   </tr>
   <tr>
     <td class="title">Consumo Energía final [kWh/m<sup>2</sup>·año]</td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
-    <td class="num"><strong style="color:red">Sin datos de consumo de energía final para las medidas en el XML</strong></td>
+    <td class="num">{{ shownum(medida.EnergiaFinal.Calefaccion) }}</td>
+    <td class="num calc">{{ showdif(informe.data.Consumo.EnergiaFinal.Calefaccion, medida.EnergiaFinal.Calefaccion) }}</td>
+    <td class="num">{{ shownum(medida.EnergiaFinal.Refrigeracion) }}</td>
+    <td class="num calc">{{ showdif(informe.data.Consumo.EnergiaFinal.Refrigeracion, medida.EnergiaFinal.Refrigeracion) }}</td>
+    <td class="num">{{ shownum(medida.EnergiaFinal.ACS) }}</td>
+    <td class="num calc">{{ showdif(informe.data.Consumo.EnergiaFinal.ACS, medida.EnergiaFinal.ACS) }}</td>
+    <td class="num">{{ shownum(medida.EnergiaFinal.Iluminacion) }}</td>
+    <td class="num calc">{{ showdif(informe.data.Consumo.EnergiaFinal.Iluminacion, medida.EnergiaFinal.Iluminacion) }}</td>
+    <td class="num">{{ shownum(medida.EnergiaFinal.Global) }}</td>
+    <td class="num calc">{{ showdif(informe.data.Consumo.EnergiaFinal.Global, medida.EnergiaFinal.Global) }}</td>
   </tr>
   <tr>
     <td class="title">Consumo Energía primaria no renovable [kWh/m<sup>2</sup>·año]</td>
@@ -837,11 +818,11 @@ funcionamiento y ocupación y demás datos utilizados para obtener la calificaci
 <table>
   <tr><td class="title">DESCRIPCIÓN DE MEDIDA DE MEJORA</td></tr>
   <tr><td>Características técnicas de la medida (modelo de equipos, materiales, parámetros característicos)</td></tr>
-  <tr height="150px"><td>{{ medida.Descripcion }}</td></tr>
+  <tr height="150px"><td>{{ medida.Descripcion|safe }}</td></tr>
   <tr><td>Coste estimado de la medida</td></tr>
-  <tr height="150px"><td><strong style="color:red">¡No está definida esta información en el XML!</strong>{{ informe.CosteEstimado }}</td><tr/>
+  <tr height="150px"><td>{{ medida.CosteEstimado|safe }}</td><tr/>
   <tr><td>Otros datos de interés</td></tr>
-  <tr height="150px"><td><strong style="color:red">¡No está definida esta información en el XML!</strong>{{ informe.OtrosDatos }}</td><tr/>
+  <tr height="150px"><td>{{ medida.OtrosDatos|safe }}</td><tr/>
 </table>
 {% endfor %}
 {% endif %}

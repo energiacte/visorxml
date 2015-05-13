@@ -21,8 +21,8 @@
 - Los campos relacionados con demanda, consumo o calificación de refrigeración y ACS dejan
   de ser obligatorios ya que en algunas zonas climáticas y en algunos tipos de edificios
   pueden no existir demandas de estos tipos.
-- Igualmente, se hace opcional la definiión de un equipo generador térmico de refrigeración.
-- Los campos de demanda Conjunta se hacen opcionales, ya que no siempre es necesario su uso.
+- Se hace opcional la definiión de un equipo generador térmico de refrigeración.
+- Se hacen opcionales los campos de demanda conjunta, ya que no siempre es necesario su uso.
 
 12-03-2015
 ----------
@@ -32,9 +32,10 @@
   de energía final pueden no tener sentido.
 - Se elimina la necesidad de definir un generador de calefacción (zona alfa)
 
-08-04-2015
+09-04-2015
 ----------
 
+- Nueva versión 2.0 del esquema de datos
 - Nuevo elemento <Telefono> (opcional)
 - Se permite la codificación de imágenes JPEG en Base64 (URI: data:image/jpeg;base64,datos_archivo_jpeg_base64)
 - Tamaño máximo recomendado de las imágenes 800x600px (3" x 2" a 300ppp)
@@ -51,5 +52,7 @@
 - Nuevas secciones <EscalaGlobal>, <EscalaCalefaccion> y <EscalaRefrigeracion> para las secciones de calificación
 - Nuevas etiquetas <ConsumoElectrico>, <ConsumoOtros>, <TotalConsumoElectrico>, <TotalConsumoOtros> en sección de emisiones
 
-TODO: Permitir en visorxml añadir puentes térmicos, teléfono y usar jpeg
-      Faltan meter las cosas que no tenemos del informe
+12-05-2015
+----------
+
+- Se permiten valores decimales con signo (p.e., para transmitancias negativas)

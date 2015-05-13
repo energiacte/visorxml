@@ -18,14 +18,25 @@ TODO del VisorXML
 
 [x] Hacer imagen de escala con número incluido
 
-- Meter imágenes y planos en ejemplo terciario
+[x] Meter imágenes y planos en ejemplo terciario
 
-- Comprobaciones básicas: que haya algo en nombre, provincia, ccaa, etc
+[x] Comprobaciones básicas: que haya algo en nombre, provincia, ccaa, etc
 
 - Imprimir informe en PDF:
 
   - http://pythonhosted.org/Flask-WeasyPrint/
   - emitir informe en PDF
+
+- Incorporar medidas de mejora a partir de otro XML
+
+- Permitir edición online del informe
+
+  - http://www.appelsiini.net/projects/jeditable
+  - https://code.google.com/p/jquery-in-place-editor/
+  - http://stackoverflow.com/questions/8257813/on-hover-show-edit-icon-on-right
+  - http://jakiestfu.github.io/Medium.js/docs/
+  - http://createjs.org/
+  - Flask-PageDown / Markdown / Bleach
 
 - Zonas restringidas de gestión:
 
@@ -37,10 +48,6 @@ TODO del VisorXML
   - http://pythonhosted.org/Flask-SQLAlchemy/
   - sustituir registro de archivos subidos con BBDD SQLite
 
-- Permitir edición online del informe
-
-  - Flask-PageDown / Markdown / Bleach
-
 - Informe distinto al de certificación
 
   - Tartas por servicios
@@ -51,7 +58,5 @@ TODO del VisorXML
 Pensar
 ======
 
-- Elementos adiabáticos V/H, ParticionInterior V/H
-- Perfiles de usuario
 
 

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DatosEnergeticosDelEdificio version="1.0">
+<DatosEnergeticosDelEdificio version="2.0">
 	<DatosDelCertificador>
-		<NombreyApellidos>Pedro Pérez López</NombreyApellidos>
+		<NombreyApellidos>Iago Pazos Torreira</NombreyApellidos>
 		<NIF>11880333K</NIF>
-		<RazonSocial>PPL Arquitectos-</RazonSocial>
+		<RazonSocial>IPT Arquitectos</RazonSocial>
 		<NIFEntidad>B22211144</NIFEntidad>
-		<Domicilio>Campo del trigo, 99</Domicilio>
-		<Municipio>Fungira del Monte</Municipio>
+		<Domicilio>Rúa das hortas, 1</Domicilio>
+		<Municipio>Cedeira</Municipio>
 		<CodigoPostal>10999</CodigoPostal>
-		<Provincia>Málaga</Provincia>
-		<ComunidadAutonoma>Andalucía</ComunidadAutonoma>
+		<Provincia>A Coruña</Provincia>
+		<ComunidadAutonoma>Galicia</ComunidadAutonoma>
 		<Email>pedro.p.l@ppla.info</Email>
-        <Telefono>+34993947038</Telefono>
+        <Telefono>+34981947038</Telefono>
 		<Titulacion>Arquitecto</Titulacion>
 		<Fecha>12/03/2015</Fecha>
 	</DatosDelCertificador>
 	<IdentificacionEdificio>
-		<NombreDelEdificio>Vivienda y garaje en Sevilla</NombreDelEdificio>
-		<Direccion>C/Feria de Diciembre, 7</Direccion>
-		<Municipio>Sevilla</Municipio>
-		<CodigoPostal>73088</CodigoPostal>
-		<Provincia>Sevilla</Provincia>
-		<ComunidadAutonoma>Andalucía</ComunidadAutonoma>
-		<ZonaClimatica>B4</ZonaClimatica>
+		<NombreDelEdificio>Vivienda y garaje en Meirás</NombreDelEdificio>
+		<Direccion>Meirás - Arealonga, 7</Direccion>
+		<Municipio>Valdoviño</Municipio>
+		<CodigoPostal>15168</CodigoPostal>
+		<Provincia>A Coruña</Provincia>
+		<ComunidadAutonoma>Galicia</ComunidadAutonoma>
+		<ZonaClimatica>C1</ZonaClimatica>
 		<AnoConstruccion/>
 		<ReferenciaCatastral>BK-234-23452345-2346</ReferenciaCatastral>
 		<TipoDeEdificio>ViviendaUnifamiliar</TipoDeEdificio>
@@ -333,7 +333,7 @@
 		</CerramientosOpacos>
 		<HuecosyLucernarios>
 			<Elemento>
-				<Nombre>VIDRIO SIMPLE CON ROTURA</Nombre>
+				<Nombre>Carpintería metálica RPT y vidrio simple</Nombre>
 				<Tipo>Hueco</Tipo>
 				<Superficie>30.10</Superficie>
 				<Transmitancia>5.44</Transmitancia>
@@ -342,7 +342,7 @@
 				<ModoDeObtencionFactorSolar>Usuario</ModoDeObtencionFactorSolar>
 			</Elemento>
 			<Elemento>
-				<Nombre>VIDRIO DOBLE</Nombre>
+				<Nombre>Carpintería metálica RPT con vidrio doble</Nombre>
 				<Tipo>Hueco</Tipo>
 				<Superficie>20.05</Superficie>
 				<Transmitancia>2.20</Transmitancia>
@@ -351,7 +351,7 @@
 				<ModoDeObtencionFactorSolar>Usuario</ModoDeObtencionFactorSolar>
 			</Elemento>
 			<Elemento>
-				<Nombre>VIDRIO BAJO EMISIVO</Nombre>
+				<Nombre>Carpintería metálica RPT y vidrio bajo emisivo</Nombre>
 				<Tipo>Hueco</Tipo>
 				<Superficie>3.25</Superficie>
 				<Transmitancia>1.84</Transmitancia>
@@ -360,7 +360,7 @@
 				<ModoDeObtencionFactorSolar>Usuario</ModoDeObtencionFactorSolar>
 			</Elemento>
 			<Elemento>
-				<Nombre>Puerta madera</Nombre>
+				<Nombre>Puerta de madera</Nombre>
                 <Tipo>Hueco</Tipo>
 				<Superficie>2.10</Superficie>
 				<Transmitancia>2.20</Transmitancia>
@@ -369,12 +369,28 @@
 				<ModoDeObtencionFactorSolar>Usuario</ModoDeObtencionFactorSolar>
 			</Elemento>
 		</HuecosyLucernarios>
-	</DatosEnvolventeTermica>
+        <PuentesTermicos>
+            <Elemento>
+                <Nombre>Frente de Forjado tipo I</Nombre>
+                <Tipo>Frente de forjado</Tipo>
+                <Longitud>12.5</Longitud>
+                <Transmitancia>1.2</Transmitancia>
+                <ModoDeObtencion>Usuario</ModoDeObtencion>
+            </Elemento>
+            <Elemento>
+                <Nombre>Esquina entrante</Nombre>
+                <Tipo>Esquina</Tipo>
+                <Longitud>22.5</Longitud>
+                <Transmitancia>-0.05</Transmitancia>
+                <ModoDeObtencion>Usuario</ModoDeObtencion>
+            </Elemento>
+        </PuentesTermicos>
+    </DatosEnvolventeTermica>
     <InstalacionesTermicas>
 	<GeneradoresDeCalefaccion>
 		<Generador>
-			<Nombre>EQ_Caldera-Electrica-Defecto</Nombre>
-			<Tipo>Caldera eléctrica o de combustible</Tipo>
+			<Nombre>Caldera eléctrica</Nombre>
+			<Tipo>EQ_Caldera-Electrica-Defecto</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
 			<RendimientoEstacional>0.61</RendimientoEstacional>
@@ -384,8 +400,8 @@
 	</GeneradoresDeCalefaccion>
 	<GeneradoresDeRefrigeracion>
 		<Generador>
-			<Nombre>XXX - EQ_Caldera-Electrica-Defecto</Nombre>
-			<Tipo>XXX - Caldera eléctrica o de combustible</Tipo>
+			<Nombre>Equipo Aire Acondicionado</Nombre>
+			<Tipo>EQ_Bomba_calor</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
 			<RendimientoEstacional>0.71</RendimientoEstacional>
@@ -395,8 +411,8 @@
 	</GeneradoresDeRefrigeracion>
 	<InstalacionesACS>
 		<Instalacion>
-			<Nombre>EQ_Caldera-Electrica-Defecto</Nombre>
-			<Tipo>Caldera eléctrica o de combustible</Tipo>
+			<Nombre>Caldera eléctrica</Nombre>
+            <Tipo>EQ_Caldera-Electrica-Defecto</Tipo>
 			<PotenciaNominal>10.00</PotenciaNominal>
 			<RendimientoNominal>0.90</RendimientoNominal>
 			<RendimientoEstacional>0.87</RendimientoEstacional>
@@ -475,6 +491,17 @@
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>
 		</Espacio>
 	</CondicionesFuncionamientoyOcupacion>
+    <EnergiasRenovables>
+      <Termica>
+        <Sistema>
+          <Nombre>Panel termosolar</Nombre>
+          <ConsumoFinalACS>40.00</ConsumoFinalACS>
+          <DemandaACS>40.00</DemandaACS>
+        </Sistema>
+      </Termica>
+      <ReduccionGlobalEnergiaPrimariaNoRenovable>4.2</ReduccionGlobalEnergiaPrimariaNoRenovable>
+      <ReduccionGlobalEmisionesCO2>23.34</ReduccionGlobalEmisionesCO2>
+    </EnergiasRenovables>
 	<EmisionesCO2>
 		<Global>8.47</Global>
 		<Calefaccion>2.71</Calefaccion>
@@ -492,12 +519,12 @@
 			<Refrigeracion>B</Refrigeracion>
 			<ACS>B</ACS>
             <EscalaGlobal>
-				<A>12.10</A>
-                <B>23.35</B>
-                <C>45.56</C>
-                <D>67.89</D>
-                <E>96.12</E>
-                <F>120.23</F>
+				<A>32.10</A>
+                <B>53.35</B>
+                <C>75.56</C>
+                <D>97.89</D>
+                <E>126.12</E>
+                <F>140.23</F>
             </EscalaGlobal>
 		</EmisionesCO2>
 		<Demanda>
