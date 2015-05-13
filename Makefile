@@ -6,7 +6,7 @@ RHOST:=recoletos
 VENV:=~/.virtualenvs/visorxml
 SITEDIR:=${VENV}/lib/python2.7/site-packages
 
-run: venv
+run:
 	if [ `echo ${VIRTUAL_ENV}|grep visorxml` ]; then echo 'Entorno virtual activo'; else . ${VENV}/bin/activate; fi && \
 	PYTHONPATH=. ./visorxml/runserver.py;
 #	. ${VENV}/bin/activate; \
