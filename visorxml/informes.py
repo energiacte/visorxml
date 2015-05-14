@@ -36,7 +36,6 @@ class Bunch(OrderedDict):
     "Contenedor genérico"
     def __init__(self, *args, **kwds):
         OrderedDict.__init__(self, *args, **kwds)
-        #self.__dict__ = self
     def __str__(self):
         state = [u"%s=%r" % (attribute, value)
                  for (attribute, value) in self.items()]#.__dict__.items()]
@@ -648,7 +647,6 @@ def analize(informe):
             for item in obj:
                 _visit(res, ckey, item)
         elif isinstance(obj, (Bunch,)):
-            print obj.keys()
             for key in obj.keys():
                 if key.startswith('_'): continue
                 _visit(res, key, obj[key])
