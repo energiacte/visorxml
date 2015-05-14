@@ -192,7 +192,7 @@ class InformeXML(object):
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'Orientacion', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
-            for attr in ['Supeficie', 'Transmitancia']:
+            for attr in ['Superficie', 'Transmitancia']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
             obj.Capas = []
             for ecapa in elemento.find('./Capas'):
