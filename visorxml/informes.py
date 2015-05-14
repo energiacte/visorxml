@@ -37,9 +37,11 @@ class Bunch(OrderedDict):
     def __init__(self, *args, **kwds):
         OrderedDict.__init__(self, *args, **kwds)
     def __str__(self):
-        state = [u"%s=%r" % (attribute, value)
-                 for (attribute, value) in self.items()]#.__dict__.items()]
+        state = [u"%s=%s" % (attribute, value)
+                 for (attribute, value) in self.__dict__.items()
+                 if not attribute.startswith('_OrderedDict')]
         return u'\n'.join(state)
+    __unicode__ = __str__
 
 XMLPARSER = lxml.etree.XMLParser(resolve_entities=False, # no sustituye unicode a entidades
                                  remove_blank_text=True,
@@ -116,7 +118,7 @@ class InformeXML(object):
         for section in SECTIONS:
             data.append(u'%s\n' % section +
                         u'=' * len(section) +
-                        u'\n' + str(self.data.get(section)) +
+                        u'\n' + unicode(getattr(self.data, section)) +
                         u"\n")
         data.append(u'Potenciamediailum\n===========\n' +
                     str(self.data.InstalacionesIluminacion.totalpotenciamedia) +
