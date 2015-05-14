@@ -23,9 +23,9 @@ XSDPATH1 = os.path.join(
     'static/validador/DatosEnergeticosDelEdificioSchema10.xsd')
 XSDPATH = XSDPATH2
 
-VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros'
-            'ElectricidadPeninsular ElectricidadBaleares'
-            ' ElectricidadCanarias ElectricidadCeutayMelilla Biocarburante').split()
+VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros '
+            'ElectricidadPeninsular ElectricidadBaleares '
+            'ElectricidadCanarias ElectricidadCeutayMelilla Biocarburante').split()
 SERVICIOS = ('Global Calefaccion Refrigeracion ACS Iluminacion').split()
 NIVELESESCALA = 'A B C D E F'.split()
 ALERTINT = 9999999999
@@ -214,7 +214,7 @@ class InformeXML(object):
                          'ModoDeObtencionTransmitancia',
                          'ModoDeObtencionFactorSolar']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
-            for attr in ['Supeficie', 'Transmitancia', 'FactorSolar']:
+            for attr in ['Superficie', 'Transmitancia', 'FactorSolar']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
             bb.HuecosyLucernarios.append(obj)
 
