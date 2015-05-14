@@ -72,6 +72,33 @@ def uploaded_file(filename):
     filedata = datafiles.path(filename)
     return send_file(filedata)
 
+@app.template_filter('asnum')
+def asnum(value):
+    try:
+        return '{:0.2f}'.format(float(value)).replace('.', ',')
+    except:
+        return '-'
+
+@app.template_filter('asint')
+def asint(value):
+    try:
+        return '{0:d}'.format(int(value))
+    except:
+        return '-'
+
+@app.template_filter('ascalif')
+def ascalif(value):
+    return value if value else '-'
+
+@app.template_filter('difwith')
+def difwith(valuedest, valueorig):
+    try:
+        res1 = float(valueorig) - float(valuedest)
+        res2 = 100.0 * res1 / float(valueorig)
+        return '{:0.2f} ({:0.2f}%)'.format(res1, res2).replace('.', ',')
+    except:
+        return '-'
+
 @app.template_filter('escalasvg')
 def escalasvg(value, informe, tipoescala='EnergiaPrimariaNoRenovable'):
     """Devuelve imagen de la escala y su calificación como SVG inline"""
