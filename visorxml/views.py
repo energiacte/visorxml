@@ -5,6 +5,7 @@
 #import locale
 #locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 
+import os
 import base64
 import datetime
 import hashlib
@@ -31,7 +32,8 @@ def validador():
         #Guardamos solamente el nuevo archivo si no coincide con el de la actual sesión
         hashkey = hashlib.md5(filedata.read()).hexdigest()
         filedata.seek(0) # rebobinamos tras leer
-        if session.get('hashkey') != hashkey:
+        if (session.get('hashkey') != hashkey
+            or not os.path.exists(datafiles.path(session['storedfilename']))):
             session['hashkey'] = hashkey
             session['storedfilename'] = datafiles.save(filedata)
             filedata.seek(0) # rebobinamos el stream después de guardar
@@ -57,7 +59,9 @@ def validador():
 @app.route('/visor/', methods=['GET', 'POST'])
 def visor():
     "Visualiza archivos de informe en XML"
-    if session.get('storedfilename') and not session.get('validationerrors'):
+    if (session.get('storedfilename')
+        and not session.get('validationerrors')
+        and os.path.exists(datafiles.path(session['storedfilename']))):
         with open(datafiles.path(session['storedfilename'])) as xmlfile:
             informe = InformeXML(xmlfile.read())
     else:
@@ -102,7 +106,7 @@ def difwith(valuedest, valueorig):
 @app.template_filter('escalasvg')
 def escalasvg(value, informe, tipoescala='EnergiaPrimariaNoRenovable'):
     """Devuelve imagen de la escala y su calificación como SVG inline"""
-    
+
     SVGTEXT = """<svg xmlns='http://www.w3.org/2000/svg' width="185" height="120">
 <g id="layer1" stroke="none">
 <path d="m 184,{ypos:d} -53,0 -11,7 11,7 53,0 z" fill="#black" />
