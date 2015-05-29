@@ -21,7 +21,6 @@ XSDPATH2 = os.path.join(
 XSDPATH1 = os.path.join(
     os.path.dirname(__file__),
     'static/validador/DatosEnergeticosDelEdificioSchema10.xsd')
-XSDPATH = XSDPATH2
 
 VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros '
             'ElectricidadPeninsular ElectricidadBaleares '
@@ -588,7 +587,7 @@ class InformeXML(object):
         if self.version == '1':
             self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH1)))
         else:
-            self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH)))
+            self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH2)))
         self.xmlschema.validate(self.xmltree)
         errors = [(error.line, error.message.encode("utf-8"))
                   for error in self.xmlschema.error_log]
