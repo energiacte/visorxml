@@ -17,7 +17,7 @@ venv: requirements.txt
 	. ${VENV}/bin/activate; pip install -r requirements.txt
 #	touch ${VENV}/bin/activate
 #	touch requirements.txt
-#	aptitude install libxml2-dev libxslt-dev
+#	aptitude install libxml2-dev libxslt-dev libffi-dev
 
 updateenv: venv
 	. ${VENV}/bin/activate; \
