@@ -22,6 +22,8 @@ TODO del VisorXML
 
 [x] Comprobaciones básicas: que haya algo en nombre, provincia, ccaa, etc
 
+[x] Permitir usar JPG en imágenes
+
 - Imprimir informe en PDF:
 
   - http://pythonhosted.org/Flask-WeasyPrint/
