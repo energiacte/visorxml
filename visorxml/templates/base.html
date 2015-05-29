@@ -1,7 +1,14 @@
 {% extends "bootstrap/base.html" %}
+{% block styles %}
+{% if 'print' not in modo %}
+{{super()}}
+{% endif %}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
 {% block title %}Visor CTE_XML{% endblock %}
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+<div class="navbar navbar-inverse hidden-print" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle"
@@ -21,11 +28,6 @@
     </div>
   </div>
 </div>
-{% endblock %}
-{% block styles %}
-{{super()}}
-<link rel="stylesheet"
-      href="{{url_for('.static', filename='style.css')}}">
 {% endblock %}
 {% block content %}
 <div class="container">
