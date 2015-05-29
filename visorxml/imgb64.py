@@ -45,10 +45,14 @@ def base64check(b64data):
 if __name__ == '__main__':
     test1 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
     test2 = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
-    test3 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAA4UlEQVR4nO2VvQ2DMBCFn6PswASewLPY2yD2sDyEj3/Pl+DGrfd1yp26W7V8B/Aggg=="
-
+    test3 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAA4UlEQVR4nO2VvQ2DMBCFn6PswASewLPY2yD2sDyEj3/Pl+DGrfd1yp26W7V8B/Aggg==" #Imagen incompleta
+    test4 = "data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wgARCAAFAAUDAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABUBAQEAAAAAAAAAAAAAAAAAAAcJ/9oADAMBAAIQAxAAAAFHFqa//8QAFRABAQAAAAAAAAAAAAAAAAAABgX/2gAIAQEAAQUCAgUlxJ//xAAfEQACAQQCAwAAAAAAAAAAAAAEBQYBAgMHEyQSFBX/2gAIAQMBAT8B2ztmFxeF6ebt9PRiVhSuMXMkyZlcqoLEBaKowT8xZ7MYY4qj1xMRReqKsx8awfr+PHjH/8QAHREAAQQCAwAAAAAAAAAAAAAABAECAwUREgYTIv/aAAgBAgEBPwGhobE2x5COPyE0CQA1ISCIUn3sH95rO6bQ2F220L3+3zLmZ3rOVd//xAAfEAACAgAHAQAAAAAAAAAAAAADBQEEAgYHEhMUIxH/2gAIAQEABj8C1EXr9RHiGyheRTZMqcX+fMJ++8D3bvC8pkgsEpnP7nu4990vr934y//EABcQAQADAAAAAAAAAAAAAAAAAAEAEUH/2gAIAQEAAT8hey7MoJ1SXKfD/9oADAMBAAIAAwAAABC//8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAR/9oACAEDAQE/EEAftu7v33fynb//xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAgEBPxBOFTLTmYY/9//EABYQAQEBAAAAAAAAAAAAAAAAAAEAEf/aAAgBAQABPxAAyoe60AsMgUP/2Q=="
+    
     img = base642img(test1)
-    print "* Objeto imagen desde URI:", img
+    print "* Objeto imagen desde URI (png):", img
+    img = base642img(test4)
+    print "* Objeto imagen desde URI (jpg):", img
+    #img3.show()
     #img.show()
 
     img = base642img(test2)
@@ -64,7 +68,9 @@ if __name__ == '__main__':
     encodedbuf = base64.b64encode(contents)
     print encodedbuf
 
-    print "* Codificación desde nombre de archivo:", img2base64('mytest.png')
+    print "* Codificación desde nombre de archivo (png):", img2base64('mytest.png')
+
+    print "* Codificación desde nombre de archivo (jpg):", img2base64('mytest.jpg')
 
     img2 = base642img(test3)
     print "* Cadena con imagen incompleta o corrupta: ", img2
