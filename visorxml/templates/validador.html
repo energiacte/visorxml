@@ -48,8 +48,8 @@
   </div>
   {% else %}
   <div class="alert alert-success">
-    <p>El informe activo, <b>{{ session['filename'] }}</b>, es válido.</p>
-    <p>Puede proceder a su <a href="{{ url_for('visor')}}" class="alert-link"> visualización</a> o seleccionar un nuevo informe en el formulario para su validación.</p>
+    <p>El informe activo, <b>{{ session['filename'] }}</b>, no contiene errores de validación.</p>
+    <p>Puede <a href="{{ url_for('visor')}}" class="alert-link">ver su contenido</a> o seleccionar un nuevo informe para su validación.</p>
   </div>
   {% endif %}
 
