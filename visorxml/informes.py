@@ -516,9 +516,12 @@ class InformeXML(object):
         medidas = [] if medidas is None else medidas
         for medida in medidas:
             bb = Bunch()
-            #TODO: pueden ser CDATA. Ver qué se hace
             for attr in 'Nombre Descripcion CosteEstimado OtrosDatos'.split():
-                setattr(bb, attr, astext(medida, './%s' % attr))
+                txt = astext(medida, './%s' % attr)
+                if txt and txt.startswith('data:/text/html,'):
+                    txt = txt.lstrip('data:/text/html,')
+                    txt = clean_html(txt)
+                setattr(bb, attr, txt)
             cc = Bunch()
             bb.Demanda = cc
             for attr in 'Global GlobalDiferenciaSituacionInicial Calefaccion Refrigeracion'.split():
@@ -560,8 +563,11 @@ class InformeXML(object):
         for prueba in pruebas:
             bb = Bunch()
             bb.FechaVisita = astext(prueba, './FechaVisita')
-            #TODO: puede ser CDATA
-            bb.Datos = astext(prueba, './Datos')
+            txt = astext(prueba, './Datos')
+            if txt and txt.startswith('data:/text/html,'):
+                txt = txt.lstrip('data:/text/html,')
+                txt = clean_html(txt)
+            bb.Datos = txt
             data.PruebasComprobacionesInspecciones.append(bb)
         #print bb
 
