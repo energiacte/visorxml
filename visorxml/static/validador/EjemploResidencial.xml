@@ -461,31 +461,31 @@
 	</InstalacionesIluminacion>
 	<CondicionesFuncionamientoyOcupacion>
 		<Espacio>
-			<Espacio>P01_E01</Espacio>
+			<Nombre>P01_E01</Nombre>
 			<Superficie>57.00</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E01</Espacio>
+			<Nombre>P02_E01</Nombre>
 			<Superficie>3.55</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E02</Espacio>
+			<Nombre>P02_E02</Nombre>
 			<Superficie>9.77</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E03</Espacio>
+			<Nombre>P02_E03</Nombre>
 			<Superficie>13.27</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E04</Espacio>
+			<Nombre>P02_E04</Nombre>
 			<Superficie>23.85</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>residencial-24h-baja</PerfilDeUso>

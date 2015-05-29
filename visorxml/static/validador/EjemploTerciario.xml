@@ -281,25 +281,25 @@
 	</InstalacionesIluminacion>
 	<CondicionesFuncionamientoyOcupacion>
 		<Espacio>
-			<Espacio>P01_E01</Espacio>
+			<Nombre>P01_E01</Nombre>
 			<Superficie>84.18</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>noresidencial-16h-media</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P01_E02</Espacio>
+			<Nombre>P01_E02</Nombre>
 			<Superficie>24.18</Superficie>
 			<NivelDeAcondicionamiento>NoAcondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>noresidencial-16h-media</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E01</Espacio>
+			<Nombre>P02_E01</Nombre>
 			<Superficie>46.18</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>noresidencial-16h-media</PerfilDeUso>
 		</Espacio>
 		<Espacio>
-			<Espacio>P02_E02</Espacio>
+			<Nombre>P02_E02</Nombre>
 			<Superficie>12.18</Superficie>
 			<NivelDeAcondicionamiento>Acondicionado</NivelDeAcondicionamiento>
 			<PerfilDeUso>noresidencial-16h-media</PerfilDeUso>

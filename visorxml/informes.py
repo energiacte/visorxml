@@ -318,7 +318,7 @@ class InformeXML(object):
         elementoscond = [] if elementoscond is None else elementoscond
         for elemento in elementoscond:
             obj = Bunch()
-            for attr in ['Espacio', 'NivelDeAcondicionamiento', 'PerfilDeUso']:
+            for attr in ['Nombre', 'NivelDeAcondicionamiento', 'PerfilDeUso']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
@@ -326,7 +326,7 @@ class InformeXML(object):
         #print self.CondicionesFuncionamientoyOcupacion
 
         # Superficies de los espacios
-        data.superficies = dict((e.Espacio, e.Superficie) for e in data.CondicionesFuncionamientoyOcupacion)
+        data.superficies = dict((e.Nombre, e.Superficie) for e in data.CondicionesFuncionamientoyOcupacion)
 
         ## Instalaciones de iluminación
         bb = Bunch()

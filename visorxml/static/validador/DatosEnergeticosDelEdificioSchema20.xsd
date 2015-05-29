@@ -10,7 +10,7 @@
 <xs:simpleType name="stringtypeCalificacion"><xs:restriction base="xs:string"><xs:pattern value="([A-G])"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeSiNo"><xs:restriction base="xs:string"><xs:pattern value="Si|No"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeModoDeObtencion"><xs:restriction base="xs:string"><xs:pattern value="Usuario|PorDefecto|Estimado"/></xs:restriction></xs:simpleType>
-<xs:simpleType name="stringtypeTipoDeEdificio"><xs:restriction base="xs:string"><xs:pattern value="ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndvidualEnBloque|EdificioUsoTerciario|LocalUsoTerciario"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeTipoDeEdificio"><xs:restriction base="xs:string"><xs:pattern value="ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque|EdificioUsoTerciario|LocalUsoTerciario"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeAlcanceInformacionXML"><xs:restriction base="xs:string"><xs:pattern value="CertificacionExistente|VerificacionExistente|CertificacionVerificacionExistente|CertificacionNuevo|VerificacionNuevo|CertificacionVerificacionNuevo"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeTipoCerramientosOpacos"><xs:restriction base="xs:string"><xs:pattern value="Fachada|Cubierta|Suelo|ParticionInteriorVertical|ParticionInteriorHorizontal|Adiabatico"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeTipoHuecosyLucernarios"><xs:restriction base="xs:string"><xs:pattern value="Hueco|Lucernario"/></xs:restriction></xs:simpleType>
@@ -316,7 +316,7 @@
     <xs:element name="Espacio" maxOccurs="unbounded" minOccurs="0">
         <xs:complexType>
           <xs:all>
-            <xs:element name="Espacio" type="xs:string"/>
+            <xs:element name="Nombre" type="xs:string"/>
             <xs:element name="Superficie" type="dectype2digits"/>
             <xs:element name="NivelDeAcondicionamiento" type="stringtypeNivelDeAcondicionamiento"/>
             <xs:element name="PerfilDeUso" type="stringtypePerfilDeUso"/>

@@ -56,3 +56,5 @@
 ----------
 
 - Se permiten valores decimales con signo (p.e., para transmitancias negativas)
+- La etiqueta que define el nombre de los espacios en condiciones operacionales es Nombre, no Espacio
+
