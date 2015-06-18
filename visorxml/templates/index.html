@@ -9,24 +9,35 @@
 <div class="page">
   <div class="row">
     <div class="col-xs-8">
-      <p>Para facilitar el intercambio electrónico y el proceso de datos procedentes de los procedimientos de evaluación de la demanda y el consumo energético orientados a la certificación energética de edificios y la verificación del DB-HE del Código Técnico de la edificación se define un formato de salida y resultados estandarizado cuya descripción pormenorizada se realiza en el <a href="{{ url_for('static', filename='validador/DOC-DB-HE-x-Bases_7-XML.pdf') }}'">Documento descriptivo del formato de salida y resultados</a>.</p>
+      <p>Esta aplicación facilita el aprovechamiento de los informes de evaluación energética en formato electrónico, para su comprobación, visualización y edición.</p>
+      <p>Este formato facilita el intercambio electrónico y el proceso de datos procedentes de procedimientos de evaluación de la demanda y del consumo energético orientados a la certificación energética de edificios o la verificación del DB-HE del Código Técnico de la Edificación. La definición del formato se describe en el documento <a href="{{ url_for('static', filename='validador/20150519 - Informe de evaluación energética del edificio en formato electrónico (XML).pdf') }}">Informe de evaluación energética del edificio en formato electrónico (XML)</a>.</p>
 
-      <p>La definición de una sintaxis y un conjunto de etiquetas común permite almacenar de forma interoperable la información de resultados y de salida (descripción general del modelo energético, factores de conversión, valores límite, etc) obtenida de los diversos procedimientos de cálculo de la demanda y el consumo energético, como la herramienta unificada LIDER/CALENER.</p>
+      <p>Este programa se ha desarrollado por el Instituto Eduardo Torroja (IETcc-CSIC) bajo el convenio suscrito con el Ministerio de Fomento.</p>
 
-      <p>El formato emplea la sintaxis <a href="http://www.w3.org/TR/REC-xml/">XML 1.0</a>, con codificación UTF-8, y el siguiente archivo <a href="{{ url_for('static', filename='validador/DatosEnergeticosDelEdificioSchema.xsd') }}">DatosEnergeticosDelEdifico.xsd</a>, incluye la definición formal de su sintaxis usando el estándar <a href="http://www.w3.org/XML/Schema">XML Schema 1.1</a>. Para este esquema se suministra el archivo de (<a href="{{ url_for('static', filename='validador/Cambios.txt') }}">registro de cambios</a>), que recoge las modificaciones realizadas al formato en cada una de sus versiones.</p>
+      <div class="well">
+        <ul>
+          <li>
+            <p>Definición del esquema de datos <small>(sintaxis <a href="http://www.w3.org/XML/Schema">XML Schema 1.1</a>)</small>:</p>
+            <ul>
+              <li><a href="{{ url_for('static', filename='validador/DatosEnergeticosDelEdificioSchema20.xsd') }}">versión 2.0</a></li>
+              <li><a href="{{ url_for('static', filename='validador/DatosEnergeticosDelEdificioSchema10.xsd') }}">versión 1.0</a></li>
+            </ul>
+          </li>
+
+          <li><a href="{{ url_for('static', filename='validador/Cambios.txt') }}">Registro de cambios</a> entre versiones del esquema.</li>
+          <li>
+            <p>Archivos de ejemplo:</p>
+            <ul>
+              <li>Informe de edificio con uso terciario (v2.0): <a href="{{ url_for('static', filename='validador/EjemploTerciario.xml') }}">EjemploTerciario.xml</a></li>
+              <li>Informe de edificio con uso residencial (v2.0): <a href="{{ url_for('static', filename='validador/EjemploResidencial.xml') }}">EjemploResidencial.xml</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
+
     <div class="col-xs-4">
       <img class="img-responsive" src="{{ url_for('static', filename='img/res/light-bulb-499796_1280.jpg') }}" />
-    </div>
-  </div>
-
-  <div class="row top-buffer">
-    <div class="well">
-      <p>Archivos de ejemplo:</p>
-      <ul>
-        <li>Informe de edificio con uso terciario: <a href="{{ url_for('static', filename='validador/InformeTerciario_ejemplo.xml') }}">InformeTerciario_ejemplo.xml</a></li>
-        {# <li>Informe de edificio con uso residencial: <a href="{{ url_for('static', filename='validador/InformeResidencial_ejemplo.xml') }}">InformeResidencial_ejemplo.xml</a></li> #}
-      </ul>
     </div>
   </div>
 
