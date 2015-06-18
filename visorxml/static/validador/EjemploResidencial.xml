@@ -624,7 +624,7 @@
 	<PruebasComprobacionesInspecciones>
       <Visita>
         <FechaVisita>24/02/2015</FechaVisita>
-        <Datos><![CDATA[data:/text/html,Información obtenida en la visita <b>primera</b>]]></Datos>
+        <Datos><![CDATA[data:text/html,Información obtenida en la visita <b>primera</b>]]></Datos>
       </Visita>
     </PruebasComprobacionesInspecciones>
 </DatosEnergeticosDelEdificio>
