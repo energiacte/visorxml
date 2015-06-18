@@ -51,9 +51,9 @@ def astext(tree, path):
     if element is None or not element.text:
         return '-'
     txt = element.text
-    if txt and txt.startswith('data:/text/html,'):
-        txt = txt.lstrip('data:/text/html,')
-        txt = clean_html(txt)
+    if txt and txt.startswith('data:text/html,'):
+        txt = txt.lstrip('data:text/html,').strip()
+        txt = clean_html(txt) if txt else ''
     return txt
 
 def asint(tree, path):
