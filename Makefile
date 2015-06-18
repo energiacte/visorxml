@@ -17,7 +17,6 @@ venv: requirements.txt
 	. ${VENV}/bin/activate; pip install -r requirements.txt
 #	touch ${VENV}/bin/activate
 #	touch requirements.txt
-#	aptitude install libxml2-dev libxslt-dev libffi-dev
 
 updateenv: venv
 	. ${VENV}/bin/activate; \
@@ -44,6 +43,8 @@ updateenv: venv
 # sudo apt-get install python-pip python-dev build-essential
 # sudo pip install --upgrade pip
 # sudo apt-get install libapache2-mod-wsgi
+#	aptitude install libxml2-dev libxslt-dev libffi-dev
+#	Hay que hacer pip install -U -r requirements.txt en el host destino con el entorno activado, para instalar todo
 upload:
 	scp -r requirements.txt $(RUSER)@$(RHOST):~
 	ssh -t -A $(RUSER)@$(RHOST) "mkdir -p ${VENV}/var/visorxml-instance/"
@@ -53,10 +54,15 @@ upload:
 								 sudo mv visorxml.wsgi /var/www/visorxml/ && \
 								 sudo chown www-data:www-data /var/www/visorxml/visorxml.wsgi && \
 								 sudo chown -R www-data:www-data ${SITEDIR}/visorxml/uploads && \
+								 sudo touch ${SITEDIR}/visorxml/visorxmlfiles.log && \
 								 sudo chown www-data:www-data ${SITEDIR}/visorxml/visorxmlfiles.log && \
 								 sudo chmod -R ug+rw ${SITEDIR}/visorxml/uploads"
 	scp -r visorxml/ $(RUSER)@$(RHOST):${SITEDIR}
 	scp -r instance/visorxml.cfg $(RUSER)@$(RHOST):${VENV}/var/visorxml-instance/visorxml.cfg
+
+remoteclean:
+	ssh -t -A $(RUSER)@$(RHOST) "find ${SITEDIR}/visorxml/uploads -iname '*.xml' -exec rm -rf '{}' \; && \
+								 cp /dev/null ${SITEDIR}/visorxml/uploads/visorxmlfiles.log"
 
 clean:
 	find visorxml/uploads -iname '*.xml' -exec rm -rf '{}' \;
