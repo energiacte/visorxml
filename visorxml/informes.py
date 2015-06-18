@@ -538,7 +538,6 @@ class InformeXML(object):
             for attr in SERVICIOS:
                 setattr(cc, attr, asfloat(medida, './EnergiaFinal/%s' % attr))
             cc = Bunch()
-            bb.CalificacionEnergiaFinal = None #TODO: Obtener calificación a partir de escalas
             bb.EnergiaPrimariaNoRenovable = cc
             for attr in SERVICIOS:
                 setattr(cc, attr, asfloat(medida, './EnergiaPrimariaNoRenovable/%s' % attr))
@@ -575,7 +574,6 @@ class InformeXML(object):
         #print bb
 
         ## Datos personalizados
-        #TODO: parece no funcionar
         txt = astext(self.xmltree, './DatosPersonalizados')
         if txt and txt.startswith('data:/text/html,'):
             txt = txt.lstrip('data:/text/html,')
