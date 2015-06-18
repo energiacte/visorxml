@@ -1,10 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% block styles %}
-{% if 'print' not in modo %}
 {{super()}}
+{% if 'print' in modo %}
+<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet" media="print"> <!-- El paquete original limita a media="screen", y aunque esto no es óptimo evitamos cambiar el paquete -->
 {% endif %}
 <link rel="stylesheet"
-      href="{{url_for('.static', filename='style.css')}}">
+      href="{{url_for('.static', filename='css/style.css')}}">
 {% endblock %}
 {% block title %}Visor CTE_XML{% endblock %}
 {% block navbar %}
