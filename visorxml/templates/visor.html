@@ -1,6 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Informe de eficiencia energética en XML - Visor de informes{% endblock %}
 
+{% block scripts %}
+{{super()}}
+<script src="{{ url_for('.static', filename='js/jquery-ui.min.js') }}"></script>
+<link type="text/css" rel="stylesheet" href="{{ url_for('.static', filename='css/jquery-ui.min.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('.static', filename='css/jquery-ui.theme.min.css') }}">
+<script src="{{ url_for('.static', filename='js/jquery.fileDownload.js') }}"></script>
+<script type="text/javascript">$(function() {
+$(document).on("click", "a.getfile", function() {
+    var $preparingFileModal = $("#preparing-file-modal");
+    $preparingFileModal.dialog({ modal: true });
+    $.fileDownload($(this).attr('href'), {
+        successCallback: function (url) {$preparingFileModal.dialog('close');},
+        failCallback: function (responseHtml, url) {
+            $preparingFileModal.dialog('close');
+            $("#error-modal").dialog({ modal: true });
+        }
+    });
+    return false; // stop the click event
+});
+});</script>
+{% endblock %}
+
 {% block page_content %}
 <div class="page">
   {% if 'text' in modo %}
@@ -24,7 +46,7 @@
   {% set calemis = d.Calificacion.EmisionesCO2 %}
   {% set calepnr = d.Calificacion.EnergiaPrimariaNoRenovable %}
 
-  <nav class="hidden-print"><a class="btn btn-primary btn-lg" role="button" href="{{ url_for('.getpdf') }}">Obtener PDF</a></nav>
+  <nav class="hidden-print"><a class="btn btn-primary btn-lg getfile" role="button" href="{{ url_for('.getpdf') }}">Obtener PDF</a></nav>
 
   <div class="piedepagina">
     Fecha <small>(de generación del documento)</small>: {{dc.Fecha}} <br />
@@ -880,5 +902,13 @@
   </div>
 
   {% endif %}
+</div>
+
+<div id="preparing-file-modal" title="Preparando informe..." style="display: none;" >
+    Por favor, espere mientras preparamos su informe...
+    <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-indeterminate" role="progressbar"></div>
+</div>
+<div id="error-modal" title="Error" style="display: none;">
+    Ocurrió un problema al preparar el informe. Pruebe más tarde.
 </div>
 {% endblock %}

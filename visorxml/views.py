@@ -11,7 +11,8 @@ import datetime
 import hashlib
 from flask import (request, session, #g, abort, flash
                    redirect, url_for, render_template,
-                   send_file)
+                   send_file, make_response)
+from flask_weasyprint import HTML, CSS, render_pdf
 from visorxml import app
 from visorxml.models import XMLFileForm, datafiles
 from visorxml.informes import InformeXML, analize, ALERT
@@ -65,10 +66,30 @@ def visor():
         with open(datafiles.path(session['storedfilename'])) as xmlfile:
             informe = InformeXML(xmlfile.read())
     else:
+        #TODO: indicar que se debe validar correctamente antes de visualizar
         informe = None
     return render_template('visor.html',
                            informe=informe,
                            modo='data') # modo = raw,text,html,data
+
+@app.route('/pdf/')
+def getpdf():
+    "Informe en formato PDF"
+    if (session.get('storedfilename')
+        and not session.get('validationerrors')
+        and os.path.exists(datafiles.path(session['storedfilename']))):
+        with open(datafiles.path(session['storedfilename'])) as xmlfile:
+            informe = InformeXML(xmlfile.read())
+        html = render_template('visor.html', informe=informe, modo='data print')
+        #HTML(string=html).write_pdf('/home/pachi/salida.pdf', stylesheets=[CSS(string='#fotos img {width:5cm;}')])
+        pdf_filename = session['filename'].rsplit('.xml', 1)[0] + '.pdf'
+        resp = make_response(render_pdf(HTML(string=html),
+                                        download_filename=pdf_filename))
+        # cookie bandera para jquery.fileDownload.js
+        resp.set_cookie('fileDownload', 'true', path='/')
+        return resp
+    else:
+        return redirect(url_for('validador'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
