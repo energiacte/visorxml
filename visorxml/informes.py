@@ -29,7 +29,7 @@ SERVICIOS = ('Global Calefaccion Refrigeracion ACS Iluminacion').split()
 NIVELESESCALA = 'A B C D E F'.split()
 ALERTINT = 9999999999
 ALERTFLOAT = ALERTINT + 0.99
-
+ALERT = ALERTINT / 100
 
 class Bunch(OrderedDict):
     "Contenedor genérico"
@@ -244,7 +244,7 @@ class InformeXML(object):
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
             bb.GeneradoresDeCalefaccion.append(obj)
-        bb.totalpotenciageneradoresdecalefaccion = sum(e.PotenciaNominal for e in bb.GeneradoresDeCalefaccion if e.PotenciaNominal < ALERTINT)
+        bb.totalpotenciageneradoresdecalefaccion = sum(e.PotenciaNominal for e in bb.GeneradoresDeCalefaccion if e.PotenciaNominal <= ALERT)
             
         bb.GeneradoresDeRefrigeracion = []
         elementosgeneradores = self.xmltree.find('./InstalacionesTermicas/GeneradoresDeRefrigeracion')
@@ -257,7 +257,7 @@ class InformeXML(object):
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
             bb.GeneradoresDeRefrigeracion.append(obj)
-        bb.totalpotenciageneradoresderefrigeracion = sum(e.PotenciaNominal for e in bb.GeneradoresDeRefrigeracion if e.PotenciaNominal < ALERTINT)
+        bb.totalpotenciageneradoresderefrigeracion = sum(e.PotenciaNominal for e in bb.GeneradoresDeRefrigeracion if e.PotenciaNominal <= ALERT)
             
         bb.InstalacionesACS = []
         elementosgeneradores = self.xmltree.find('./InstalacionesTermicas/InstalacionesACS')
@@ -660,7 +660,7 @@ def analize(informe):
 
     values = []
     _visit(values, 'root', informe.data)
-    suspects = [key for (value, key) in values if value >= ALERTINT]
+    suspects = [key for (value, key) in values if value >= ALERT]
     if suspects:
         info.append(('AVISO', u'Valores numéricos erróneos en : %s' % ', '.join(set(suspects))))
 
