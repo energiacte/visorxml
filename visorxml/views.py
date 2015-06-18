@@ -14,7 +14,7 @@ from flask import (request, session, #g, abort, flash
                    send_file)
 from visorxml import app
 from visorxml.models import XMLFileForm, datafiles
-from visorxml.informes import InformeXML, analize
+from visorxml.informes import InformeXML, analize, ALERT
 
 @app.route('/')
 def index():
@@ -78,17 +78,33 @@ def uploaded_file(filename):
 
 @app.template_filter('asnum')
 def asnum(value):
+    "Devuelve un valor numérico con dos decimales"
     try:
-        return '{:0.2f}'.format(float(value)).replace('.', ',')
+        val = float(value)
+        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else '-'
     except:
-        return '-'
+        res = '-'
+    return res
+
+@app.template_filter('aspct')
+def aspct(value):
+    "Devuelve un porcentaje a partir del tanto por uno"
+    try:
+        val = 100.0 * float(value)
+        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else '-'
+    except:
+        res = '-'
+    return res
 
 @app.template_filter('asint')
 def asint(value):
+    "Devuelve un valor entero"
     try:
-        return '{0:d}'.format(int(value))
+        val = int(value)
+        res = '{0:d}'.format(int(val)) if val <= ALERT else '-'
     except:
-        return '-'
+        res = '-'
+    return res
 
 @app.template_filter('ascalif')
 def ascalif(value):
@@ -99,7 +115,7 @@ def difwith(valuedest, valueorig):
     try:
         res1 = float(valueorig) - float(valuedest)
         res2 = 100.0 * res1 / float(valueorig)
-        return '{:0.2f} ({:0.2f}%)'.format(res1, res2).replace('.', ',')
+        return '{:0.2f}<br />({:0.2f}%)'.format(res1, res2).replace('.', ',')
     except:
         return '-'
 
