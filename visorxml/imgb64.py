@@ -38,6 +38,7 @@ def base64check(b64data):
         image_string = cStringIO.StringIO(base64.b64decode(data))
         image = PIL.Image.open(image_string)
         image.load()
+        # Limitar tamaño?: image.thumbnail((1500, 1500), Image.ANTIALIAS)
         return b64data
     except Exception:
         return ''
