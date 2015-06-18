@@ -24,10 +24,11 @@ TODO del VisorXML
 
 [x] Permitir usar JPG en imágenes
 
-- Imprimir informe en PDF:
+[x] Imprimir informe en PDF:
 
   - http://pythonhosted.org/Flask-WeasyPrint/
   - emitir informe en PDF
+  - http://diethardsteiner.github.io/reporting/2015/02/17/CSS-for-print.html
 
 - Incorporar medidas de mejora a partir de otro XML
 
