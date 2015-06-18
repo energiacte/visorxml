@@ -49,7 +49,7 @@ XMLPARSER = lxml.etree.XMLParser(resolve_entities=False, # no sustituye unicode 
 def astext(tree, path):
     element = tree.find(path)
     if element is None or not element.text:
-        return None
+        return '-'
     txt = element.text
     if txt and txt.startswith('data:/text/html,'):
         txt = txt.lstrip('data:/text/html,')
@@ -153,6 +153,10 @@ class InformeXML(object):
                      'TipoDeEdificio', 'NormativaVigente', 'Procedimiento',
                      'AlcanceInformacionXML']:
             setattr(bb, attr, astext(et, './IdentificacionEdificio/%s' % attr))
+        if 'ninguno' in bb.ReferenciaCatastral:
+            bb.ReferenciaCatastral = '-'
+        if 'Seleccione de la lista' in bb.NormativaVigente:
+            bb.NormativaVigente = '-'    
         #print bb
 
         ## Datos generales y geometría
