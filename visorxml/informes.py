@@ -598,32 +598,39 @@ class InformeXML(object):
 def analize(informe):
     """Analiza contenidos de un Informe XML en busca de posibles errores"""
     dd = informe.data
-    zci = dd.IdentificacionEdificio.ZonaClimatica[:-1]
-    zcv = dd.IdentificacionEdificio.ZonaClimatica[-1]
-    esvivienda = 'Vivienda' in dd.IdentificacionEdificio.TipoDeEdificio
+    ddid = dd.IdentificacionEdificio
+    ddgeo = dd.DatosGeneralesyGeometria
+    zci = ddid.ZonaClimatica[:-1]
+    zcv = ddid.ZonaClimatica[-1]
+    esvivienda = 'Vivienda' in ddid.TipoDeEdificio
 
     info = []
-    if sum(informe.data.superficies.values()) > dd.DatosGeneralesyGeometria.SuperficieHabitable:
+    if ddid.AnoConstruccion == '-':
+        info.append(('AVISO', u'No se ha definido el año de construcción'))
+    if ddid.ReferenciaCatastral == '-':
+        info.append(('AVISO', u'No se ha definido la referencia catastral'))
+
+    if sum(dd.superficies.values()) > ddgeo.SuperficieHabitable:
         info.append(('ERROR', u'Superficies habitable menor que suma de la superficie de los espacios'))
     if zcv not in '1234':
         info.append(('ERROR', u'Zona climática de verano incorrecta'))
     if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
         info.append(('ERROR', u'Zona climática de invierno incorrecta'))
 
-    plano_ = dd.DatosGeneralesyGeometria.Plano
+    plano_ = ddgeo.Plano
     if not plano_:
         info.append(('AVISO', u'Sin datos de plano'))
     elif not base64check(plano_):
         info.append(('AVISO', u'Datos de plano incorrectos'))
 
-    imagen_ = dd.DatosGeneralesyGeometria.Imagen
+    imagen_ = ddgeo.Imagen
     if not imagen_:
         info.append(('AVISO', u'Sin datos de imagen'))
     elif not base64check(imagen_):
         info.append(('AVISO', u'Datos de imagen incorrectos'))
 
-    if ((0 > dd.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableCalefactada > 100)
-        or (0 > dd.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableRefrigerada > 100)):
+    if ((0 > ddgeo.PorcentajeSuperficieHabitableCalefactada > 100)
+        or (0 > ddgeo.PorcentajeSuperficieHabitableRefrigerada > 100)):
         info.append(('ERROR', u'Porcentajes de superficies acondicionadas fuera de rango'))
 
     if esvivienda:
