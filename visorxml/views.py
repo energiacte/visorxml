@@ -25,6 +25,12 @@ def index():
 @app.route('/validador/', methods=['GET', 'POST'])
 def validador():
     "Valida archivos de informe en XML"
+    #TODO: recoger y validar archivos con medidas de mejora
+    #TODO: guardar archivos usando hash y así evitar guardar storedfilename
+    #TODO: En vez de un informe tendremos una lista de informes,
+    #TODO: con el informe base y los de las medidas de mejora.
+    #TODO: En vez de guardar en la sesión del usuario los datos, usamos los hashes de archivos almacenados en una BBDD
+    #TODO: Guardamos solamente el nuevo archivo si no coincide con el de la actual sesión
     form = XMLFileForm()
     if form.validate_on_submit() and not form.errors:
         data = request.files['base']
