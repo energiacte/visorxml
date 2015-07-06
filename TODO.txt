@@ -61,5 +61,21 @@ TODO del VisorXML
 Pensar
 ======
 
+- JSON y plantillas en el cliente:
 
+import json
+import xmltodict
 
+def convert(xml_file, xml_attribs=True):
+    with open(xml_file, "rb") as f:    # notice the "rb" mode
+        d = xmltodict.parse(f, xml_attribs=xml_attribs)
+        return json.dumps(d, indent=4)
+
+https://pypi.python.org/pypi/jsonpath-rw
+
+Fixes
+=====
+
+- Eliminar hack para usar media='print' en la plantilla base en cuanto haya una nueva versión de flask-bootstrap que elimine media="screen" para bootstrap.css (arreglado en git después de reportar fallo).
+- Cambiar sinimagen.png por SVG inline
+- Avisos de validación con plantas = 0 (aunque plantas sobre rasante es un texto)
