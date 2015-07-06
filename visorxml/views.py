@@ -27,47 +27,43 @@ def validador():
     "Valida archivos de informe en XML"
     form = XMLFileForm()
     if form.validate_on_submit() and not form.errors:
-        filedata = request.files['file']
-        session['filename'] = filedata.filename
-        #XXX: usar, no la sesión del usuario sino los hashes de archivos almacenados en una BBDD
-        #Guardamos solamente el nuevo archivo si no coincide con el de la actual sesión
-        hashkey = hashlib.md5(filedata.read()).hexdigest()
-        filedata.seek(0) # rebobinamos tras leer
-        if (session.get('hashkey') != hashkey
-            or not os.path.exists(datafiles.path(session['storedfilename']))):
-            session['hashkey'] = hashkey
-            session['storedfilename'] = datafiles.save(filedata)
-            filedata.seek(0) # rebobinamos el stream después de guardar
-        informe = InformeXML(filedata.read())
-        errors = informe.validate()
-        info = analize(informe)
-        session['validationerrors'] = errors
-        session['info'] = info
+        data = request.files['base']
+        xmldata = data.read()
+        data.seek(0) # rebobinamos tras leer       
+        session['base_name'] = data.filename
+        hashkey = hashlib.md5(xmldata).hexdigest()
+        if (session.get('base_hashkey') != hashkey
+            or not os.path.exists(datafiles.path(session['base_storedname']))):
+            session['base_hashkey'] = hashkey
+            session['base_storedname'] = datafiles.save(data)
+            #data.seek(0) # rebobinamos el stream después de guardar
+        informe = InformeXML(xmldata)
+        session['base_validationerrors'] = informe.validate()
+        session['base_info'] = analize(informe)
         # Guardamos datos en el registro
         with open(app.config['LOG_FILE'], 'a') as logfile:
             dt = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
-            haserrors = "ERROR" if errors else "OK"
+            haserrors = "ERROR" if session['base_validationerrors'] else "OK"
             logfile.write("%s, %s, %s, %s, %s\n" % (dt,
                                                     request.remote_addr,
-                                                    session['filename'],
-                                                    session['storedfilename'],
+                                                    session['base_name'],
+                                                    session['base_storedname'],
                                                     haserrors))
         return redirect(url_for('validador'))
-    #session['info'] = ''
+        #session['base_info'] = ''n
     return render_template('validador.html',
                            form=form)
 
 @app.route('/visor/', methods=['GET', 'POST'])
 def visor():
     "Visualiza archivos de informe en XML"
-    if (session.get('storedfilename')
-        and not session.get('validationerrors')
-        and os.path.exists(datafiles.path(session['storedfilename']))):
-        with open(datafiles.path(session['storedfilename'])) as xmlfile:
+    if (session.get('base_storedname')
+        and not session.get('base_validationerrors')
+        and os.path.exists(datafiles.path(session['base_storedname']))):
+        with open(datafiles.path(session['base_storedname'])) as xmlfile:
             informe = InformeXML(xmlfile.read())
     else:
-        #TODO: indicar que se debe validar correctamente antes de visualizar
-        informe = None
+        return redirect(url_for('validador'))
     return render_template('visor.html',
                            informe=informe,
                            modo='data') # modo = raw,text,html,data
@@ -75,14 +71,14 @@ def visor():
 @app.route('/pdf/')
 def getpdf():
     "Informe en formato PDF"
-    if (session.get('storedfilename')
-        and not session.get('validationerrors')
-        and os.path.exists(datafiles.path(session['storedfilename']))):
-        with open(datafiles.path(session['storedfilename'])) as xmlfile:
+    if (session.get('base_storedname')
+        and not session.get('base_validationerrors')
+        and os.path.exists(datafiles.path(session['base_storedname']))):
+        with open(datafiles.path(session['base_storedname'])) as xmlfile:
             informe = InformeXML(xmlfile.read())
         html = render_template('visor.html', informe=informe, modo='data print')
         #HTML(string=html).write_pdf('/home/pachi/salida.pdf', stylesheets=[CSS(string='#fotos img {width:5cm;}')])
-        pdf_filename = session['filename'].rsplit('.xml', 1)[0] + '.pdf'
+        pdf_filename = session['base_name'].rsplit('.xml', 1)[0] + '.pdf'
         resp = make_response(render_pdf(HTML(string=html),
                                         download_filename=pdf_filename))
         # cookie bandera para jquery.fileDownload.js
