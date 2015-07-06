@@ -527,11 +527,11 @@
 	<PruebasComprobacionesInspecciones>
         <Visita>
             <FechaVisita>10/5/2014</FechaVisita>
-            <Datos><![CDATA[data:/text/html,<h1>Pruebas</h1>Se ha ejecutado <b>una cala</b><br>y <i>calculado</i> el resto de elementos.]]></Datos>
+            <Datos><![CDATA[data:text/html,<h1>Pruebas</h1>Se ha ejecutado <b>una cala</b><br>y <i>calculado</i> el resto de elementos.]]></Datos>
         </Visita>
         <Visita>
             <FechaVisita>20/8/2014</FechaVisita>
-            <Datos><![CDATA[data:/text/html,<h1>Pruebas</h1>Se ha ejecutado <b>otra cala</b><br>y <i>calculado</i> el muro oeste.]]></Datos>
+            <Datos><![CDATA[data:text/html,<h1>Pruebas</h1>Se ha ejecutado <b>otra cala</b><br>y <i>calculado</i> el muro oeste.]]></Datos>
         </Visita>
 	</PruebasComprobacionesInspecciones>
 	<DatosPersonalizados>
