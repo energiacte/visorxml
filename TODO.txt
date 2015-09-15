@@ -46,6 +46,8 @@ TODO del VisorXML
   - http://pythonhosted.org/Flask-User/
   - archivos subidos: ver registro, borrar, etc
 
+- Documento PDF híbrido con XML embebido
+
 - Usar base de datos para guardar registro:
 
   - http://pythonhosted.org/Flask-SQLAlchemy/
