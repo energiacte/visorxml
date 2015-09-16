@@ -49,7 +49,7 @@ module.exports = function(grunt) {
       },
       fonts: {
         options: {
-          destPrefix: 'vendor/fonts'
+          destPrefix: 'visorxml/static/fonts'
         },
         files: {
           'glyphicons-halflings-regular.eot': 'bootstrap/dist/fonts/glyphicons-halflings-regular.eot',

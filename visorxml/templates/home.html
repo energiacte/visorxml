@@ -1,1 +1,92 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{% trans "Main Page" %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>{% trans "Informe energético del edificio en formato XML" %}</h1>
+</div>
+<div class="page">
+  <div class="row">
+    <div class="col-xs-8">
+      <p>
+        {% blocktrans %}
+        Esta aplicación facilita el aprovechamiento de los informes de evaluación energética en formato electrónico,
+        para su comprobación, visualización y edición.
+        {% endblocktrans %}
+      </p>
+      <p>
+        {% static "docs/20150519_FormatoXML.pdf" as xml_format_url %}
+        {% blocktrans %}
+        Este formato está orientado al intercambio electrónico y al proceso de datos originados en procedimientos de
+        evaluación de la demanda y del consumo energético para la certificación energética de edificios y la
+        verificación del DB-HE del Código Técnico de la Edificación (CTE). La definición del formato se describe en el
+        documento <a href="{{ xml_format_url }}">Informe de evaluación
+        energética del edificio en formato electrónico (XML)</a>.
+        {% endblocktrans %}
+      </p>
+
+      <div class="well clear">
+        <ul>
+          <li>
+            <p>
+              {% blocktrans %}
+              Definición del esquema de datos <small>(sintaxis <a href="http://www.w3.org/XML/Schema">XML Schema 1.1</a>)</small>:
+              {% endblocktrans %}
+            </p>
+            <ul>
+              <li><a href="{% static "docs/DatosEnergeticosDelEdificioSchema20.xsd" %}">{% trans "versión 2.0" %}</a></li>
+              <li><a href="{% static "docs/DatosEnergeticosDelEdificioSchema10.xsd" %}">{% trans "versión 1.0" %}</a></li>
+            </ul>
+          </li>
+
+          <li><a href="{% static "docs/Cambios.txt" %}">{% trans "Registro de cambios entre versiones del esquema." %}</a></li>
+          <li>
+            <p>{% trans "Archivos de ejemplo:" %}</p>
+            <ul>
+              <li>
+                {% trans "Informe de edificio con uso terciario (v2.0):" %}
+                <a href="{% static "docs/EjemploTerciario.xml" %}">EjemploTerciario.xml</a>
+              </li>
+              <li>
+                {% trans "Informe de edificio con uso residencial (v2.0):" %}
+                <a href="{% static "docs/EjemploResidencial.xml" %}">EjemploResidencial.xml</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <p>
+          {% blocktrans %}
+          Este programa está desarrollado por el <b><a href="http://www.ietcc.csic.es">Instituto Eduardo Torroja de
+          Ciencias de la Construcción (IETcc-CSIC)</a></b> en el marco del convenio suscrito con el
+          <b><a href="http://www.fomento.gob.es">Ministerio de Fomento</a></b>.
+          {% endblocktrans %}
+        </p>
+        <div class="clearfix">
+          <a href="http://www.fomento.gob.es">
+            <img class="img-responsive col-xs-6" src="{% static "img/logomfom.png" %}" />
+          </a>
+          <a href="http://www.ietcc.csic.es">
+            <img class="img-responsive col-xs-6" src="{% static "img/logoietcccsic.png" %}" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-4">
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <b>{% trans "Aplicación en fase de pruebas" %}</b><br />
+        {% trans "El uso de esta aplicación no tiene valor reglamentario." %}
+      </div>
+      <img class="img-responsive" src="{% static "img/res/light-bulb-499796_1280.jpg" %}" />
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
