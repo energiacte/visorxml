@@ -1,0 +1,10 @@
+*.pyc
+.DS_Store
+
+.idea
+bower_components
+node_modules
+vendor
+venv
+
+visorxml/static

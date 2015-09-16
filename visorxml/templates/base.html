@@ -1,37 +1,47 @@
-{% extends "bootstrap/base.html" %}
-{% block styles %}
-{{super()}}
-{% if 'print' in modo %}
-<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet" media="print"> <!-- El paquete original limita a media="screen", y aunque esto no es óptimo evitamos cambiar el paquete -->
-{% endif %}
-<link rel="stylesheet"
-      href="{{url_for('.static', filename='css/style.css')}}">
-{% endblock %}
-{% block title %}Visor CTE_XML{% endblock %}
-{% block navbar %}
-<div class="navbar navbar-inverse hidden-print" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle"
-              data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{{ url_for('index') }}">Visor CTE_XML</a>
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Visor CTE_XML</title>
+
+    <link href="{%  static "css/style.css" %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button"
+                  class="navbar-toggle collapsed"
+                  data-toggle="collapse"
+                  data-target="#navbar"
+                  aria-expanded="false"
+                  aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url "home" %}">Visor CTE_XML</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url "home" %}">Home</a></li>
+            <li><a href="">Validador</a></li>
+            <li><a href="">Visor</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
     </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><a href="{{ url_for('validador') }}">Validador</a></li>
-        <li><a href="{{ url_for('visor') }}">Visor</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-{% endblock %}
-{% block content %}
-<div class="container">
-    {% block page_content %}{% endblock %}
-</div>
-{% endblock %}
+
+    <script src="{%  static "js/visorxml.js" %}"></script>
+  </body>
+</html>
