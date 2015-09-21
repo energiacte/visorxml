@@ -1,23 +1,40 @@
 {% extends "base.html" %}
-{% block title %}Validador de informes{% endblock %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}{% trans "Validador de informes" %}{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1>Validador de informes en formato XML</h1>
+  <h1>{% trans "Validador de informes en formato XML" %}</h1>
 </div>
 <div class="page">
-  <p class="lead">Seleccione un archivo de informe de eficiencia energética en XML y, opcionalmente, hasta tres archivos obtenidos mediante a aplicación de medidas de mejora sobre el caso base.</p>
-  <p>Puede probar la validación con un <a href="{{ url_for('static', filename='validador/EjemploTerciario.xml') }}">informe de ejemplo de edificio con uso terciario</a> o con un <a href="{{ url_for('static', filename='validador/EjemploResidencial.xml') }}">informe de ejemplo de edificio con uso residencial</a>.</p>
+  <p class="lead">
+    {% blocktrans %}
+    Seleccione un archivo de informe de eficiencia energética en XML y, opcionalmente, hasta tres archivos obtenidos
+    mediante a aplicación de medidas de mejora sobre el caso base.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% static "docs/EjemploTerciario.xml" as xml_example_1_url %}
+    {% static "docs/EjemploResidencial.xml" as xml_example_2_url %}
+    {% blocktrans %}
+    Puede probar la validación con un <a href="{{ xml_example_1_url }}">informe de ejemplo de edificio con uso
+      terciario</a> o con un <a href="{{ xml_example_2_url }}">informe de ejemplo de edificio con uso residencial</a>.
+    {% endblocktrans %}
+  </p>
 
   <div class="panel panel-primary">
-    <div class="panel-heading">Selección de archivos de informe de evaluación de la eficiencia energética.</div>
+    <div class="panel-heading">
+      {% trans "Selección de archivos de informe de evaluación de la eficiencia energética." %}
+    </div>
     <div class="panel-body">
-      <form class="form" action="" role="form" method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
+      <form class="form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.errors }}
         <div class="form-group col-md-6">
-          {{ form.base.label }}{% if session['base_name'] %} <span class='small text-info'>({{ session['base_name'] }})</span>{% endif %}
-          {{ form.base }}
-          <p class="help-block">{{ form.base.description }}</p>
+          {{ form.base.label_tag }} {% if request.session.base_name %}({{ request.session.base_name }}){% endif %}
+          {{ form.base }} {{ pep }}
+          <p class="help-block">{{ form.base.help_text }}</p>
           {% if form.base.errors %}
           <ul>
             {% for error in form.base.errors %}
@@ -28,54 +45,62 @@
         </div>
         <div class="col-md-6">
           <div class="panel panel-default">
-            <div class="panel-heading"><strong>OPCIONAL</strong>: Archivos XML resultantes de la aplicación de medidas de mejora al caso base</div>
+            <div class="panel-heading">
+              {% blocktrans %}
+              <strong>OPCIONAL</strong>: Archivos XML resultantes de la aplicación de medidas de mejora al caso base
+              {% endblocktrans %}
+            </div>
             <div class="panel-body">
               <div class="form-group">
-                {{ form.mej1.label }}{% if session['mej1'] %} <span class='small text-info'>({{ session['mej1'] }})</span>{% endif %}
+                {{ form.mej1.label_tag }}
                 {{ form.mej1 }}
               </div>
               <div class="form-group">
-                {{ form.mej2.label }}{% if session['mej2'] %} <span class='small text-info'>({{ session['mej2'] }})</span>{% endif %}
+                {{ form.mej2.label_tag }}
                 {{ form.mej2 }}
               </div>
               <div class="form-group">
-                {{ form.mej3.label }}{% if session['mej3'] %} <span class='small text-info'>({{ session['mej3'] }})</span>{% endif %}
+                {{ form.mej3.label_tag }}
                 {{ form.mej3 }}
               </div>
             </div>
           </div>
         </div>
-        {{ form.submit(class='btn btn-primary') }}
+
+        <button type="submit" class="btn btn-primary">{% trans "Validar" %}</button>
       </form>
     </div>
   </div>
 
-  {% if session['base_storedname'] %}
+  {% if validation_data %}
 
-  {% if session['base_validationerrors'] %}
+  {% if validation_data.base_validationerrors %}
   <div class="alert alert-danger">
-    Se han encontrado errores en la validación.
+    {% trans "Se han encontrado errores en la validación." %}
   </div>
-  <h2>Resultado de la validación</h2>
-  <p>Se han encontrado <strong>{{ session['base_validationerrors']|length }}</strong> errores de validación en el archivo {{ session['base_name'] }}:</p>
+  <h2>{% trans "Resultado de la validación" %}</h2>
+  <p>
+    Se han encontrado <strong>{{ validation_data.base_validationerrors|length }}</strong> errores de validación en
+    el archivo {{ request.session.base_name }}:
+  </p>
   <div class="well">
-    {% for (linenumber, message) in session['base_validationerrors'] %}
+    {% for (linenumber, message) in validation_data.base_validationerrors %}
     <strong>Línea {{ linenumber }}:</strong> {{ message }}<br />
     {% endfor %}
   </div>
   {% else %}
   <div class="alert alert-success">
-    <p>El informe activo, <b>{{ session['base_name'] }}</b>, no contiene errores de validación.</p>
-    <p>Puede <a href="{{ url_for('visor')}}" class="alert-link">ver su contenido</a> o seleccionar un nuevo informe para su validación.</p>
+    <p>El informe activo, <b>{{ request.session.base_name }}</b>, no contiene errores de validación.</p>
+{#    <p>Puede <a href="{{ url_for('visor')}}" class="alert-link">ver su contenido</a> o seleccionar un nuevo informe para su validación.</p>#}
   </div>
   {% endif %}
 
-  {% if session['base_info'] %}
+  {% if validation_data.base_info %}
   <div class="alert alert-warning">
     <h2>Avisos de validación</h2>
-    <p>Se han encontrado <strong>{{ session['base_info']|length }}</strong> avisos de validación:</p>
+    <p>Se han encontrado <strong>{{ validation_data.base_info|length }}</strong> avisos de validación:</p>
     <div class="well">
-      {% for (messagetype, message) in session['base_info'] %}
+      {% for messagetype, message in validation_data.base_info %}
       <strong>{{ messagetype }}:</strong> {{ message }}<br />
       {% endfor %}
     </div>

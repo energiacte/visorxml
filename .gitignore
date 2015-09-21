@@ -7,6 +7,8 @@ node_modules
 vendor
 venv
 
+visorxml/visorxml.log
+visorxml/media/*
 visorxml/static/css
 visorxml/static/js
 visorxml/static/fonts

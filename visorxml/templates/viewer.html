@@ -1,0 +1,878 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load visorxml %}
+
+{% block title %}{% trans "Visor de informes" %}{% endblock %}
+
+{% block content %}
+
+<div class="page">
+  {% if 'text' in modo %}
+  <pre>{{report.astext}}</pre>
+  {% endif %}
+  {% if 'html' in modo %}
+  {{ report.ashtml|safe }}
+  {% endif %}
+  {% if 'raw' in modo %}
+  <pre>{{ report.data }}</pre>
+  {% endif %}
+  {% if 'data' in modo %}
+
+  {% with id=report.data.IdentificacionEdificio dg=report.data.DatosGeneralesyGeometria dc=report.data.DatosDelCertificador consef=report.data.Consumo.EnergiaFinal consepnr=report.data.Consumo.EnergiaPrimariaNoRenovable emis=report.data.EmisionesCO2 calemis=report.data.Calificacion.EmisionesCO2 calepnr=report.data.Calificacion.EnergiaPrimariaNoRenovable %}
+
+  <nav class="hidden-print">
+    <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'get_pdf' %}">Obtener PDF</a>
+  </nav>
+
+  <div class="piedepagina">
+    Fecha <small>(de generación del documento)</small>: {{dc.Fecha}} <br />
+    Ref. Catastral: {{ id.ReferenciaCatastral }}
+  </div>
+
+  <div class="informe" id="informe">
+    <h2 class="text-center">CERTIFICADO DE EFICIENCIA ENERGÉTICA DE EDIFICIOS</h2>
+
+    <h4>IDENTIFICACIÓN DEL EDIFICIO O DE LA PARTE QUE SE CERTIFICA:</h4>
+
+    <table class="top">
+      <tr>
+        <td class="title" width="30%">Nombre del Edificio</td>
+        <td colspan="3">{{ id.NombreDelEdificio }}</td>
+      </tr>
+      <tr>
+        <td class="title">Dirección</td>
+        <td colspan="3">{{ id.Direccion }}</td>
+      </tr>
+      <tr>
+        <td class="title">Municipio</td>
+        <td>{{ id.Municipio }}</td>
+        <td class="title" width="15%">Código Postal</td>
+        <td>{{ id.CodigoPostal }}</td>
+      </tr>
+      <tr>
+        <td class="title">Provincia</td>
+        <td>{{ id.Provincia }}</td>
+        <td class="title" width="15%">Comunidad Autónoma</td>
+        <td>{{ id.ComunidadAutonoma }}</td>
+      </tr>
+      <tr>
+        <td class="title">Zona climática</td>
+        <td>{{ id.ZonaClimatica }}</td>
+        <td class="title" width="15%">Año construcción</td>
+        <td>{{ id.AnoConstruccion }}</td>
+      </tr>
+      <tr>
+        <td class="title">Plantas sobre rasante</td>
+        <td>{{ dg.NumeroDePlantasSobreRasante }}</td>
+        <td class="title" width="15%">Plantas bajo rasante</td>
+        <td>{{ dg.NumeroDePlantasBajoRasante }}</td>
+      </tr>
+      <tr>
+        <td class="title">Normativa vigente (construcción / rehabilitación)</td>
+        <td colspan="3">{{ id.NormativaVigente }}</td>
+      </tr>
+      <tr>
+        <td class="title">Referencia/s catastral/es</td>
+        <td colspan="3">{{ id.ReferenciaCatastral }}</td>
+      </tr>
+    </table>
+
+    <br />
+
+    <table>
+      <tr><td class="title" colspan="2">Tipo de edificio o parte del edificio que se certifica:</td></tr>
+      <tr>
+        <td width="50%"><span style="margin-left:20px" />{% if 'Nuevo' in id.AlcanceInformacionXML %}&#9746;{% else %}&#9744;{% endif %} Edificio de nueva construcción</td>
+        <td><span style="margin-left:20px" />{% if 'Existente' in id.AlcanceInformacionXML %}&#9746;{% else %}&#9744;{% endif %} Edificio existente</input></td>
+      </tr>
+      <tr><td class="title" colspan="2">&nbsp;</td></tr>
+      <tr>
+        <td>
+          <span style="margin-left:20px" />{% if 'Vivienda' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Vivienda<br />
+          <span style="margin-left:40px" />{% if 'Unifamiliar' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Unifamiliar<br />
+          <span style="margin-left:40px" />{% if 'Bloque' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Bloque<br />
+          <span style="margin-left:60px" />{% if 'Completo' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Bloque Completo<br />
+          <span style="margin-left:60px" />{% if 'EnBloque' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Vivienda individual
+        </td>
+        <td>
+          <span style="margin-left:20px" />{% if 'Terciario' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Terciario<br />
+          <span style="margin-left:40px" />{% if 'EdificioUsoTerciario' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Edificio completo<br />
+          <span style="margin-left:40px" />{% if 'Local' in id.TipoDeEdificio %}&#9746;{% else %}&#9744;{% endif %} Local
+        </td>
+      </tr>
+    </table>
+
+    <br />
+
+    <h4>DATOS DEL TÉCNICO CERTIFICADOR:</h4>
+
+    <table class="top">
+      <tr>
+        <td class="title" width="30%">Nombre y Apellidos</td>
+        <td>{{ dc.NombreyApellidos }}</td>
+        <td class="title" width="15%">NIF/NIE</td>
+        <td>{{ dc.NIF }}</td>
+      </tr>
+      <tr>
+        <td class="title">Razón Social</td>
+        <td>{{ dc.RazonSocial }}</td>
+        <td class="title">NIF</td>
+        <td>{{ dc.NIFEntidad }}</td>
+      </tr>
+      <tr>
+        <td class="title">Domicilio</td>
+        <td colspan="3">{{ dc.Domicilio }}</td>
+      </tr>
+      <tr>
+        <td class="title">Municipio</td>
+        <td>{{ dc.Municipio }}</td>
+        <td class="title">Código Postal</td>
+        <td>{{ dc.CodigoPostal }}</td>
+      </tr>
+      <tr>
+        <td class="title">Provincia</td>
+        <td>{{ dc.Provincia }}</td>
+        <td class="title">Comunidad Autónoma</td>
+        <td>{{ dc.ComunidadAutonoma }}</td>
+      </tr>
+      <tr>
+        <td class="title">e-mail</td>
+        <td>{{ dc.Email }}</td>
+        <td class="title">Teléfono</td>
+        <td>{{ dc.Telefono }}</td>
+      </tr>
+      <tr>
+        <td class="title">Titulación habilitante según normativa vigente</td>
+        <td colspan="3">{{ dc.Titulacion }}</td>
+      </tr>
+      <tr>
+        <td class="title" colspan="2">Procedimiento reconocido de calificación energética utilizado y versión:</td>
+        <td colspan="2">{{ id.Procedimiento }}</td>
+      </tr>
+    </table>
+
+    <br />
+
+    <h4>CALIFICACIÓN ENERGÉTICA OBTENIDA:</h4>
+
+    <div class="row">
+      <div class="calif">
+        <table>
+          <tr>
+            <td class="title">CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE<br />[kWh/m<sup>2</sup>·año]</td>
+            <td class="title">EMISIONES DE DIÓXIDO DE CARBONO<br />[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+          </tr>
+          <tr>
+            <td>{% if consepnr.Global %}<img src="{% escalasvg consepnr.Global report 'EnergiaPrimariaNoRenovable' %}" />{% endif %}</td>
+            <td>{% if emis.Global %}<img src="{% escalasvg emis.Global report 'EmisionesCO2' %}" />{% endif %}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <p>El técnico certificador abajo firmante certifica que ha realizado la calificación energética del edificio o de la parte que se certifica
+      de acuerdo con el procedimiento establecido por la normativa vigente y que son ciertos los datos que figuran en el presente
+      documento, y sus anexos:</p>
+
+    <p>Fecha: {{ dc.Fecha }}</p>
+    <br />
+    <p class="text-center">Firma del técnico certificador: {{ dc.NombreyApellidos}} - {{ dc.NIF}}</p>
+
+    <ol>
+      <li><strong>Anexo I. </strong>Descripción de las características energéticas del edificio.</li>
+      <li><strong>Anexo II. </strong>Calificación energética del edificio.</li>
+      <li><strong>Anexo III. </strong>Recomendaciones para la mejora de la eficiencia energética.</li>
+      <li><strong>Anexo IV. </strong>Pruebas, comprobaciones e inspecciones realizadas por el técnico certificador.</li>
+    </ol>
+    <p>Registro del Órgano Territorial Competente:</p>
+    <!-- Falta tabla de pie de página (ver modelo )-->
+
+    <div class="page-break"></div>
+    <!-- ANEXO I - Descripción del edificio -->
+    <h3 class="text-center">ANEXO I<br />DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO</h3>
+
+    <p>En este apartado se describen las características energéticas del edificio, envolvente térmica, instalaciones, condiciones de
+      funcionamiento y ocupación y demás datos utilizados para obtener la calificación energética del edificio.</p>
+
+    <h4>1. SUPERFICIE, IMAGEN Y SITUACIÓN</h4>
+
+    <table>
+      <tr>
+        <td class="title col-md-5">Superficie habitable [m<sup>2</sup>]</td>
+        <td class="col-md-7">{{ dg.SuperficieHabitable|asnum }}</td>
+      </tr>
+    </table>
+
+    <br />
+
+    <table class="fotos">
+      <tr>
+        <td class="title col-md-6">Imagen del Edificio</td>
+        <td class="title col-md-6">Plano de situación</td>
+      </tr>
+      <tr>
+        <td class="col-md-6" align="center">
+          {% if dg.Imagen %}
+          <img src="{{ dg.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+          {% else %}
+          <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+          {% endif %}
+        </td>
+        <td class="col-md-6" align="center">
+          {% if dg.Plano %}
+          <img src="{{ dg.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
+          {% else %}
+          <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+
+    <h4>2. ENVOLVENTE TÉRMICA</h4>
+
+    <h5>Cerramientos opacos</h5>
+
+    <table class="table-hover">
+      <tr>
+        <td width="30%" class="title">Nombre</td>
+        <td width="10%" class="title">Tipo</td>
+        <td class="title">Superficie [m<sup>2</sup>]</td>
+        <td class="title">Transmitancia [W/m<sup>2</sup>·K]</td>
+        <td width="20%" class="title">Modo de obtención</td>
+      </tr>
+      {% for e in report.data.DatosEnvolventeTermica.CerramientosOpacos %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td class="num">{{ e.Superficie|asnum}}</td>
+        <td class="num">{{ e.Transmitancia|asnum }}</td>
+        <td>{{ e.ModoDeObtencion }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h5>Huecos y lucernarios</h5>
+
+    <table>
+      <tr>
+        <td width="30%" class="title">Nombre</td>
+        <td width="10%" class="title">Tipo</td>
+        <td class="title">Superficie [m<sup>2</sup>]</td>
+        <td class="title">Transmitancia [W/m<sup>2</sup>·K]</td>
+        <td class="title">Factor solar</td>
+        <td width="15%" class="title">Modo de obtención.<br />Transmitancia</td>
+        <td width="15%" class="title">Modo de obtención.<br />Factor solar</td>
+      </tr>
+      <tr>
+        {% for e in report.data.DatosEnvolventeTermica.HuecosyLucernarios %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td class="num">{{ e.Superficie|asnum }}</td>
+        <td class="num">{{ e.Transmitancia|asnum }}</td>
+        <td class="num">{{ e.FactorSolar|asnum }}</td>
+        <td>{{ e.ModoDeObtencionTransmitancia }}</td>
+        <td>{{ e.ModoDeObtencionFactorSolar }}</td>
+      </tr>
+      {% endfor %}
+      </tr>
+    </table>
+
+    <h4>3. INSTALACIONES TÉRMICAS</h4>
+
+    <h5>Generadores de calefacción</h5>
+
+    <table>
+      <tr>
+        <td width="25%" class="title">Nombre</td>
+        <td width="20%" class="title">Tipo</td>
+        <td class="title">Potencia nominal [kW]</td>
+        <td class="title">Rendimiento estacional [%]</td>
+        <td width="20%" class="title">Tipo de energía</td>
+        <td width="10%" class="title">Modo de obtención</td>
+      </tr>
+      {% for e in report.data.InstalacionesTermicas.GeneradoresDeCalefaccion %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td class="num">{{ e.PotenciaNominal|asnum }}</td>
+        <td class="num">{{ e.RendimientoEstacional|aspct }}</td>
+        <td>{{ e.VectorEnergetico }}</td>
+        <td>{{ e.ModoDeObtencion }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTALES</td>
+        <td class="shade"></td>
+        <td class="total num calc">{{ report.data.InstalacionesTermicas.totalpotenciageneradoresdecalefaccion|asnum }}</td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+      </tr>
+    </table>
+
+    <h5>Generadores de refrigeración</h5>
+
+    <table>
+      <tr>
+        <td width="25%" class="title">Nombre</td>
+        <td width="20%" class="title">Tipo</td>
+        <td class="title">Potencia nominal [kW]</td>
+        <td class="title">Rendimiento estacional [%]</td>
+        <td width="20%" class="title">Tipo de energía</td>
+        <td width="10%" class="title">Modo de obtención</td>
+      </tr>
+      {% for e in report.data.InstalacionesTermicas.GeneradoresDeRefrigeracion %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td class="num">{{ e.PotenciaNominal|asnum }}</td>
+        <td class="num">{{ e.RendimientoEstacional|aspct }}</td>
+        <td>{{ e.VectorEnergetico }}</td>
+        <td>{{ e.ModoDeObtencion }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTALES</td>
+        <td class="shade"></td>
+        <td class="total num calc">{{ report.data.InstalacionesTermicas.totalpotenciageneradoresderefrigeracion|asnum }}</td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+      </tr>
+    </table>
+
+    <h5>Instalaciones de Agua Caliente Sanitaria</h5>
+
+    <table style="width:65%">
+      <tr>
+        <td width="45%" class="title">Demanda diaria de ACS a 60ºC (litros/dia)</td>
+        <td width="20%" class="num">{{ dg.DemandaDiariaACS|asnum }}</td>
+      </tr>
+    </table>
+
+    <br />
+
+    <table>
+      <tr>
+        <td width="25%" class="title">Nombre</td>
+        <td width="20%" class="title">Tipo</td>
+        <td class="title" width="10%">Potencia nominal [kW]</td>
+        <td class="title" width="10%">Rendimiento estacional [%]</td>
+        <td width="25%" class="title">Tipo de energía</td>
+        <td width="10%" class="title">Modo de obtención</td>
+      </tr>
+      {% for e in report.data.InstalacionesTermicas.InstalacionesACS %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td class="num">{{ e.PotenciaNominal|asnum }}</td>
+        <td class="num">{{ e.RendimientoEstacional|aspct }}</td>
+        <td>{{ e.VectorEnergetico }}</td>
+        <td>{{ e.ModoDeObtencion }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h5>Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)</h5>
+
+    {% for e in report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion|default:' ' %}
+    <table>
+      <tr>
+        <td class="title" width="25%">Nombre</td>
+        <td colspan="3">{{ e.Nombre }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%">Tipo</td>
+        <td colspan="3">{{ e.Tipo }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%">Zona asociada</td>
+        <td colspan="3">{{ e.ZonaAsociada }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%">Potencia calor [kW]</td>
+        <td class="title" width="25%">Potencia frío [kW]</td>
+        <td class="title" width="25%">Rendimiento estacional calor [%]</td>
+        <td class="title" width="25%">Rendimiento estacional frío [%]</td>
+      </tr>
+      <tr>
+        <td class="num">{{ e.PotenciaCalor|asnum }}</td>
+        <td class="num">{{ e.PotenciaFrio|asnum }}</td>
+        <td class="num">{{ e.RendimientoEstacionalCalor|aspct }}</td>
+        <td class="num">{{ e.RendimientoEstacionalFrio|aspct }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%">Enfriamiento gratuito</td>
+        <td class="title" width="25%">Enfriamiento evaporativo</td>
+        <td class="title" width="25%">Recuperación de energía</td>
+        <td class="title" width="25%">Control</td>
+      </tr>
+      <tr>
+        <td>{{ e.EnfriamientoGratuito|default:'-' }}</td>
+        <td>{{ e.EnfriamientoEvaporativo|default:'-' }}</td>
+        <td>{{ e.RecuperacionEnergia|default:'-' }}</td>
+        <td>{{ e.TipoControl|default:'-' }}</td>
+      </tr>
+    </table>
+    <br />
+    {% endfor %}
+
+    <h5>Torres de refrigeración (sólo edificios terciarios)</h5>
+
+    <table>
+      <tr>
+        <td class="title" width="25%">Nombre</td>
+        <td class="title" width="25%">Tipo</td>
+        <td class="title" width="25%">Servicio asociado</td>
+        <td class="title" width="25%">Consumo de energía [kWh/año]</td>
+      </tr>
+      {% for e in report.data.InstalacionesTermicas.TorresyRefrigeracion|default:' ' %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td>{{ e.ServicioAsociado }}</td>
+        <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTALES</td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+        <td class="total num calc">{{ report.data.InstalacionesTermicas.totalconsumotorresyrefrigeracion|asnum }}</td>
+      </tr>
+    </table>
+
+    <h5>Ventilación y bombeo (sólo edificios terciarios)</h5>
+
+    <table>
+      <tr>
+        <td class="title" width="25%">Nombre</td>
+        <td class="title" width="25%">Tipo</td>
+        <td class="title" width="25%">Servicio asociado</td>
+        <td class="title" width="25%">Consumo de energía [kWh/año]</td>
+      </tr>
+      {% for e in report.data.InstalacionesTermicas.VentilacionyBombeo|default:' ' %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td>{{ e.Tipo }}</td>
+        <td>{{ e.ServicioAsociado }}</td>
+        <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTALES</td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+        <td class="total num calc">{{ report.data.InstalacionesTermicas.totalconsumoventilacionybombeo|asnum }}</td>
+      </tr>
+    </table>
+
+    <h4>4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)</h4>
+
+    <table>
+      <tr>
+        <td class="title" width="20%">Espacio</td>
+        <td class="title" width="20%">Potencia instalada [W/m<sup>2</sup>]</td>
+        <td class="title" width="20%">VEEI [W/m<sup>2</sup>·100lux]</td>
+        <td class="title" width="20%">Iluminancia media [lux]</td>
+        <td class="title" width="20%">Modo de obtención</td>
+      </tr>
+      {% for e in report.data.InstalacionesIluminacion.Espacios %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td class="num">{{ e.PotenciaInstalada|asnum }}</td>
+        <td class="num">{{ e.VEEI|asnum }}</td>
+        <td class="num">{{ e.IluminanciaMedia|asnum }}</td>
+        <td>{{ e.ModoDeObtencion }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTALES</td>
+        <td class="total num">{{ report.data.InstalacionesIluminacion.totalpotenciamedia|asnum }}</td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+        <td class="shade"></td>
+      </tr>
+    </table>
+
+    <h4>5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)</h4>
+
+    <table>
+      <tr>
+        <td class="title" width="33%">Espacio</td>
+        <td class="title" width="33%">Superficie [m<sup>2</sup>]</td>
+        <td class="title" width="33%">Perfil de uso</td>
+      </tr>
+      {% for e in report.data.CondicionesFuncionamientoyOcupacion %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td class="num">{{ e.Superficie|asnum }}</td>
+        <td>{{ e.PerfilDeUso }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h4>6. ENERGÍAS RENOVABLES</h4>
+
+    <h5>Térmica</h5>
+    <table>
+      <tr>
+        <td class="title" width="20%" rowspan="2">Nombre</td>
+        <td class="title" colspan="3">Consumo de Energía Final cubierto, en función del servicio asociado [%]</td>
+        <td class="title" width="20%" align="center" rowspan="2">Demanda de ACS cubierta [%]</td>
+      </tr>
+      <tr>
+        <td class="title" width="20%">Calefacción</td>
+        <td class="title" width="20%">Refrigeración</td>
+        <td class="title" width="20%">ACS</td>
+      </tr>
+      {% for e in report.data.EnergiasRenovables.Termica %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td class="num">{{ e.ConsumoFinalCalefaccion|asnum }}</td>
+        <td class="num">{{ e.ConsumoFinalRefrigeracion|asnum }}</td>
+        <td class="num">{{ e.ConsumoFinalACS|asnum }}</td>
+        <td class="num">{{ e.DemandaACS|asnum }}</td>
+      </tr>
+      {% endfor %}
+      {% with totaltermica=report.data.EnergiasRenovables.totaltermica %}
+      <tr>
+        <td class="total text-center">TOTAL</td>
+        <td class="total num">{{ totaltermica.ConsumoFinalCalefaccion|asnum }}</td>
+        <td class="total num">{{ totaltermica.ConsumoFinalRefrigeracion|asnum }}</td>
+        <td class="total num">{{ totaltermica.ConsumoFinalACS|asnum }}</td>
+        <td class="total num">{{ totaltermica.DemandaACS|asnum }}</td>
+      </tr>
+      {% endwith %}
+    </table>
+
+    <h5>Eléctrica</h5>
+    <table style="width:75%" align="center">
+      <tr>
+        <td class="title">Nombre</td>
+        <td class="title">Energía eléctrica generada y autoconsumida [kWh/año]</td>
+      </tr>
+      {% for e in report.data.EnergiasRenovables.Electrica|default:' ' %}
+      <tr>
+        <td>{{ e.Nombre }}</td>
+        <td class="num">{{ e.EnergiaGeneradaAutoconsumida|asnum }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td class="total text-center">TOTAL</td>
+        <td class="total num">{{ report.data.EnergiasRenovables.totalelectrica|asnum }}</td>
+      </tr>
+    </table>
+
+    <div class="page-break"></div>
+    <!-- ANEXO II - Calificación energética -->
+    <h3 class="text-center">ANEXO II<br />CALIFICACIÓN ENERGÉTICA DEL EDIFICIO</h3>
+
+    <table>
+      <tr>
+        <td width="25%" class="title">Zona Climática</td>
+        <td>{{ id.ZonaClimatica }}</td>
+        <td width="25%" class="title">Uso</td>
+        <td>{{ id.TipoDeEdificio }}</td>
+      </tr>
+    </table>
+
+    <h4>1. CALIFICACIÓN ENERGÉTICA DEL EDIFICIO EN EMISIONES</h4>
+
+    <table>
+      <tr>
+        <td class="title" width="50%">INDICADOR GLOBAL</td>
+        <td class="title" width="50%" colspan="4">INDICADORES PARCIALES</td>
+      </tr>
+      <tr>
+        <td rowspan="4" align="center"><img src="{% escalasvg emis.Global report 'EmisionesCO2' %}" /></td>
+        <td class="title" width="25%" colspan="2">CALEFACCIÓN</td>
+        <td class="title" width="25%" colspan="2">ACS</td>
+      </tr>
+      <tr>
+        <td class="info" width="15%">Emisiones calefacción [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calemis.Calefaccion|default:'-' }}</td>
+        <td class="info" width="15%">Emisiones ACS [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calemis.ACS|default:'-' }}</td>
+      </tr>
+      <tr>
+        <td class="num">{{ emis.Calefaccion|asnum }}</td>
+        <td class="num">{{ emis.ACS|asnum }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%" colspan="2">REFRIGERACIÓN</td>
+        <td class="title" width="25%" colspan="2">ILUMINACIÓN</td>
+      </tr>
+      <tr>
+        <td rowspan="2" align="center"><p style="font-size:12px; font-style: italic">Emisiones globales [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</p></td>
+        <td class="info">Emisiones refrigeración [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calemis.Refrigeracion|default:'-' }}</td>
+        <td class="info">Emisiones iluminación [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calemis.Iluminacion|default:'-' }}</td>
+      </tr>
+      <tr>
+        <td class="num">{{ emis.Refrigeracion|asnum }}</td>
+        <td class="num">{{ emis.Iluminacion|asnum }}</td>
+      </tr>
+    </table>
+
+    <p>La calificación global del edificio se expresa en términos de dióxido de carbono liberado a la atmósfera como consecuencia del consumo energético del mismo.</p>
+
+    <table style="width:75%" align="center">
+      <tr>
+        <td></td>
+        <td class="title" width="20%">kgCO<sub>2e</sub>/m<sup>2</sup>·año</td>
+        <td class="title" width="20%">kgCO<sub>2e</sub>/año</td>
+      </tr>
+      <tr>
+        <td class="info">Emisiones CO<sub>2</sub> por consumo eléctrico</td>
+        <td class="num">{{ emis.ConsumoElectrico|asnum }}</td>
+        <td class="num">{{ emis.TotalConsumoElectrico|asint }}</td>
+      <tr>
+        <td class="info">Emisiones CO<sub>2</sub> por otros combustibles</td>
+        <td class="num">{{ emis.ConsumoOtros|asnum }}</td>
+        <td class="num">{{ emis.TotalConsumoOtros|asint }}</td>
+      </tr>
+    </table>
+
+    <h4>2. CALIFICACIÓN ENERGÉTICA DEL EDIFICIO EN CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE</h4>
+
+    <p>Por energía primara no renovable se entiende la energía consumida por el edificio procedente de fuentes no renovables que no ha sufrido ningún proceso de conversión o transformación.</p>
+
+    <table>
+      <tr>
+        <td class="title" width="50%">INDICADOR GLOBAL</td>
+        <td class="title" width="50%" colspan="4">INDICADORES PARCIALES</td>
+      </tr>
+      <tr>
+        <td width="30%" rowspan="4" align="center"><img src="{% escalasvg consepnr.Global report 'EnergiaPrimariaNoRenovable' %}" />
+        </td>
+        <td class="title" width="25%" colspan="2">CALEFACCIÓN</td>
+        <td class="title" width="25%" colspan="2">ACS</td>
+      </tr>
+      <tr>
+        <td width="15%" class="info">Energía primaria calefacción [kWh/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calepnr.Calefaccion|default:'-' }}</td>
+        <td width="15%" class="info">Energía primaria ACS [kWh/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calepnr.ACS|default:'-' }}</td>
+      </tr>
+      <tr>
+        <td class="num">{{ consepnr.Calefaccion|asnum }}</td>
+        <td class="num">{{ consepnr.ACS|asnum }}</td>
+      </tr>
+      <tr>
+        <td class="title" width="25%" colspan="2">REFRIGERACIÓN</td>
+        <td class="title" width="25%" colspan="2">ILUMINACIÓN</td>
+      </tr>
+      <tr>
+        <td rowspan="2" class="info">Consumo global de energía primaria no renovable [kWh/m<sup>2</sup>·año]</td>
+        <td class="info">Energía primaria refrigeración [kWh/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calepnr.Refrigeracion|default:'-' }}</td>
+        <td class="info">Energía primaria iluminación [kWh/m<sup>2</sup>·año]</td>
+        <td rowspan="2">{{ calepnr.Iluminacion|default:'-' }}</td>
+      </tr>
+      <tr>
+        <td class="num">{{ consepnr.Refrigeracion|asnum }}</td>
+        <td class="num">{{ consepnr.Iluminacion|asnum }}</td>
+      </tr>
+    </table>
+
+    <h4>3. CALIFICACIÓN PARCIAL DE LA DEMANDA ENERGÉTICA DE CALEFACCIÓN Y REFRIGERACIÓN</h4>
+
+    <p>La demanda energética de calefacción y refrigeración es la energía necesaria para mantener las condiciones internas de confort del edificio.</p>
+
+    <div class="row">
+      <div class="calif">
+        <table>
+          <tr>
+            <td class="title">DEMANDA DE CALEFACCIÓN</td>
+            <td class="title">DEMANDA DE REFRIGERACIÓN</td>
+          </tr>
+          <tr>
+            <!-- XXX: ver aquí los casos de terciario con 08 ren/h -->
+            <td><img src="{% escalasvg report.data.Demanda.EdificioObjeto.Calefaccion report 'DemandaCalefaccion' %}" /></td>
+            <td><img src="{% escalasvg report.data.Demanda.EdificioObjeto.Refrigeracion report 'DemandaRefrigeracion' %}" /></td>
+          </tr>
+          <tr>
+            <td class="info">Demanda de calefacción [kWh/m<sup>2</sup>·año]</td>
+            <td class="info">Demanda de refrigeración [kWh/m<sup>2</sup>·año]</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+    <!-- ANEXO III - Medidas de mejora -->
+    <h3 class="text-center">ANEXO III<br />RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA</h3>
+
+    {% if not report.data.MedidasDeMejora %}
+    <table><tr><td>No se han definido medidas de mejora de la eficiencia energética</td></tr></table>
+    {% else %}
+    {% for medida in report.data.MedidasDeMejora %}
+    <h4>MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA</h4>
+    <table>
+      <tr>
+        <td class="title" colspan="2">Denominación:</td>
+        <td><strong>{{ medida.Nombre }}</strong></td>
+      </tr>
+    </table>
+
+    <br />
+
+    <h4 class="text-center">CALIFICACIÓN ENERGÉTICA GLOBAL</h4>
+    <div class="row">
+      <div class="calif">
+        <table>
+          <tr>
+            <td class="title">CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE<br />[kWg/m<sup>2</sup>·año]</td>
+            <td class="title">EMISIONES DE DIÓXIDO DE CARBONO<br />[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+          </tr>
+          <tr>
+            <td><img src="{% escalasvg medida.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" /></td>
+            <td><img src="{% escalasvg medida.EmisionesCO2.Global report 'EmisionesCO2' %}" /></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <br />
+
+    <h4 class="text-center">CALIFICACIONES ENERGÉTICAS PARCIALES</h4>
+    <div class="row">
+      <div class="calif">
+        <table>
+          <tr>
+            <td class="title">DEMANDA DE CALEFACCIÓN<br />[kWh/m<sup>2</sup>·año]</td>
+            <td class="title">DEMANDA DE REFRIGERACIÓN<br />[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
+          </tr>
+          <tr>
+            <td><img src="{% escalasvg medida.Demanda.Calefaccion report 'DemandaCalefaccion' %}" /></td>
+            <td><img src="{% escalasvg medida.Demanda.Refrigeracion report 'DemandaRefrigeracion' %}" /></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h4>ANÁLISIS TÉCNICO</h4>
+
+    <table>
+      <tr>
+        <td class="title col-md-2" rowspan="2">Indicador</td>
+        <td class="title col-md-2" colspan="2">Calefacción</td>
+        <td class="title col-md-2" colspan="2">Refrigeración</td>
+        <td class="title col-md-2" colspan="2">ACS</td>
+        <td class="title col-md-2" colspan="2">Iluminación</td>
+        <td class="title col-md-2" colspan="2">Total</td>
+      </tr>
+      <tr>
+        <td class="title col-md-1">Valor</td>
+        <td class="title col-md-1">Ahorro<br /><small>respecto a la situación original</small></td>
+        <td class="title col-md-1">Valor</td>
+        <td class="title col-md-1">Ahorro<br /><small>respecto a la situación original</small></td>
+        <td class="title col-md-1">Valor</td>
+        <td class="title col-md-1">Ahorro<br /><small>respecto a la situación original</small></td>
+        <td class="title col-md-1">Valor</td>
+        <td class="title col-md-1">Ahorro<br /><small>respecto a la situación original</small></td>
+        <td class="title col-md-1">Valor</td>
+        <td class="title col-md-1">Ahorro<br /><small>respecto a la situación original</small></td>
+      </tr>
+      <tr>
+        <td class="title">Consumo Energía final<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
+        <td class="num">{{ medida.EnergiaFinal.Calefaccion|asnum }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:consef.Calefaccion|safe }}</td>
+        <td class="num">{{ medida.EnergiaFinal.Refrigeracion|asnum }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:consef.Refrigeracion|safe }}</td>
+        <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:consef.ACS|safe }}</td>
+        <td class="num">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:consef.Iluminacion|safe }}</td>
+        <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:consef.Global|safe }}</td>
+      </tr>
+      <tr>
+        <td class="title">Consumo Energía primaria no renovable<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
+        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Calefaccion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Calefaccion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Calefaccion|difwith:consepnr.Calefaccion|safe }}</td>
+        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Refrigeracion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|difwith:consepnr.Refrigeracion|safe }}</td>
+        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.ACS|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.ACS|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.ACS|difwith:consepnr.ACS|safe }}</td>
+        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|difwith:consepnr.Iluminacion|safe }}</td>
+        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Global|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Global|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Global|difwith:consepnr.Global|safe }}</td>
+      </tr>
+      <tr>
+        <td class="title">Emisiones de CO<sub>2</sub><br /><small>[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</small></td>
+        <td class="num">{{ medida.EmisionesCO2.Calefaccion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Calefaccion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Calefaccion|difwith:emis.Calefaccion|safe }}</td>
+        <td class="num">{{ medida.EmisionesCO2.Refrigeracion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Refrigeracion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Refrigeracion|difwith:emis.Refrigeracion|safe }}</td>
+        <td class="num">{{ medida.EmisionesCO2.ACS|asnum }}<br />{{ medida.CalificacionEmisionesCO2.ACS|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.ACS|difwith:emis.ACS|safe }}</td>
+        <td class="num">{{ medida.EmisionesCO2.Iluminacion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Iluminacion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Iluminacion|difwith:emis.Iluminacion|safe }}</td>
+        <td class="num">{{ medida.EmisionesCO2.Global|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Global|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Global|difwith:emis.Global|safe }}</td>
+      </tr>
+      <tr>
+        <td class="title">Demanda<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
+        <td class="num">{{ medida.Demanda.Calefaccion|asnum }}<br />{{ medida.CalificacionDemanda.Calefaccion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.Demanda.Calefaccion|difwith:report.data.Demanda.EdificioObjeto.Calefaccion|safe }}</td>
+        <td class="num">{{ medida.Demanda.Refrigeracion|asnum }}<br />{{ medida.CalificacionDemanda.Refrigeracion|default:'-' }}</td>
+        <td class="num calc small dif">{{ medida.Demanda.Refrigeracion|difwith:report.data.Demanda.EdificioObjeto.Refrigeracion|safe }}</td>
+        <td colspan="2" class="shade">&nbsp;</td>
+        <td colspan="2" class="shade">&nbsp;</td>
+        <td colspan="2" class="shade">&nbsp;</td>
+      </tr>
+    </table>
+
+    <p>Nota: Los indicadores energéticos anteriores están calculados en base a coeficientes estándar de operación y funcionamiento del edificio, por lo que solo son válidos a efectos de su calificación energética. Para el análisis económico de las medidas de ahorro y eficiencia energética, el técnico certificador deberá utilizar las condiciones reales y datos históricos de consumo del edificio.</p>
+
+    <br />
+
+    <table>
+      <tr><td class="title">DESCRIPCIÓN DE LA MEDIDA DE MEJORA</td></tr>
+      <tr><td><strong>Características técnicas de la medida (modelo de equipos, materiales, parámetros característicos)</strong><br /><br />
+      {{ medida.Descripcion|safe }}</td></tr>
+      <tr><td><strong>Coste estimado de la medida</strong><br /><br />
+          {{ medida.CosteEstimado|safe }}</td><tr/>
+      <tr><td><strong>Otros datos de interés</strong><br /><br />
+      {{ medida.OtrosDatos|safe }}</td><tr/>
+    </table>
+    {% endfor %}
+    {% endif %}
+
+    <div class="page-break"></div>
+    <!-- ANEXO IV -->
+    <h3 class="text-center">ANEXO IV<br />PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR</h3>
+
+    <p>Se describen a continuación las pruebas, comprobaciones e inspecciones llevadas a cabo por el técnico certificador durante el proceso de toma de datos y de calificación de la eficiencia energética del edificio, con la finalidad de establecer la conformidad de la información de partida contenida en el certificado de eficiencia energética.</p>
+
+    <table>
+      {% for visita in report.data.PruebasComprobacionesInspecciones %}
+      <tr>
+        <td class="title" width="30%">Fecha de realización de la visita del técnico certificador</td>
+        <td>{{ visita.FechaVisita }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">{{ visita.Datos|safe }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  </div>
+
+  {% endwith %}
+  {% endif %}
+</div>
+
+<div id="preparing-file-modal" title="Preparando informe..." style="display: none;" >
+    Por favor, espere mientras preparamos su informe...
+    <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-indeterminate" role="progressbar"></div>
+</div>
+<div id="error-modal" title="Error" style="display: none;">
+    Ocurrió un problema al preparar el informe. Pruebe más tarde.
+</div>
+{% endblock %}
