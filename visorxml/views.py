@@ -195,16 +195,16 @@ def escalasvg(value, informe, tipoescala='EnergiaPrimariaNoRenovable'):
             calif = 'G'
         return calif
 
-    if tipoescala == 'EnergiaPrimariaNoRenovable':
-        escala = informe.data.Calificacion.EnergiaPrimariaNoRenovable.EscalaGlobal
-    elif tipoescala == 'EmisionesCO2':
-        escala = informe.data.Calificacion.EmisionesCO2.EscalaGlobal
-    elif tipoescala == 'DemandaCalefaccion':
-        escala = informe.data.Calificacion.Demanda.EscalaCalefaccion
-    elif tipoescala == 'DemandaRefrigeracion':
-        escala = informe.data.Calificacion.Demanda.EscalaRefrigeracion
-        
     try:
+        if tipoescala == 'EnergiaPrimariaNoRenovable':
+            escala = informe.data.Calificacion.EnergiaPrimariaNoRenovable.EscalaGlobal
+        elif tipoescala == 'EmisionesCO2':
+            escala = informe.data.Calificacion.EmisionesCO2.EscalaGlobal
+        elif tipoescala == 'DemandaCalefaccion':
+            escala = informe.data.Calificacion.Demanda.EscalaCalefaccion
+        elif tipoescala == 'DemandaRefrigeracion':
+            escala = informe.data.Calificacion.Demanda.EscalaRefrigeracion
+        
         value = float(value)
         califnum = "{0:.2f}".format(value).replace('.', ',') if value else ''
         calif = _getcalif(value, escala)
