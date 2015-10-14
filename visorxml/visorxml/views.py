@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, FormView
 
 from .forms import XMLFileForm
-from .reports import XMLReport, analize
+from .reports import XMLReport
 from .pdf_utils import render_to_pdf
 
 
@@ -44,7 +44,7 @@ class ValidatorView(FormView):
 
         validation_data = {
             'base_validation_errors': report.validate(),
-            'base_info': analize(report)
+            'base_info': report.analize()
         }
 
         has_errors = 'ERROR' if validation_data['base_validation_errors'] else 'OK'

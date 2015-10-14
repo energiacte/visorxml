@@ -5,7 +5,6 @@
 
 from collections import OrderedDict
 import numbers
-import os
 
 from django.conf import settings
 
@@ -23,27 +22,32 @@ XSDPATH1 = settings.XSDPATH1
 VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros '
             'ElectricidadPeninsular ElectricidadBaleares '
             'ElectricidadCanarias ElectricidadCeutayMelilla Biocarburante').split()
-SERVICIOS = ('Global Calefaccion Refrigeracion ACS Iluminacion').split()
+SERVICIOS = 'Global Calefaccion Refrigeracion ACS Iluminacion'.split()
 NIVELESESCALA = 'A B C D E F'.split()
 ALERTINT = 9999999999
 ALERTFLOAT = ALERTINT + 0.99
 ALERT = ALERTINT / 100
 
+
 class Bunch(OrderedDict):
-    "Contenedor genérico"
+    """Contenedor genérico"""
+
     def __init__(self, *args, **kwds):
         OrderedDict.__init__(self, *args, **kwds)
+
     def __str__(self):
-        state = [u"%s=%s" % (attribute, value)
+        state = ['%s=%s' % (attribute, value)
                  for (attribute, value) in self.__dict__.items()
                  if not attribute.startswith('_OrderedDict')]
-        return u'\n'.join(state)
+        return '\n'.join(state)
     __unicode__ = __str__
 
-XMLPARSER = lxml.etree.XMLParser(resolve_entities=False, # no sustituye unicode a entidades
+XMLPARSER = lxml.etree.XMLParser(resolve_entities=False,  # no sustituye unicode a entidades
                                  remove_blank_text=True,
-                                 ns_clean=True, # limpia namespaces
+                                 ns_clean=True,  # limpia namespaces
                                  remove_comments=True)
+
+
 def astext(tree, path):
     element = tree.find(path)
     if element is None or not element.text:
@@ -54,6 +58,7 @@ def astext(tree, path):
         txt = clean_html(txt) if txt else ''
     return txt
 
+
 def asint(tree, path):
     element = tree.find(path)
     if element is None or not element.text:
@@ -63,6 +68,7 @@ def asint(tree, path):
     except ValueError:
         val = ALERTINT
     return val
+
 
 def asfloat(tree, path):
     element = tree.find(path)
@@ -106,20 +112,23 @@ class XMLReport(object):
     @property
     def astext(self):
         """Contenido del informe como texto"""
-        SECTIONS = ('DatosDelCertificador', 'IdentificacionEdificio',
-                    'DatosGeneralesyGeometria', 'DatosEnvolventeTermica',
-                    'InstalacionesTermicas', 'InstalacionesIluminacion', #Es lista
-                    'Demanda', 'Consumo', 'CondicionesFuncionamientoyOcupacion', # Es lista
-                    'EmisionesCO2', 'Calificacion', 'MedidasDeMejora')
-        data = [self.version,]
+        SECTIONS = ('DatosDelCertificador',
+                    'IdentificacionEdificio',
+                    'DatosGeneralesyGeometria',
+                    'DatosEnvolventeTermica',
+                    'InstalacionesTermicas',
+                    'InstalacionesIluminacion',  # Es lista
+                    'Demanda',
+                    'Consumo',
+                    'CondicionesFuncionamientoyOcupacion',  # Es lista
+                    'EmisionesCO2',
+                    'Calificacion',
+                    'MedidasDeMejora')
+        data = [self.version]
         for section in SECTIONS:
-            data.append(u'%s\n' % section +
-                        u'=' * len(section) +
-                        u'\n' + unicode(getattr(self.data, section)) +
-                        u"\n")
-        data.append(u'Potenciamediailum\n===========\n' +
-                    str(self.data.InstalacionesIluminacion.totalpotenciamedia) +
-                    u"\n")
+            data.append('%s\n%s\n%s\n' % (section, '=' * len(section), getattr(self.data, section)))
+
+        data.append('Potenciamediailum\n===========\n%s\n' % str(self.data.InstalacionesIluminacion.totalpotenciamedia))
         return '\n'.join(data)
 
     @property
@@ -130,45 +139,66 @@ class XMLReport(object):
                          HtmlFormatter(noclasses=True))
 
     def _parsetree(self):
-        et = self.xmltree
         data = Bunch()
 
-        ## Datos del certificador
-        bb = Bunch()
-        data.DatosDelCertificador = bb
+        data.DatosDelCertificador = self.get_datos_certificador()
+        data.IdentificacionEdificio = self.get_identificacion_edificio()
+        data.DatosGeneralesyGeometria = self.get_datos_generales_y_geometria()
+        data.DatosEnvolventeTermica = self.get_datos_envolvente_termica()
+        data.InstalacionesTermicas = self.get_instalaciones_termicas()
+        data.CondicionesFuncionamientoyOcupacion, data.superficies = self.get_condiciones_funcionamiento_y_ocupacion()
+        data.InstalacionesIluminacion = self.get_instalaciones_iluminacion(data.superficies)
+        data.EnergiasRenovables = self.get_energias_renovables()
+        data.Demanda = self.get_demanda()
+        data.Consumo = self.get_consumo()
+        data.EmisionesCO2 = self.get_emisiones_co2()
+        data.Calificacion = self.get_calificacion()
+        data.MedidasDeMejora = self.get_medidas_de_mejora()
+        data.PruebasComprobacionesInspecciones = self.get_pruebas_comprobaciones_inspecciones()
+        data.DatosPersonalizados = self.get_datos_personalizados()
+
+        return data
+
+    def get_datos_certificador(self):
+        datos_certificador = Bunch()
+
         for attr in ['NombreyApellidos', 'NIF', 'RazonSocial', 'NIFEntidad', 'Domicilio',
                      'Municipio', 'CodigoPostal', 'Provincia', 'ComunidadAutonoma',
                      'Email', 'Telefono', 'Titulacion', 'Fecha']:
-            setattr(bb, attr, astext(et, './DatosDelCertificador/%s' % attr))
-        #print bb
+            setattr(datos_certificador, attr, astext(self.xmltree, './DatosDelCertificador/%s' % attr))
 
-        ## Identificación del edificio
-        bb = Bunch()
-        data.IdentificacionEdificio = bb
+        return datos_certificador
+
+    def get_identificacion_edificio(self):
+        identificacion_edificio = Bunch()
+
         for attr in ['NombreDelEdificio', 'Direccion',
                      'Municipio', 'CodigoPostal', 'Provincia', 'ComunidadAutonoma',
                      'ZonaClimatica', 'AnoConstruccion', 'ReferenciaCatastral',
                      'TipoDeEdificio', 'NormativaVigente', 'Procedimiento',
                      'AlcanceInformacionXML']:
-            setattr(bb, attr, astext(et, './IdentificacionEdificio/%s' % attr))
-        if 'ninguno' in bb.ReferenciaCatastral:
-            bb.ReferenciaCatastral = '-'
-        if 'Seleccione de la lista' in bb.NormativaVigente:
-            bb.NormativaVigente = '-'
-        #print bb
+            setattr(identificacion_edificio, attr, astext(self.xmltree, './IdentificacionEdificio/%s' % attr))
+        if 'ninguno' in identificacion_edificio.ReferenciaCatastral:
+            identificacion_edificio.ReferenciaCatastral = '-'
+        if 'Seleccione de la lista' in identificacion_edificio.NormativaVigente:
+            identificacion_edificio.NormativaVigente = '-'
 
-        ## Datos generales y geometría
-        bb = Bunch()
-        data.DatosGeneralesyGeometria = bb
-        bb.NumeroDePlantasSobreRasante = astext(et, './DatosGeneralesyGeometria/NumeroDePlantasSobreRasante')
+        return identificacion_edificio
+
+    def get_datos_generales_y_geometria(self):
+        datos_generales_y_geometria = Bunch()
+
+        datos_generales_y_geometria.NumeroDePlantasSobreRasante = astext(
+            self.xmltree,
+            './DatosGeneralesyGeometria/NumeroDePlantasSobreRasante')
         img = self.xmltree.find('./DatosGeneralesyGeometria/Imagen')
-        bb.Imagen = base64check(img.text) if (img is not None and img.text) else None
+        datos_generales_y_geometria.Imagen = base64check(img.text) if (img is not None and img.text) else None
         img = self.xmltree.find('./DatosGeneralesyGeometria/Plano')
-        bb.Plano = base64check(img.text) if (img is not None and img.text) else None
+        datos_generales_y_geometria.Plano = base64check(img.text) if (img is not None and img.text) else None
         for attr in ['NumeroDePlantasBajoRasante',
                      'PorcentajeSuperficieHabitableCalefactada',
                      'PorcentajeSuperficieHabitableRefrigerada']:
-            setattr(bb, attr, asint(et, './DatosGeneralesyGeometria/%s' % attr))
+            setattr(datos_generales_y_geometria, attr, asint(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
         for attr in ['SuperficieHabitable',
                      'VolumenEspacioHabitable',
                      'Compacidad',
@@ -177,19 +207,28 @@ class XMLReport(object):
                      'VentilacionUsoResidencial',
                      'VentilacionTotal',
                      'DemandaDiariaACS']:
-            setattr(bb, attr, asfloat(et, './DatosGeneralesyGeometria/%s' % attr))
-        bb.PorcentajeSuperficieAcristalada = Bunch(
-            **{key:asint(et, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
+            setattr(datos_generales_y_geometria, attr, asfloat(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
+        datos_generales_y_geometria.PorcentajeSuperficieAcristalada = Bunch(
+            **{key: asint(self.xmltree, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
                for key in 'N NE E SE S SO O NO'.split()})
-        #print bb
 
-        ## Datos Envolvente Térmica
-        bb = Bunch()
-        data.DatosEnvolventeTermica = bb
-        bb.CerramientosOpacos = []
-        elementosopacos = self.xmltree.find('./DatosEnvolventeTermica/CerramientosOpacos')
-        elementosopacos = [] if elementosopacos is None else elementosopacos
-        for elemento in elementosopacos:
+        return datos_generales_y_geometria
+
+    def get_datos_envolvente_termica(self):
+        datos_envolvente_termica = Bunch()
+
+        datos_envolvente_termica.CerramientosOpacos = self.get_cerramientos_opacos()
+        datos_envolvente_termica.HuecosyLucernarios = self.get_huecos_y_lucernarios()
+        datos_envolvente_termica.PuentesTermicos = self.get_puentes_termicos()
+
+        return datos_envolvente_termica
+
+    def get_cerramientos_opacos(self):
+        cerramientos_opacos = []
+
+        elementos_opacos = self.xmltree.find('./DatosEnvolventeTermica/CerramientosOpacos')
+        elementos_opacos = [] if elementos_opacos is None else elementos_opacos
+        for elemento in elementos_opacos:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'Orientacion', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
@@ -205,12 +244,16 @@ class XMLReport(object):
                              'CalorEspecifico']:
                     setattr(capa, attr, asfloat(ecapa, './%s' % attr))
                 obj.Capas.append(capa)
-            bb.CerramientosOpacos.append(obj)
+            cerramientos_opacos.append(obj)
 
-        bb.HuecosyLucernarios = []
-        elementoshuecos = self.xmltree.find('./DatosEnvolventeTermica/HuecosyLucernarios')
-        elementoshuecos = [] if elementoshuecos is None else elementoshuecos
-        for elemento in elementoshuecos:
+        return cerramientos_opacos
+
+    def get_huecos_y_lucernarios(self):
+        huecos_y_lucernarios = []
+
+        elementos_huecos = self.xmltree.find('./DatosEnvolventeTermica/HuecosyLucernarios')
+        elementos_huecos = [] if elementos_huecos is None else elementos_huecos
+        for elemento in elementos_huecos:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'Orientacion',
                          'ModoDeObtencionTransmitancia',
@@ -218,65 +261,97 @@ class XMLReport(object):
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie', 'Transmitancia', 'FactorSolar']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.HuecosyLucernarios.append(obj)
+            huecos_y_lucernarios.append(obj)
 
-        bb.PuentesTermicos = []
-        elementospts = self.xmltree.find('./DatosEnvolventeTermica/PuentesTermicos')
-        elementospts = [] if elementospts is None else elementospts
-        for elemento in elementospts:
+        return huecos_y_lucernarios
+
+    def get_puentes_termicos(self):
+        puentes_termicos = []
+
+        elementos_pts = self.xmltree.find('./DatosEnvolventeTermica/PuentesTermicos')
+        elementos_pts = [] if elementos_pts is None else elementos_pts
+        for elemento in elementos_pts:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Longitud', 'Transmitancia']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.PuentesTermicos.append(obj)
-        #print bb
+            puentes_termicos.append(obj)
 
-        ## Instalaciones Térmicas
+        return puentes_termicos
+
+    def get_instalaciones_termicas(self):
         bb = Bunch()
-        data.InstalacionesTermicas = bb
-        bb.GeneradoresDeCalefaccion = []
-        elementosgeneradores = self.xmltree.find('./InstalacionesTermicas/GeneradoresDeCalefaccion')
-        elementosgeneradores = [] if elementosgeneradores is None else elementosgeneradores
-        for elemento in elementosgeneradores:
+
+        bb.GeneradoresDeCalefaccion, bb.totalpotenciageneradoresdecalefaccion = self.get_generadores_de_calefaccion()
+        bb.GeneradoresDeRefrigeracion, bb.totalpotenciageneradoresderefrigeracion = self.get_generadores_de_refrigeracion()
+        bb.InstalacionesACS = self.get_instalaciones_acs()
+        bb.SistemasSecundariosCalefaccionRefrigeracion = self.get_sistemas_secundarios_calefaccion_refrigeracion()
+        bb.TorresyRefrigeracion, bb.totalconsumotorresyrefrigeracion = self.get_torres_y_refrigeracion()
+        bb.VentilacionyBombeo, bb.totalconsumoventilacionybombeo = self.get_ventilacion_y_bombeo()
+
+        return bb
+
+    def get_generadores_de_calefaccion(self):
+        generadores_de_calefaccion = []
+
+        elementos_generadores = self.xmltree.find('./InstalacionesTermicas/GeneradoresDeCalefaccion')
+        elementos_generadores = [] if elementos_generadores is None else elementos_generadores
+        for elemento in elementos_generadores:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'VectorEnergetico',
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.GeneradoresDeCalefaccion.append(obj)
-        bb.totalpotenciageneradoresdecalefaccion = sum(e.PotenciaNominal for e in bb.GeneradoresDeCalefaccion if e.PotenciaNominal <= ALERT)
+            generadores_de_calefaccion.append(obj)
 
-        bb.GeneradoresDeRefrigeracion = []
-        elementosgeneradores = self.xmltree.find('./InstalacionesTermicas/GeneradoresDeRefrigeracion')
-        elementosgeneradores = [] if elementosgeneradores is None else elementosgeneradores
-        for elemento in elementosgeneradores:
+        total_potencia_generadores_de_calefaccion = sum(
+            e.PotenciaNominal for e in generadores_de_calefaccion if e.PotenciaNominal <= ALERT)
+
+        return generadores_de_calefaccion, total_potencia_generadores_de_calefaccion
+
+    def get_generadores_de_refrigeracion(self):
+        generadores_de_refrigeracion = []
+
+        elementos_generadores = self.xmltree.find('./InstalacionesTermicas/GeneradoresDeRefrigeracion')
+        elementos_generadores = [] if elementos_generadores is None else elementos_generadores
+        for elemento in elementos_generadores:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'VectorEnergetico',
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.GeneradoresDeRefrigeracion.append(obj)
-        bb.totalpotenciageneradoresderefrigeracion = sum(e.PotenciaNominal for e in bb.GeneradoresDeRefrigeracion if e.PotenciaNominal <= ALERT)
+            generadores_de_refrigeracion.append(obj)
 
-        bb.InstalacionesACS = []
-        elementosgeneradores = self.xmltree.find('./InstalacionesTermicas/InstalacionesACS')
-        elementosgeneradores = [] if elementosgeneradores is None else elementosgeneradores
-        for elemento in elementosgeneradores:
+        total_potencia_generadores_de_refrigeracion = sum(
+            e.PotenciaNominal for e in generadores_de_refrigeracion if e.PotenciaNominal <= ALERT)
+
+        return generadores_de_refrigeracion, total_potencia_generadores_de_refrigeracion
+
+    def get_instalaciones_acs(self):
+        instalaciones_acs = []
+
+        elementos_generadores = self.xmltree.find('./InstalacionesTermicas/InstalacionesACS')
+        elementos_generadores = [] if elementos_generadores is None else elementos_generadores
+        for elemento in elementos_generadores:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'VectorEnergetico',
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.InstalacionesACS.append(obj)
+            instalaciones_acs.append(obj)
 
-        bb.SistemasSecundariosCalefaccionRefrigeracion = []
-        elementossecundarios = self.xmltree.find('./InstalacionesTermicas/SistemasSecundariosCalefaccionRefrigeracion')
-        elementossecundarios = [] if elementossecundarios is None else elementossecundarios
-        for elemento in elementossecundarios:
+        return instalaciones_acs
+
+    def get_sistemas_secundarios_calefaccion_refrigeracion(self):
+        sistemas_secundarios_calefaccion_refrigeracion = []
+
+        elementos_secundarios = self.xmltree.find('./InstalacionesTermicas/SistemasSecundariosCalefaccionRefrigeracion')
+        elementos_secundarios = [] if elementos_secundarios is None else elementos_secundarios
+        for elemento in elementos_secundarios:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'ZonaAsociada',
                          'EnfriamientoEvaporativo', 'RecuperacionEnergia',
@@ -285,36 +360,47 @@ class XMLReport(object):
             for attr in ['PotenciaCalor', 'PotenciaFrio', 'RendimentoCalor', 'RendimientoFrio',
                          'RendimientoEstacionalCalor', 'RendimientoEstacionalFrio']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.SistemasSecundariosCalefaccionRefrigeracion.append(obj)
+            sistemas_secundarios_calefaccion_refrigeracion.append(obj)
 
-        bb.TorresyRefrigeracion = []
-        elementostorres = self.xmltree.find('./InstalacionesTermicas/TorresyRefrigeracion')
-        elementostorres = [] if elementostorres is None else elementostorres
-        for elemento in elementostorres:
+        return sistemas_secundarios_calefaccion_refrigeracion
+
+    def get_torres_y_refrigeracion(self):
+        torres_y_refrigeracion = []
+
+        elementos_torres = self.xmltree.find('./InstalacionesTermicas/TorresyRefrigeracion')
+        elementos_torres = [] if elementos_torres is None else elementos_torres
+        for elemento in elementos_torres:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'ServicioAsociado']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['ConsumoDeEnergia']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.TorresyRefrigeracion.append(obj)
-        bb.totalconsumotorresyrefrigeracion = sum(e.ConsumoDeEnergia for e in bb.TorresyRefrigeracion)
+            torres_y_refrigeracion.append(obj)
 
-        bb.VentilacionyBombeo = []
-        elementosventila = self.xmltree.find('./InstalacionesTermicas/VentilacionyBombeo')
-        elementosventila = [] if elementosventila is None else elementosventila
-        for elemento in elementosventila:
+        total_consumo_torres_y_refrigeracion = sum(e.ConsumoDeEnergia for e in torres_y_refrigeracion)
+
+        return torres_y_refrigeracion, total_consumo_torres_y_refrigeracion
+
+    def get_ventilacion_y_bombeo(self):
+        ventilacion_y_bombeo = []
+
+        elementos_ventilacion = self.xmltree.find('./InstalacionesTermicas/VentilacionyBombeo')
+        elementos_ventilacion = [] if elementos_ventilacion is None else elementos_ventilacion
+        for elemento in elementos_ventilacion:
             obj = Bunch()
             for attr in ['Nombre', 'Tipo', 'ServicioAsociado']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['ConsumoDeEnergia']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.VentilacionyBombeo.append(obj)
-        bb.totalconsumoventilacionybombeo = sum(e.ConsumoDeEnergia for e in bb.VentilacionyBombeo)
-        #print bb
+            ventilacion_y_bombeo.append(obj)
 
-        ## Condiciones de funcionamiento y ocupación
-        bb = []
-        data.CondicionesFuncionamientoyOcupacion = bb
+        total_consumo_ventilacion_y_bombeo = sum(e.ConsumoDeEnergia for e in ventilacion_y_bombeo)
+
+        return ventilacion_y_bombeo, total_consumo_ventilacion_y_bombeo
+
+    def get_condiciones_funcionamiento_y_ocupacion(self):
+        condiciones_funcionamiento_y_ocupacion = []
+
         elementoscond = self.xmltree.find('./CondicionesFuncionamientoyOcupacion')
         elementoscond = [] if elementoscond is None else elementoscond
         for elemento in elementoscond:
@@ -323,36 +409,48 @@ class XMLReport(object):
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.append(obj)
-        #print self.CondicionesFuncionamientoyOcupacion
+            condiciones_funcionamiento_y_ocupacion.append(obj)
 
-        # Superficies de los espacios
-        data.superficies = dict((e.Nombre, e.Superficie) for e in data.CondicionesFuncionamientoyOcupacion)
+        superficies = dict((e.Nombre, e.Superficie) for e in condiciones_funcionamiento_y_ocupacion)
 
-        ## Instalaciones de iluminación
-        bb = Bunch()
-        data.InstalacionesIluminacion = bb
-        bb.PotenciaTotalInstalada = asfloat(self.xmltree, './InstalacionesIluminacion/PotenciaTotalInstalada')
-        bb.Espacios = []
+        return condiciones_funcionamiento_y_ocupacion, superficies
+
+    def get_instalaciones_iluminacion(self, superficies):
+        instalaciones_iluminacion = Bunch()
+
+        instalaciones_iluminacion.PotenciaTotalInstalada = asfloat(self.xmltree,
+                                                                   './InstalacionesIluminacion/PotenciaTotalInstalada')
+        instalaciones_iluminacion.Espacios = []
         elementosilumina = self.xmltree.find('./InstalacionesIluminacion')
         elementosilumina = [] if elementosilumina is None else elementosilumina
         for elemento in elementosilumina:
-            if elemento.tag == 'PotenciaTotalInstalada': continue
+            if elemento.tag == 'PotenciaTotalInstalada':
+                continue
             obj = Bunch()
             for attr in ['Nombre', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaInstalada', 'VEEI', 'IluminanciaMedia']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.Espacios.append(obj)
-        _eiluminados = dict((e.Nombre, e) for e in bb.Espacios)
-        _supiluminada = sum(data.superficies[e] for e in _eiluminados)
-        bb.totalpotenciamedia = sum(1.0*data.superficies[e]*_eiluminados[e].PotenciaInstalada / _supiluminada for e in _eiluminados)
-        #print bb
+            instalaciones_iluminacion.Espacios.append(obj)
+        _eiluminados = dict((e.Nombre, e) for e in instalaciones_iluminacion.Espacios)
+        _supiluminada = sum(superficies[e] for e in _eiluminados)
 
-        ## Energías renovables
-        bb = Bunch()
-        data.EnergiasRenovables = bb
-        bb.Termica = []
+        instalaciones_iluminacion.totalpotenciamedia = sum(
+            1.0 * superficies[e] * _eiluminados[e].PotenciaInstalada / _supiluminada for e in _eiluminados)
+
+        return instalaciones_iluminacion
+
+    def get_energias_renovables(self):
+        energias_renovables = Bunch()
+
+        energias_renovables.Termica, energias_renovables.totaltermica = self.get_energia_renovable_termica()
+        energias_renovables.Electrica, energias_renovables.totalelectrica = self.get_energia_renovable_electrica()
+
+        return energias_renovables
+
+    def get_energia_renovable_termica(self):
+        energia_renovable_termica = []
+
         elementosertermica = self.xmltree.find('./EnergiasRenovables/Termica')
         elementosertermica = [] if elementosertermica is None else elementosertermica
         for elemento in elementosertermica:
@@ -362,202 +460,269 @@ class XMLReport(object):
             for attr in ['ConsumoFinalCalefaccion', 'ConsumoFinalRefrigeracion',
                          'ConsumoFinalACS', 'DemandaACS']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.Termica.append(obj)
+            energia_renovable_termica.append(obj)
 
-        bb.totaltermica = Bunch()
+        energia_renovable_total_termica = self.get_energia_renovable_total_termica(energia_renovable_termica)
+
+        return energia_renovable_termica, energia_renovable_total_termica
+
+    def get_energia_renovable_total_termica(self, termica):
+
+        total_termica = Bunch()
+
         _noneaszero = lambda x: x if x is not None else 0
-        bb.totaltermica.ConsumoFinalCalefaccion = sum(_noneaszero(getattr(e, 'ConsumoFinalCalefaccion', 0)) for e in bb.Termica)
-        bb.totaltermica.ConsumoFinalRefrigeracion = sum(_noneaszero(getattr(e, 'ConsumoFinalRefrigeracion', 0)) for e in bb.Termica)
-        bb.totaltermica.ConsumoFinalACS = sum(_noneaszero(getattr(e, 'ConsumoFinalACS', 0)) for e in bb.Termica)
-        bb.totaltermica.DemandaACS = sum(_noneaszero(getattr(e, 'DemandaACS', 0)) for e in bb.Termica)
 
-        bb.Electrica = []
-        elementoserelectrica = self.xmltree.find('./EnergiasRenovables/Electrica')
-        elementoserelectrica = [] if elementoserelectrica is None else elementoserelectrica
-        for elemento in elementoserelectrica:
+        total_termica.ConsumoFinalCalefaccion = sum(_noneaszero(getattr(e, 'ConsumoFinalCalefaccion', 0)) for e in termica)
+        total_termica.ConsumoFinalRefrigeracion = sum(_noneaszero(getattr(e, 'ConsumoFinalRefrigeracion', 0)) for e in termica)
+        total_termica.ConsumoFinalACS = sum(_noneaszero(getattr(e, 'ConsumoFinalACS', 0)) for e in termica)
+        total_termica.DemandaACS = sum(_noneaszero(getattr(e, 'DemandaACS', 0)) for e in termica)
+
+        return total_termica
+
+    def get_energia_renovable_electrica(self):
+        energia_renovable_electrica = []
+
+        elementos_er_electrica = self.xmltree.find('./EnergiasRenovables/Electrica')
+        elementos_er_electrica = [] if elementos_er_electrica is None else elementos_er_electrica
+        for elemento in elementos_er_electrica:
             obj = Bunch()
             for attr in ['Nombre']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['EnergiaGeneradaAutoconsumida']:
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
-            bb.Electrica.append(obj)
-        bb.totalelectrica = sum(e.EnergiaGeneradaAutoconsumida for e in bb.Electrica)
-        #print bb
+            energia_renovable_electrica.append(obj)
 
-        ## Demanda
-        bb = Bunch()
-        data.Demanda = bb
-        bb.EdificioObjeto = Bunch()
+        energia_renovable_total_electrica = sum(e.EnergiaGeneradaAutoconsumida for e in energia_renovable_electrica)
+
+        return energia_renovable_electrica, energia_renovable_total_electrica
+
+    def get_demanda(self):
+        demanda = Bunch()
+
+        demanda.EdificioObjeto = Bunch()
         for attr in ['Global', 'Calefaccion', 'Refrigeracion', 'ACS',
                      'Conjunta', 'Calefaccion08', 'Refrigeracion08',
                      'Conjunta08', 'Ahorro08']:
-            setattr(bb.EdificioObjeto, attr,
+            setattr(demanda.EdificioObjeto, attr,
                     asfloat(self.xmltree, './Demanda/EdificioObjeto/%s' % attr))
 
-        bb.EdificioDeReferencia = Bunch()
+        demanda.EdificioDeReferencia = Bunch()
         for attr in ['Global', 'Calefaccion', 'Refrigeracion', 'ACS',
                      'Conjunta', 'Calefaccion08', 'Refrigeracion08',
                      'Conjunta08']:
-            setattr(bb.EdificioDeReferencia, attr,
+            setattr(demanda.EdificioDeReferencia, attr,
                     asfloat(self.xmltree, './Demanda/EdificioDeReferencia/%s' % attr))
 
-        bb.Exigencias = Bunch()
+        demanda.Exigencias = Bunch()
         for attr in ['LimiteCalefaccionVivienda', 'LimiteRefrigeracionVivienda',
                      'LimiteAhorroOtrosUsos']:
-            setattr(bb.Exigencias, attr,
+            setattr(demanda.Exigencias, attr,
                     asfloat(self.xmltree, './Demanda/Exigencias/%s' % attr))
-        #print bb
 
-        ## Consumo
-        bb = Bunch()
-        data.Consumo = bb
-        bb.FactoresdePaso = Bunch()
+        return demanda
 
-        cc = Bunch()
+    def get_consumo(self):
+        consumo = Bunch()
+        consumo.FactoresdePaso = self.get_factores_de_paso()
+        consumo.EnergiaFinalVectores = self.get_energia_final_vectores()
+        consumo.EnergiaFinal = self.get_energia_final_por_servicios(consumo.EnergiaFinalVectores)
+        consumo.EnergiaPrimariaNoRenovable = self.get_energia_primaria_no_renovable()
+
+        consumo.Exigencias = Bunch()
+        consumo.Exigencias.LimiteViviendaGlobalEPNR = asfloat(self.xmltree,
+                                                              './Consumo/Exigencias/LimiteViviendaGlobalEPNR')
+
+        return consumo
+
+    def get_factores_de_paso(self):
+        factores_de_paso = Bunch()
+
+        final_a_primaria_no_renovable = Bunch()
         for attr in VECTORES:
-            setattr(cc, attr, asfloat(self.xmltree, './Consumo/FactoresdePaso/FinalAPrimariaNoRenovable/%s' % attr))
-        bb.FactoresdePaso.FinalAPrimariaNoRenovable = cc
+            value = './Consumo/FactoresdePaso/FinalAPrimariaNoRenovable/%s' % attr
+            setattr(final_a_primaria_no_renovable, attr, asfloat(self.xmltree, value))
+        factores_de_paso.FinalAPrimariaNoRenovable = final_a_primaria_no_renovable
 
-        cc = Bunch()
+        final_a_emisiones = Bunch()
         for attr in VECTORES:
-            setattr(cc, attr, asfloat(self.xmltree, './Consumo/FactoresdePaso/FinalAEmisiones/%s' % attr))
-        bb.FactoresdePaso.FinalAEmisiones = cc
+            setattr(final_a_emisiones, attr, asfloat(self.xmltree,
+                                                     './Consumo/FactoresdePaso/FinalAEmisiones/%s' % attr))
+        factores_de_paso.FinalAEmisiones = final_a_emisiones
 
-        cc = Bunch()
+        return factores_de_paso
+
+    def get_energia_final_vectores(self):
+        energia_final_vectores = Bunch()
+
         for vec in VECTORES:
-            vv = Bunch()
+            vector = Bunch()
             if self.xmltree.find('./Consumo/EnergiaFinalVectores/%s' % vec) is not None:
                 for servicio in SERVICIOS:
-                    setattr(vv, servicio, asfloat(self.xmltree, './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio)))
-                setattr(cc, vec, vv)
-        bb.EnergiaFinalVectores = cc
+                    setattr(vector, servicio,
+                            asfloat(self.xmltree, './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio)))
+                setattr(energia_final_vectores, vec, vector)
 
-        # Datos de energía final por servicios
-        cc = Bunch()
-        bb.EnergiaFinal = cc
+        return energia_final_vectores
+
+    def get_energia_final_por_servicios(self, energia_final_vectores):
+        energia_final_por_servicios = Bunch()
+
         for vector in VECTORES:
-            vecdata = getattr(bb.EnergiaFinalVectores, vector, None)
-            if vecdata is None: continue
+            vecdata = getattr(energia_final_vectores, vector, None)
+            if vecdata is None:
+                continue
             for servicio in SERVICIOS:
                 veccval = getattr(vecdata, servicio, 0.0)
-                if veccval is None: continue
-                cval = getattr(cc, servicio, 0.0)
+                if veccval is None:
+                    continue
+                cval = getattr(energia_final_por_servicios, servicio, 0.0)
                 cval = 0.0 if cval is None else cval
-                setattr(cc, servicio, cval + veccval)
+                setattr(energia_final_por_servicios, servicio, cval + veccval)
 
-        cc = Bunch()
+        return energia_final_por_servicios
+
+    def get_energia_primaria_no_renovable(self):
+        energia_primaria_no_renovable = Bunch()
+
         for servicio in SERVICIOS:
-            setattr(cc, servicio, asfloat(self.xmltree, './Consumo/EnergiaPrimariaNoRenovable/%s' % servicio))
-        bb.EnergiaPrimariaNoRenovable = cc
+            value = './Consumo/EnergiaPrimariaNoRenovable/%s' % servicio
+            setattr(energia_primaria_no_renovable, servicio, asfloat(self.xmltree, value))
 
-        bb.Exigencias = Bunch()
-        bb.Exigencias.LimiteViviendaGlobalEPNR = asfloat(self.xmltree, './Consumo/Exigencias/LimiteViviendaGlobalEPNR')
-        #print bb
+        return energia_primaria_no_renovable
 
-        ## Emisiones de CO2
-        bb = Bunch()
-        data.EmisionesCO2 = bb
+    def get_emisiones_co2(self):
+        emisiones_co2 = Bunch()
+
         for servicio in SERVICIOS + 'ConsumoElectrico ConsumoOtros TotalConsumoElectrico TotalConsumoOtros'.split():
-            setattr(bb, servicio, asfloat(self.xmltree, './EmisionesCO2/%s' % servicio))
-        #print bb
+            setattr(emisiones_co2, servicio, asfloat(self.xmltree, './EmisionesCO2/%s' % servicio))
 
-        ## Calificacion
-        bb = Bunch()
-        data.Calificacion = bb
+        return emisiones_co2
 
-        cc = Bunch()
-        bb.Demanda = cc
+    def get_calificacion(self):
+        calificacion = Bunch()
+
+        calificacion.Demanda = self.get_calificacion_demanda()
+        calificacion.EnergiaPrimariaNoRenovable = self.get_calificacion_energia_primaria_no_renovable()
+        calificacion.EmisionesCO2 = self.get_calificacion_emisiones_co2()
+
+        return calificacion
+
+    def get_calificacion_demanda(self):
+        calificacion_demanda = Bunch()
+
         escala = self.xmltree.find('./Calificacion/Demanda/EscalaCalefaccion')
         if escala is not None:
             dd = Bunch()
             for nivel in NIVELESESCALA:
                 setattr(dd, nivel, asfloat(escala, './%s' % nivel))
-            cc.EscalaCalefaccion = dd
+            calificacion_demanda.EscalaCalefaccion = dd
+
         escala = self.xmltree.find('./Calificacion/Demanda/EscalaRefrigeracion')
         if escala is not None:
             dd = Bunch()
             for nivel in NIVELESESCALA:
                 setattr(dd, nivel, asfloat(escala, './%s' % nivel))
-            cc.EscalaRefrigeracion = dd
-        cc.Calefaccion = astext(self.xmltree, './Calificacion/Demanda/Calefaccion')
-        cc.Refrigeracion = astext(self.xmltree, './Calificacion/Demanda/Calefaccion')
+            calificacion_demanda.EscalaRefrigeracion = dd
 
-        cc = Bunch()
-        bb.EnergiaPrimariaNoRenovable = cc
+        calificacion_demanda.Calefaccion = astext(self.xmltree, './Calificacion/Demanda/Calefaccion')
+        calificacion_demanda.Refrigeracion = astext(self.xmltree, './Calificacion/Demanda/Calefaccion')
+
+        return calificacion_demanda
+
+    def get_calificacion_energia_primaria_no_renovable(self):
+        calificacion_energia_primaria_no_renovable = Bunch()
+
         escala = self.xmltree.find('./Calificacion/EnergiaPrimariaNoRenovable/EscalaGlobal')
         if escala is not None:
-            dd = Bunch()
+            escala_global = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(dd, nivel, asfloat(escala, './%s' % nivel))
-            cc.EscalaGlobal = dd
-        cc.Global = astext(self.xmltree, './Calificacion/EnergiaPrimariaNoRenovable/Global')
-        cc.Calefaccion = astext(self.xmltree, './Calificacion/EnergiaPrimariaNoRenovable/Calefaccion')
-        cc.Refrigeracion = astext(self.xmltree, './Calificacion/EnergiaPrimariaNoRenovable/Refrigeracion')
-        cc.ACS = astext(self.xmltree, './Calificacion/EnergiaPrimariaNoRenovable/ACS')
-        cc.Iluminacion = astext(self.xmltree, './Calificacion/EnergiaPrimariaNoRenovable/Iluminacion')
+                setattr(escala_global, nivel, asfloat(escala, './%s' % nivel))
+            calificacion_energia_primaria_no_renovable.EscalaGlobal = escala_global
 
-        cc = Bunch()
-        bb.EmisionesCO2 = cc
+        calificacion_energia_primaria_no_renovable.Global = astext(self.xmltree,
+                                                                   './Calificacion/EnergiaPrimariaNoRenovable/Global')
+        calificacion_energia_primaria_no_renovable.Calefaccion = astext(self.xmltree,
+                                                                        './Calificacion/EnergiaPrimariaNoRenovable/Calefaccion')
+        calificacion_energia_primaria_no_renovable.Refrigeracion = astext(self.xmltree,
+                                                                          './Calificacion/EnergiaPrimariaNoRenovable/Refrigeracion')
+        calificacion_energia_primaria_no_renovable.ACS = astext(self.xmltree,
+                                                                './Calificacion/EnergiaPrimariaNoRenovable/ACS')
+        calificacion_energia_primaria_no_renovable.Iluminacion = astext(self.xmltree,
+                                                                        './Calificacion/EnergiaPrimariaNoRenovable/Iluminacion')
+
+        return calificacion_energia_primaria_no_renovable
+
+    def get_calificacion_emisiones_co2(self):
+        calificacion_emisiones_co2 = Bunch()
+
         escala = self.xmltree.find('./Calificacion/EmisionesCO2/EscalaGlobal')
         if escala is not None:
-            dd = Bunch()
+            escala_global = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(dd, nivel, asfloat(escala, './%s' % nivel))
-            cc.EscalaGlobal = dd
-        cc.Global = astext(self.xmltree, './Calificacion/EmisionesCO2/Global')
-        cc.Calefaccion = astext(self.xmltree, './Calificacion/EmisionesCO2/Calefaccion')
-        cc.Refrigeracion = astext(self.xmltree, './Calificacion/EmisionesCO2/Refrigeracion')
-        cc.ACS = astext(self.xmltree, './Calificacion/EmisionesCO2/ACS')
-        cc.Iluminacion = astext(self.xmltree, './Calificacion/EmisionesCO2/Iluminacion')
-        #print bb
+                setattr(escala_global, nivel, asfloat(escala, './%s' % nivel))
+            calificacion_emisiones_co2.EscalaGlobal = escala_global
 
-        ## Medidas de mejora
-        data.MedidasDeMejora = []
+        calificacion_emisiones_co2.Global = astext(self.xmltree, './Calificacion/EmisionesCO2/Global')
+        calificacion_emisiones_co2.Calefaccion = astext(self.xmltree, './Calificacion/EmisionesCO2/Calefaccion')
+        calificacion_emisiones_co2.Refrigeracion = astext(self.xmltree, './Calificacion/EmisionesCO2/Refrigeracion')
+        calificacion_emisiones_co2.ACS = astext(self.xmltree, './Calificacion/EmisionesCO2/ACS')
+        calificacion_emisiones_co2.Iluminacion = astext(self.xmltree, './Calificacion/EmisionesCO2/Iluminacion')
+
+        return calificacion_emisiones_co2
+
+    def get_medidas_de_mejora(self):
+        medidas_de_mejora = []
+
         medidas = self.xmltree.find('./MedidasDeMejora')
         medidas = [] if medidas is None else medidas
         for medida in medidas:
-            bb = Bunch()
+            medida_de_mejora = Bunch()
+
             for attr in 'Nombre Descripcion CosteEstimado OtrosDatos'.split():
                 txt = astext(medida, './%s' % attr)
                 if txt and txt.startswith('data:/text/html,'):
                     txt = txt.lstrip('data:/text/html,')
                     txt = clean_html(txt)
-                setattr(bb, attr, txt)
-            cc = Bunch()
-            bb.Demanda = cc
-            for attr in 'Global GlobalDiferenciaSituacionInicial Calefaccion Refrigeracion'.split():
-                setattr(cc, attr, asfloat(medida, './Demanda/%s' % attr))
-            cc = Bunch()
-            bb.CalificacionDemanda = cc
-            for attr in 'Calefaccion Refrigeracion'.split():
-                setattr(cc, attr, astext(medida, './CalificacionDemanda/%s' % attr))
-            cc = Bunch()
-            bb.EnergiaFinal = cc
-            for attr in SERVICIOS:
-                setattr(cc, attr, asfloat(medida, './EnergiaFinal/%s' % attr))
-            cc = Bunch()
-            bb.EnergiaPrimariaNoRenovable = cc
-            for attr in SERVICIOS:
-                setattr(cc, attr, asfloat(medida, './EnergiaPrimariaNoRenovable/%s' % attr))
-            cc.GlobalDiferenciaSituacionInicial = asfloat(medida, './EnergiaPrimariaNoRenovable/GlobalDiferenciaSituacionInicial')
-            cc = Bunch()
-            bb.CalificacionEnergiaPrimariaNoRenovable = cc
-            for attr in SERVICIOS:
-                setattr(cc, attr, astext(medida, './CalificacionEnergiaPrimariaNoRenovable/%s' % attr))
-            cc = Bunch()
-            bb.EmisionesCO2 = cc
-            for attr in SERVICIOS:
-                setattr(cc, attr, asfloat(medida, './EmisionesCO2/%s' % attr))
-            cc.GlobalDiferenciaSituacionInicial = asfloat(medida, './EmisionesCO2/GlobalDiferenciaSituacionInicial')
-            cc = Bunch()
-            bb.CalificacionEmisionesCO2 = cc
-            for attr in SERVICIOS:
-                setattr(cc, attr, astext(medida, './CalificacionEmisionesCO2/%s' % attr))
-            data.MedidasDeMejora.append(bb)
-        #print bb
+                setattr(medida_de_mejora, attr, txt)
 
-        ## Pruebas, comprobaciones e inspecciones
-        data.PruebasComprobacionesInspecciones = []
+            medida_de_mejora.Demanda = Bunch()
+            for attr in 'Global GlobalDiferenciaSituacionInicial Calefaccion Refrigeracion'.split():
+                setattr(medida_de_mejora.Demanda, attr, asfloat(medida, './Demanda/%s' % attr))
+
+            medida_de_mejora.CalificacionDemanda = Bunch()
+            for attr in 'Calefaccion Refrigeracion'.split():
+                setattr(medida_de_mejora.CalificacionDemanda, attr, astext(medida, './CalificacionDemanda/%s' % attr))
+
+            medida_de_mejora.EnergiaFinal = Bunch()
+            for attr in SERVICIOS:
+                setattr(medida_de_mejora.EnergiaFinal, attr, asfloat(medida, './EnergiaFinal/%s' % attr))
+
+            medida_de_mejora.EnergiaPrimariaNoRenovable = Bunch()
+            for attr in SERVICIOS:
+                setattr(medida_de_mejora.EnergiaPrimariaNoRenovable, attr, asfloat(medida, './EnergiaPrimariaNoRenovable/%s' % attr))
+            medida_de_mejora.EnergiaPrimariaNoRenovable.GlobalDiferenciaSituacionInicial = asfloat(medida,
+                                                          './EnergiaPrimariaNoRenovable/GlobalDiferenciaSituacionInicial')
+
+            medida_de_mejora.CalificacionEnergiaPrimariaNoRenovable = Bunch()
+            for attr in SERVICIOS:
+                setattr(medida_de_mejora.CalificacionEnergiaPrimariaNoRenovable, attr, astext(medida, './CalificacionEnergiaPrimariaNoRenovable/%s' % attr))
+
+            medida_de_mejora.EmisionesCO2 = Bunch()
+            for attr in SERVICIOS:
+                setattr(medida_de_mejora.EmisionesCO2, attr, asfloat(medida, './EmisionesCO2/%s' % attr))
+            medida_de_mejora.EmisionesCO2.GlobalDiferenciaSituacionInicial = asfloat(medida, './EmisionesCO2/GlobalDiferenciaSituacionInicial')
+
+            medida_de_mejora.CalificacionEmisionesCO2 = Bunch()
+            for attr in SERVICIOS:
+                setattr(medida_de_mejora.CalificacionEmisionesCO2, attr, astext(medida, './CalificacionEmisionesCO2/%s' % attr))
+
+            medidas_de_mejora.append(medida_de_mejora)
+
+        return medidas_de_mejora
+
+    def get_pruebas_comprobaciones_inspecciones(self):
+        pruebas_comprobaciones_inspecciones = []
+
         pruebas = self.xmltree.find('./PruebasComprobacionesInspecciones')
         pruebas = [] if pruebas is None else pruebas
         for prueba in pruebas:
@@ -568,18 +733,16 @@ class XMLReport(object):
                 txt = txt.lstrip('data:/text/html,')
                 txt = clean_html(txt)
             bb.Datos = txt
-            data.PruebasComprobacionesInspecciones.append(bb)
-        #print bb
+            pruebas_comprobaciones_inspecciones.append(bb)
 
-        ## Datos personalizados
+        return pruebas_comprobaciones_inspecciones
+
+    def get_datos_personalizados(self):
         txt = astext(self.xmltree, './DatosPersonalizados')
         if txt and txt.startswith('data:/text/html,'):
             txt = txt.lstrip('data:/text/html,')
             txt = clean_html(txt)
-        data.DatosPersonalizados = txt
-        #print data.DatosPersonalizados
-
-        return data
+        return txt
 
     def validate(self):
         """Valida el informe XML según el esquema XSD"""
@@ -593,83 +756,86 @@ class XMLReport(object):
                   for error in self.xmlschema.error_log]
         return errors
 
-def analize(informe):
-    """Analiza contenidos de un Informe XML en busca de posibles errores"""
-    dd = informe.data
-    ddid = dd.IdentificacionEdificio
-    ddgeo = dd.DatosGeneralesyGeometria
-    zci = ddid.ZonaClimatica[:-1]
-    zcv = ddid.ZonaClimatica[-1]
-    esvivienda = 'Vivienda' in ddid.TipoDeEdificio
+    def analize(self):
+        """Analiza contenidos de un Informe XML en busca de posibles errores"""
+        dd = self.data
+        ddid = dd.IdentificacionEdificio
+        ddgeo = dd.DatosGeneralesyGeometria
+        zci = ddid.ZonaClimatica[:-1]
+        zcv = ddid.ZonaClimatica[-1]
+        esvivienda = 'Vivienda' in ddid.TipoDeEdificio
 
-    info = []
-    if ddid.AnoConstruccion == '-':
-        info.append(('AVISO', u'No se ha definido el año de construcción'))
-    if ddid.ReferenciaCatastral == '-':
-        info.append(('AVISO', u'No se ha definido la referencia catastral'))
+        info = []
+        if ddid.AnoConstruccion == '-':
+            info.append(('AVISO', 'No se ha definido el año de construcción'))
+        if ddid.ReferenciaCatastral == '-':
+            info.append(('AVISO', 'No se ha definido la referencia catastral'))
 
-    if sum(dd.superficies.values()) > ddgeo.SuperficieHabitable:
-        info.append(('ERROR', u'Superficies habitable menor que suma de la superficie de los espacios'))
-    if zcv not in '1234':
-        info.append(('ERROR', u'Zona climática de verano incorrecta'))
-    if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
-        info.append(('ERROR', u'Zona climática de invierno incorrecta'))
+        if sum(dd.superficies.values()) > ddgeo.SuperficieHabitable:
+            info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios'))
+        if zcv not in '1234':
+            info.append(('ERROR', 'Zona climática de verano incorrecta'))
+        if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
+            info.append(('ERROR', 'Zona climática de invierno incorrecta'))
 
-    plano_ = ddgeo.Plano
-    if not plano_:
-        info.append(('AVISO', u'Sin datos de plano'))
-    elif not base64check(plano_):
-        info.append(('AVISO', u'Datos de plano incorrectos'))
+        plano_ = ddgeo.Plano
+        if not plano_:
+            info.append(('AVISO', 'Sin datos de plano'))
+        elif not base64check(plano_):
+            info.append(('AVISO', 'Datos de plano incorrectos'))
 
-    imagen_ = ddgeo.Imagen
-    if not imagen_:
-        info.append(('AVISO', u'Sin datos de imagen'))
-    elif not base64check(imagen_):
-        info.append(('AVISO', u'Datos de imagen incorrectos'))
+        imagen_ = ddgeo.Imagen
+        if not imagen_:
+            info.append(('AVISO', 'Sin datos de imagen'))
+        elif not base64check(imagen_):
+            info.append(('AVISO', 'Datos de imagen incorrectos'))
 
-    if ((0 > ddgeo.PorcentajeSuperficieHabitableCalefactada > 100)
-        or (0 > ddgeo.PorcentajeSuperficieHabitableRefrigerada > 100)):
-        info.append(('ERROR', u'Porcentajes de superficies acondicionadas fuera de rango'))
+        if ((0 > ddgeo.PorcentajeSuperficieHabitableCalefactada > 100) or
+                (0 > ddgeo.PorcentajeSuperficieHabitableRefrigerada > 100)):
+            info.append(('ERROR', 'Porcentajes de superficies acondicionadas fuera de rango'))
 
-    if esvivienda:
-        # Sin chequear
-        if (zcv == '1'
-            and (dd.Demanda.EdificioDeReferencia.Refrigeracion
-                 or dd.Calificacion.EmisionesCO2.Refrigeracion
-                 or dd.Calificacion.Demanda.Refrigeracion
-                 or dd.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion)):
-            info.append(('ERROR', u'Zona sin demanda de refrigeración de referencia y para el que se ha definido calificación para ese servicio'))
-        # Sin chequear
-        if (zci in ('alpha', 'alfa', 'a')
-            and (dd.Demanda.EdificioDeReferencia.Calefaccion
-                 or dd.Calificacion.EmisionesCO2.Calefaccion
-                 or dd.Calificacion.Demanda.Calefaccion
-                 or dd.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion)):
-            info.append(('ERROR', u'Zona sin demanda de calefacción de referencia y para la que se ha definido calificación para ese servicio'))
+        if esvivienda:
+            # Sin chequear
+            if (zcv == '1' and
+                    (dd.Demanda.EdificioDeReferencia.Refrigeracion or
+                     dd.Calificacion.EmisionesCO2.Refrigeracion or
+                     dd.Calificacion.Demanda.Refrigeracion or
+                     dd.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion)):
+                info.append(('ERROR',
+                             'Zona sin demanda de refrigeración de referencia y para el que se ha definido calificación para ese servicio'))
+            # Sin chequear
+            if (zci in ('alpha', 'alfa', 'a') and
+                    (dd.Demanda.EdificioDeReferencia.Calefaccion or
+                     dd.Calificacion.EmisionesCO2.Calefaccion or
+                     dd.Calificacion.Demanda.Calefaccion or
+                     dd.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion)):
+                info.append(('ERROR',
+                             'Zona sin demanda de calefacción de referencia y para la que se ha definido calificación para ese servicio'))
 
-    if not esvivienda:
-        if not informe.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion:
-            info.append(('AVISO', u'No se han definido sistemas secundarios de calefacción y/o refrigeración'))
-        if not informe.data.InstalacionesTermicas.VentilacionyBombeo:
-            info.append(('AVISO', u'No se han definido sistemas de ventilación y bombeo'))
+        if not esvivienda:
+            if not self.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion:
+                info.append(('AVISO', 'No se han definido sistemas secundarios de calefacción y/o refrigeración'))
+            if not self.data.InstalacionesTermicas.VentilacionyBombeo:
+                info.append(('AVISO', 'No se han definido sistemas de ventilación y bombeo'))
 
-    def _visit(res, ckey, obj):
-        "Incluye en res la lista de valores numéricos con sus etiquetas"
-        if isinstance(obj, numbers.Number):
-            res.append((obj, ckey))
-        elif isinstance(obj, (list, tuple)):
-            for item in obj:
-                _visit(res, ckey, item)
-        elif isinstance(obj, (Bunch,)):
-            for key in obj.keys():
-                if key.startswith('_'): continue
-                _visit(res, key, obj[key])
+        def _visit(res, ckey, obj):
+            """Incluye en res la lista de valores numéricos con sus etiquetas"""
 
-    values = []
-    _visit(values, 'root', informe.data)
-    suspects = [key for (value, key) in values if value >= ALERT]
-    if suspects:
-        info.append(('AVISO', u'Valores numéricos erróneos en : %s' % ', '.join(set(suspects))))
+            if isinstance(obj, numbers.Number):
+                res.append((obj, ckey))
+            elif isinstance(obj, (list, tuple)):
+                for item in obj:
+                    _visit(res, ckey, item) 
+            elif isinstance(obj, (Bunch,)):
+                for key in obj.keys():
+                    if key.startswith('_'):
+                        continue
+                    _visit(res, key, obj[key])
 
-    return info
+        values = []
+        _visit(values, 'root', self.data)
+        suspects = [key for (value, key) in values if value >= ALERT]
+        if suspects:
+            info.append(('AVISO', 'Valores numéricos erróneos en : %s' % ', '.join(set(suspects))))
 
+        return info
