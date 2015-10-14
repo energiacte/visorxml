@@ -1,1 +1,4 @@
 Django==1.8.4
+lxml==3.4.4
+Pillow==2.9.0
+Pygments==2.0.2
