@@ -5,10 +5,12 @@ import os.path
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.views.generic import TemplateView, FormView
 
 from .forms import XMLFileForm
 from .reports import XMLReport, analize
+from .pdf_utils import render_to_pdf
 
 
 logger = logging.getLogger(__name__)
@@ -25,9 +27,11 @@ class ValidatorView(FormView):
 
     def form_valid(self, form):
         session = self.request.session
+
         uploaded_file = self.request.FILES['base']
         xmldata = uploaded_file.read()
         session['base_name'] = uploaded_file.name
+
         hashkey = hashlib.md5(xmldata).hexdigest()
         if session.get('base_hashkey') != hashkey:  # or not os.path.exists(datafiles.path(session['base_storedname'])):
             session['base_hashkey'] = hashkey
@@ -76,4 +80,31 @@ class ViewerView(TemplateView):
 
 
 class GetPDFView(TemplateView):
-    pass
+    template_name = "viewer.html"
+
+    def get(self, request, *args, **kwargs):
+        session = request.session
+        if session.get('base_stored_name', False):
+            return super(GetPDFView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('validator'))
+
+    def get_context_data(self, **kwargs):
+        context = super(GetPDFView, self).get_context_data(**kwargs)
+        context['modo'] = 'data print'
+
+        session = self.request.session
+        file_path = os.path.join(settings.MEDIA_ROOT, session['base_hashkey'])
+        with open(file_path, 'rb') as xmlfile:
+            context['report'] = XMLReport(xmlfile.read())
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        html = render_to_string(self.template_name, context)
+
+        env = {
+            'generation_date': context['report'].data.DatosDelCertificador.Fecha,
+            'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
+        }
+        return render_to_pdf(html, 'pepe.pdf', env)

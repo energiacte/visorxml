@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# webkit2pdf -f example.html -o out.pdf (on local)
+# DISPLAY=:1 webkit2pdf -f example.html -o out.pdf (on server)
+#
+
+import os
+import sys
+import shutil
+from optparse import OptionParser
+from tempfile import mkdtemp
+
+class Phantom2Pdf:
+    def __init__(self, html_file, pdf_file):
+        self.in_file = os.path.abspath(html_file)
+        self.out_file = os.path.abspath(pdf_file)
+        self.cmd_dir = os.path.dirname(os.path.abspath(__file__))
+        self.rasterize_js = os.path.join(self.cmd_dir, "rasterize.js")
+        self.media_dir = os.path.abspath(os.path.join(self.cmd_dir, "..", "media"))
+        self.static_dir = os.path.abspath(os.path.join(self.cmd_dir, "..", "static"))
+        self.temp_dir = None
+
+        self.create_workdir()
+
+    def create_workdir(self):
+        self.temp_dir = mkdtemp(prefix="webkit2pdf_")
+        with open(self.in_file, "r") as in_fd:
+            with open(os.path.join(self.temp_dir, "index.html"), "w") as out_fd:
+                html = in_fd.read()
+                html = html.replace("/static/", "static/")
+                html = html.replace("/media/", "media/")
+                out_fd.write(html)
+
+        os.symlink(self.media_dir, os.path.join(self.temp_dir, "media"))
+        os.symlink(self.static_dir, os.path.join(self.temp_dir, "static"))
+
+    def exit(self):
+        os.system("mkdir -p %s" % os.path.dirname(self.out_file))
+        os.system("cp -a %s %s" % (os.path.join(self.temp_dir, "web.pdf"), self.out_file))
+        shutil.rmtree(self.temp_dir)
+
+    def save_pdf(self):
+        in_path = os.path.join(self.temp_dir, "index.html")
+        out_path = os.path.join(self.temp_dir, "web.pdf")
+        os.system("phantomjs %s %s %s A4" % (self.rasterize_js, in_path, out_path))
+        self.exit()
+
+
+if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("-f", "--file", dest="file",
+                      help="html file", metavar="FILE")
+    parser.add_option("-o", "--out", dest="out",
+                      help="output pdf file", metavar="OUT")
+    (options, args) = parser.parse_args()
+
+    if options.out == None or options.file == None:
+        parser.print_help()
+        sys.exit(1)
+    else:
+        wk = Phantom2Pdf(options.file, options.out)
+        wk.save_pdf()
