@@ -12,7 +12,7 @@ import lxml.etree
 from lxml.html.clean import clean_html
 from pygments import highlight
 from pygments.lexers.html import XmlLexer
-from pygments.formatters import HtmlFormatter
+from pygments.formatters.html import HtmlFormatter
 
 from .imgb64 import base64check
 
@@ -825,7 +825,7 @@ class XMLReport(object):
                 res.append((obj, ckey))
             elif isinstance(obj, (list, tuple)):
                 for item in obj:
-                    _visit(res, ckey, item) 
+                    _visit(res, ckey, item)
             elif isinstance(obj, (Bunch,)):
                 for key in obj.keys():
                     if key.startswith('_'):
