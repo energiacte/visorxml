@@ -3,16 +3,14 @@
 
 """Definición de entidades para el análisis de informes de resultados en XML"""
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
+
 import numbers
 
 from django.conf import settings
 
 import lxml.etree
 from lxml.html.clean import clean_html
-from pygments import highlight
-from pygments.lexers.html import XmlLexer
-from pygments.formatters.html import HtmlFormatter
 
 from .imgb64 import base64check
 
@@ -82,20 +80,54 @@ def asfloat(tree, path):
 
 
 class XMLReport(object):
-    def __init__(self, xmldata):
-        self.xml = xmldata
-        self._xmltree = None
-        self._data = None
+    def __init__(self, xml_strings):
         self.xmlschema = None
+        self.errors = {
+            'extra_files_errors': {},
+            'validation_errors': {},
+            'info': {}
+        }
+        self._data = None
+
+        self.xmltree = self.merge_xml_trees(xml_strings)
         self._parsetree()
 
-    @property
-    def xmltree(self):
-        """Árbol lxml de entidades XML"""
-        if self._xmltree is None:
-            self._xmltree = lxml.etree.XML(self.xml,
-                                           parser=XMLPARSER)
-        return self._xmltree
+        self.validate()
+        self.analize()
+
+    def merge_xml_trees(self, xml_strings):
+        _, main_xml_string = xml_strings[0]
+        main_xml_tree = lxml.etree.XML(main_xml_string, parser=XMLPARSER)
+
+        del xml_strings[0]
+
+        xml_trees = [
+            (filename, lxml.etree.XML(xml_string, parser=XMLPARSER))
+            for filename, xml_string
+            in xml_strings
+        ]
+
+        errors = defaultdict(list)
+
+        attrs_to_check = [
+            './IdentificacionEdificio/Direccion',
+            './IdentificacionEdificio/Municipio',
+            './IdentificacionEdificio/CodigoPostal',
+            './IdentificacionEdificio/Provincia',
+            './IdentificacionEdificio/ComunidadAutonoma',
+            './IdentificacionEdificio/ZonaClimatica',
+            './IdentificacionEdificio/ReferenciaCatastral'
+        ]
+        for attr in attrs_to_check:
+            main_tree_value = main_xml_tree.find(attr).text
+
+            for xml_filename, xml_tree in xml_trees:
+                value = xml_tree.find(attr).text
+                if main_tree_value != value:
+                    errors[xml_filename].append('%s no coincide con el archivo base' % attr)
+
+        self.errors['extra_files_errors'] = dict(errors)
+        return main_xml_tree
 
     @property
     def version(self):
@@ -108,6 +140,7 @@ class XMLReport(object):
         if self._data is None:
             self._data = self._parsetree()
         return self._data
+
 
     @property
     def astext(self):
@@ -130,13 +163,6 @@ class XMLReport(object):
 
         data.append('Potenciamediailum\n===========\n%s\n' % str(self.data.InstalacionesIluminacion.totalpotenciamedia))
         return '\n'.join(data)
-
-    @property
-    def ashtml(self):
-        """Contenido del informe como HTML resaltado"""
-        return highlight(self.xml,
-                         XmlLexer(),
-                         HtmlFormatter(noclasses=True))
 
     def _parsetree(self):
         data = Bunch()
@@ -752,9 +778,11 @@ class XMLReport(object):
         else:
             self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH2)))
         self.xmlschema.validate(self.xmltree)
-        errors = [(error.line, error.message.encode("utf-8"))
-                  for error in self.xmlschema.error_log]
-        return errors
+
+        for error in self.xmlschema.error_log:
+            print(error.line, error.message)
+        errors = [(error.line, error.message) for error in self.xmlschema.error_log]
+        self.errors['validation_errors'] = errors
 
     def analize(self):
         """Analiza contenidos de un Informe XML en busca de posibles errores"""
@@ -838,4 +866,4 @@ class XMLReport(object):
         if suspects:
             info.append(('AVISO', 'Valores numéricos erróneos en : %s' % ', '.join(set(suspects))))
 
-        return info
+        self.errors['info'] = info

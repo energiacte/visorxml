@@ -8,17 +8,6 @@
 {% block content %}
 
 <div class="page">
-  {% if 'text' in modo %}
-  <pre>{{report.astext}}</pre>
-  {% endif %}
-  {% if 'html' in modo %}
-  {{ report.ashtml|safe }}
-  {% endif %}
-  {% if 'raw' in modo %}
-  <pre>{{ report.data }}</pre>
-  {% endif %}
-  {% if 'data' in modo %}
-
   {% with id=report.data.IdentificacionEdificio dg=report.data.DatosGeneralesyGeometria dc=report.data.DatosDelCertificador consef=report.data.Consumo.EnergiaFinal consepnr=report.data.Consumo.EnergiaPrimariaNoRenovable emis=report.data.EmisionesCO2 calemis=report.data.Calificacion.EmisionesCO2 calepnr=report.data.Calificacion.EnergiaPrimariaNoRenovable %}
 
   <nav class="hidden-print">
@@ -955,7 +944,6 @@
   </script>
 
   {% endwith %}
-  {% endif %}
 </div>
 
 <div id="preparing-file-modal" title="Preparando informe..." style="display: none;" >

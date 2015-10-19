@@ -12,6 +12,19 @@
     display: none;
   }
 
+  .panel-title {
+    background-color: #f5f5f5;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    margin: 10px -15px 10px -15px;
+    padding: 10px 15px;
+  }
+
+  .add-button {
+    float: right;
+    margin-top: 10px;
+  }
+
   .informe h2,
   .informe h3,
   .informe h4,
