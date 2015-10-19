@@ -10,7 +10,8 @@ module.exports = function(grunt) {
   var contribFiles = [
     // external libraries
     'vendor/js/jquery.js',
-    'vendor/js/bootstrap.js'
+    'vendor/js/bootstrap.js',
+    'vendor/js/bootstrap-fileinput.js'
   ];
 
   var srcFiles = [
@@ -20,6 +21,7 @@ module.exports = function(grunt) {
 
   var cssFiles = [
     'vendor/css/bootstrap.css',
+    'vendor/css/bootstrap-fileinput.css',
     'assets/css/visorxml.css'
   ];
 
@@ -35,8 +37,9 @@ module.exports = function(grunt) {
           destPrefix: 'vendor/js'
         },
         files: {
+          'jquery.js': 'jquery/dist/jquery.js',
           'bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-          'jquery.js': 'jquery/dist/jquery.js'
+          'bootstrap-fileinput.js': 'bootstrap-fileinput/js/fileinput.js'
         }
       },
       css: {
@@ -44,7 +47,8 @@ module.exports = function(grunt) {
           destPrefix: 'vendor/css'
         },
         files: {
-          'bootstrap.css': 'bootstrap/dist/css/bootstrap.css'
+          'bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
+          'bootstrap-fileinput.css': 'bootstrap-fileinput/css/fileinput.css'
         }
       },
       fonts: {

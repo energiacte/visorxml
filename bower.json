@@ -14,7 +14,8 @@
     "bower_components"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "bootstrap-fileinput": "~4.2.7"
   },
   "private": true
 }
