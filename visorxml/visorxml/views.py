@@ -29,34 +29,29 @@ class ValidatorView(FormSetView):
     success_url = reverse_lazy('validator')
 
     def formset_valid(self, formset):
+        session = self.request.session
+
         xml_files = []
         for form_index, form in enumerate(formset.forms):
-            uploaded_file = form.cleaned_data['file']
-            xml_files.append(uploaded_file)
+            uploaded_file = form.cleaned_data.get('file', None)
+            if uploaded_file:
+                xml_files.append(uploaded_file)
 
         xml_strings = self.save_session_info(xml_files)
         report = XMLReport(xml_strings)
+        report_file = report.save_to_file(settings.MEDIA_ROOT)
+        session['report_xml_name'] = report_file
 
         context_data = self.get_context_data(formset=formset)
         context_data['validation_data'] = report.errors
 
         return self.render_to_response(context_data)
 
-        # validation_data = {
-        #     'base_validation_errors': report.validate(),
-        #     'base_info': report.analize()
-        # }
-        #
-        # has_errors = 'ERROR' if validation_data['base_validation_errors'] else 'OK'
-        # logger.info('%s, %s, %s\n' % (session['base_name'],
-        #                               hashkey,
-        #                               has_errors))
-        #
-        # context_data = self.get_context_data(form=form)
-        # context_data['validation_data'] = validation_data
-        # return self.render_to_response(context_data)
-
     def save_session_info(self, xml_files):
+        """
+        Get a list of uploaded XML files and save some data in the user session.
+        Returns a list of tuples, [(file_name, xml_file_content), ...]
+        """
         session = self.request.session
 
         xml_strings = []
@@ -82,7 +77,7 @@ class ViewerView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         session = request.session
-        if session.get('base_stored_name', False):
+        if session.get('report_xml_name', False):
             return super(ViewerView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('validator'))
@@ -90,9 +85,11 @@ class ViewerView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ViewerView, self).get_context_data(**kwargs)
         session = self.request.session
-        file_path = os.path.join(settings.MEDIA_ROOT, session['base_hashkey'])
+        file_name = session['report_xml_name']
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         with open(file_path, 'rb') as xmlfile:
-            context['report'] = XMLReport(xmlfile.read())
+            print(file_path)
+            context['report'] = XMLReport([(file_name, xmlfile.read())])
 
         return context
 
@@ -110,9 +107,10 @@ class GetPDFView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(GetPDFView, self).get_context_data(**kwargs)
         session = self.request.session
-        file_path = os.path.join(settings.MEDIA_ROOT, session['base_hashkey'])
+        file_name = session['report_xml_name']
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         with open(file_path, 'rb') as xmlfile:
-            context['report'] = XMLReport(xmlfile.read())
+            context['report'] = XMLReport([(file_name, xmlfile.read())])
 
         return context
 

@@ -3,9 +3,11 @@
 
 """Definición de entidades para el análisis de informes de resultados en XML"""
 
-from collections import OrderedDict, defaultdict
-
+import os.path
+import hashlib
 import numbers
+from collections import OrderedDict, defaultdict
+from decimal import Decimal
 
 from django.conf import settings
 
@@ -39,11 +41,6 @@ class Bunch(OrderedDict):
                  if not attribute.startswith('_OrderedDict')]
         return '\n'.join(state)
     __unicode__ = __str__
-
-XMLPARSER = lxml.etree.XMLParser(resolve_entities=False,  # no sustituye unicode a entidades
-                                 remove_blank_text=True,
-                                 ns_clean=True,  # limpia namespaces
-                                 remove_comments=True)
 
 
 def astext(tree, path):
@@ -81,53 +78,203 @@ def asfloat(tree, path):
 
 class XMLReport(object):
     def __init__(self, xml_strings):
+        self.xml_parser = lxml.etree.XMLParser(resolve_entities=False,  # no sustituye unicode a entidades
+                                               remove_blank_text=True,
+                                               ns_clean=True,  # limpia namespaces
+                                               remove_comments=True)
+
         self.xmlschema = None
         self.errors = {
-            'extra_files_errors': {},
-            'validation_errors': {},
-            'info': {}
+            'extra_files_errors': None,
+            'validation_errors': None,
+            'info': None
         }
         self._data = None
 
-        self.xmltree = self.merge_xml_trees(xml_strings)
+        self.xmltree = self.calculate_improvement_measures(xml_strings)
         self._parsetree()
 
         self.validate()
         self.analize()
 
-    def merge_xml_trees(self, xml_strings):
-        _, main_xml_string = xml_strings[0]
-        main_xml_tree = lxml.etree.XML(main_xml_string, parser=XMLPARSER)
+    def save_to_file(self, path):
+        xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
+        hashkey = hashlib.md5(xml_string).hexdigest()
 
+        with open(os.path.join(path, hashkey), 'wb') as output_file:
+            output_file.write(xml_string)
+
+        return hashkey
+
+    def calculate_improvement_measures(self, xml_strings):
+        # Get the base XML data
+        print(type(xml_strings))
+        base_xml_filename, base_xml_string = xml_strings[0]
+        base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
+
+        # Remove the base XML from the list
         del xml_strings[0]
 
-        xml_trees = [
-            (filename, lxml.etree.XML(xml_string, parser=XMLPARSER))
-            for filename, xml_string
-            in xml_strings
-        ]
-
         errors = defaultdict(list)
+        for improvement_xml_filename, improvement_xml_string in xml_strings:
+            improvement_xml_tree = lxml.etree.XML(improvement_xml_string, parser=self.xml_parser)
+            improvement_xml_fragment = lxml.etree.Element('Medida')
 
-        attrs_to_check = [
-            './IdentificacionEdificio/Direccion',
-            './IdentificacionEdificio/Municipio',
-            './IdentificacionEdificio/CodigoPostal',
-            './IdentificacionEdificio/Provincia',
-            './IdentificacionEdificio/ComunidadAutonoma',
-            './IdentificacionEdificio/ZonaClimatica',
-            './IdentificacionEdificio/ReferenciaCatastral'
-        ]
-        for attr in attrs_to_check:
-            main_tree_value = main_xml_tree.find(attr).text
+            lxml.etree.SubElement(improvement_xml_fragment, 'Nombre').text = 'NOMBRE'
+            lxml.etree.SubElement(improvement_xml_fragment, 'Descripcion').text = 'DESCRIPCION'
+            lxml.etree.SubElement(improvement_xml_fragment, 'CosteEstimado').text = 'COSTE ESTIMADO'
+            lxml.etree.SubElement(improvement_xml_fragment, 'OtrosDatos').text = 'OTROS DATOS'
 
-            for xml_filename, xml_tree in xml_trees:
-                value = xml_tree.find(attr).text
-                if main_tree_value != value:
-                    errors[xml_filename].append('%s no coincide con el archivo base' % attr)
+            self.check_building_properties(base_xml_tree,
+                                           improvement_xml_filename,
+                                           improvement_xml_tree)
 
-        self.errors['extra_files_errors'] = dict(errors)
-        return main_xml_tree
+            self.improvement_fragment_add_demanda(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_calificacion_demanda(improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_energia_final(improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_energia_primaria_no_renovable(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_calificacion_energia_primaria_no_renovable(improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_emisiones_co2(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_calificacion_emisiones_co2(improvement_xml_tree, improvement_xml_fragment)
+
+            self.append_improvement_fragment(base_xml_tree, improvement_xml_fragment)
+
+            print(lxml.etree.tostring(improvement_xml_fragment))
+
+        return base_xml_tree
+
+    def check_building_properties(self, base_xml_tree, improvement_xml_filename, improvement_xml_tree):
+        attrs_to_check = {
+            './IdentificacionEdificio/Direccion': 'Direccion',
+            './IdentificacionEdificio/Municipio': 'Municipio',
+            './IdentificacionEdificio/CodigoPostal': 'CodigoPostal',
+            './IdentificacionEdificio/Provincia': 'Provincia',
+            './IdentificacionEdificio/ComunidadAutonoma': 'ComunidadAutonoma',
+            './IdentificacionEdificio/ZonaClimatica': 'ZonaClimatica',
+            './IdentificacionEdificio/ReferenciaCatastral': 'ReferenciaCatastral'
+        }
+
+        errors = []
+        for attr, attr_name in attrs_to_check.items():
+            main_tree_value = base_xml_tree.find(attr).text
+            value = improvement_xml_tree.find(attr).text
+            if main_tree_value != value:
+                errors.append('"%s" no coincide con el archivo base' % attr_name)
+
+        if len(errors) > 0:
+            self.errors['extra_files_errors'][improvement_xml_filename] = errors
+
+    def improvement_fragment_add_demanda(self, base_xml_tree, improvement_xml_tree, improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'Demanda')
+
+        base_demanda = Decimal(base_xml_tree.find('./Demanda/EdificioObjeto/Global').text)
+        improvement_demanda = Decimal(improvement_xml_tree.find('./Demanda/EdificioObjeto/Global').text)
+        diff = improvement_demanda - base_demanda
+
+        improvement_calefaccion = Decimal(improvement_xml_tree.find('./Demanda/EdificioObjeto/Calefaccion').text)
+        improvement_refrigeracion = Decimal(improvement_xml_tree.find('./Demanda/EdificioObjeto/Refrigeracion').text)
+
+        lxml.etree.SubElement(element, 'Global').text = '%s' % improvement_demanda
+        lxml.etree.SubElement(element, 'GlobalDiferenciaSituacionInicial').text = '%s' % diff
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % improvement_calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % improvement_refrigeracion
+
+    def improvement_fragment_add_calificacion_demanda(self, improvement_xml_tree, improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'CalificacionDemanda')
+
+        calefaccion = improvement_xml_tree.find('./Calificacion/Demanda/Calefaccion').text
+        refrigeracion = improvement_xml_tree.find('./Calificacion/Demanda/Refrigeracion').text
+
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % refrigeracion
+
+    def improvement_fragment_add_energia_final(self, improvement_xml_tree, improvement_xml_fragment):
+        servicios = defaultdict(int)
+        for vec in VECTORES:
+            if improvement_xml_tree.find('./Consumo/EnergiaFinalVectores/%s' % vec) is not None:
+                for servicio in SERVICIOS:
+                    servicio_element = improvement_xml_tree.find('./Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio))
+                    if servicio_element is not None:
+                        servicios[servicio] += Decimal(servicio_element.text)
+
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaFinal')
+        for servicio, valor in servicios.items():
+            lxml.etree.SubElement(element, servicio).text = '%s' % valor
+
+    def improvement_fragment_add_energia_primaria_no_renovable(self,
+                                                               base_xml_tree,
+                                                               improvement_xml_tree,
+                                                               improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaPrimariaNoRenovable')
+
+        energia_global = Decimal(improvement_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/Global').text)
+        energia_global_base = Decimal(base_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/Global').text)
+        energia_calefaccion = Decimal(improvement_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/Calefaccion').text)
+        energia_refrigeracion = Decimal(improvement_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/Refrigeracion').text)
+        energia_acs = Decimal(improvement_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/ACS').text)
+        energia_iluminacion = Decimal(improvement_xml_tree.find('./Consumo/EnergiaPrimariaNoRenovable/Iluminacion').text)
+        diff = energia_global - energia_global_base
+
+        lxml.etree.SubElement(element, 'Global').text = '%s' % energia_global
+        lxml.etree.SubElement(element, 'GlobalDiferenciaSituacionInicial').text = '%s' % diff
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % energia_calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % energia_refrigeracion
+        lxml.etree.SubElement(element, 'ACS').text = '%s' % energia_acs
+        lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % energia_iluminacion
+
+    def improvement_fragment_add_calificacion_energia_primaria_no_renovable(self,
+                                                                            improvement_xml_tree,
+                                                                            improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'CalificacionEnergiaPrimariaNoRenovable')
+
+        energia_global = improvement_xml_tree.find('./Calificacion/EnergiaPrimariaNoRenovable/Global').text
+        energia_calefaccion = improvement_xml_tree.find('./Calificacion/EnergiaPrimariaNoRenovable/Calefaccion').text
+        energia_refrigeracion = improvement_xml_tree.find('./Calificacion/EnergiaPrimariaNoRenovable/Refrigeracion').text
+        energia_acs = improvement_xml_tree.find('./Calificacion/EnergiaPrimariaNoRenovable/ACS').text
+        energia_iluminacion = improvement_xml_tree.find('./Calificacion/EnergiaPrimariaNoRenovable/Iluminacion').text
+
+        lxml.etree.SubElement(element, 'Global').text = '%s' % energia_global
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % energia_calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % energia_refrigeracion
+        lxml.etree.SubElement(element, 'ACS').text = '%s' % energia_acs
+        lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % energia_iluminacion
+
+    def improvement_fragment_add_emisiones_co2(self, base_xml_tree, improvement_xml_tree, improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'EmisionesCO2')
+
+        emisiones_global = Decimal(improvement_xml_tree.find('./EmisionesCO2/Global').text)
+        emisiones_global_base = Decimal(base_xml_tree.find('./EmisionesCO2/Global').text)
+        emisiones_calefaccion = Decimal(improvement_xml_tree.find('./EmisionesCO2/Calefaccion').text)
+        emisiones_refrigeracion = Decimal(improvement_xml_tree.find('./EmisionesCO2/Refrigeracion').text)
+        emisiones_acs = Decimal(improvement_xml_tree.find('./EmisionesCO2/ACS').text)
+        emisiones_iluminacion = Decimal(improvement_xml_tree.find('./EmisionesCO2/Iluminacion').text)
+        diff = emisiones_global - emisiones_global_base
+
+        lxml.etree.SubElement(element, 'Global').text = '%s' % emisiones_global
+        lxml.etree.SubElement(element, 'GlobalDiferenciaSituacionInicial').text = '%s' % diff
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % emisiones_calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % emisiones_refrigeracion
+        lxml.etree.SubElement(element, 'ACS').text = '%s' % emisiones_acs
+        lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % emisiones_iluminacion
+
+    def improvement_fragment_add_calificacion_emisiones_co2(self, improvement_xml_tree, improvement_xml_fragment):
+        element = lxml.etree.SubElement(improvement_xml_fragment, 'CalificacionEmisionesCO2')
+
+        emisiones_global = improvement_xml_tree.find('./Calificacion/EmisionesCO2/Global').text
+        emisiones_calefaccion = improvement_xml_tree.find('./Calificacion/EmisionesCO2/Calefaccion').text
+        emisiones_refrigeracion = improvement_xml_tree.find('./Calificacion/EmisionesCO2/Refrigeracion').text
+        emisiones_acs = improvement_xml_tree.find('./Calificacion/EmisionesCO2/ACS').text
+        emisiones_iluminacion = improvement_xml_tree.find('./Calificacion/EmisionesCO2/Iluminacion').text
+
+        lxml.etree.SubElement(element, 'Global').text = '%s' % emisiones_global
+        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % emisiones_calefaccion
+        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % emisiones_refrigeracion
+        lxml.etree.SubElement(element, 'ACS').text = '%s' % emisiones_acs
+        lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % emisiones_iluminacion
+
+    def append_improvement_fragment(self, base_xml_tree, improvement_xml_fragment):
+        improvement_measures = base_xml_tree.find('./MedidasDeMejora')
+        improvement_measures.append(improvement_xml_fragment)
 
     @property
     def version(self):
@@ -140,7 +287,6 @@ class XMLReport(object):
         if self._data is None:
             self._data = self._parsetree()
         return self._data
-
 
     @property
     def astext(self):
