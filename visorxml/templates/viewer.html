@@ -23,43 +23,43 @@
       <table class="top">
         <tr>
           <td class="title" width="30%">Nombre del Edificio</td>
-          <td colspan="3">{{ id.NombreDelEdificio }}</td>
+          <td colspan="3"><a href="#" class="editable">{{ id.NombreDelEdificio }}</a></td>
         </tr>
         <tr>
           <td class="title">Dirección</td>
-          <td colspan="3">{{ id.Direccion }}</td>
+          <td colspan="3"><a href="#" class="editable">{{ id.Direccion }}</a></td>
         </tr>
         <tr>
           <td class="title">Municipio</td>
-          <td>{{ id.Municipio }}</td>
+          <td><a href="#" class="editable">{{ id.Municipio }}</a></td>
           <td class="title" width="15%">Código Postal</td>
-          <td>{{ id.CodigoPostal }}</td>
+          <td><a href="#" class="editable">{{ id.CodigoPostal }}</a></td>
         </tr>
         <tr>
           <td class="title">Provincia</td>
-          <td>{{ id.Provincia }}</td>
+          <td><a href="#" class="editable">{{ id.Provincia }}</a></td>
           <td class="title" width="15%">Comunidad Autónoma</td>
-          <td>{{ id.ComunidadAutonoma }}</td>
+          <td><a href="#" class="editable">{{ id.ComunidadAutonoma }}</a></td>
         </tr>
         <tr>
           <td class="title">Zona climática</td>
-          <td>{{ id.ZonaClimatica }}</td>
+          <td><a href="#" class="editable">{{ id.ZonaClimatica }}</a></td>
           <td class="title" width="15%">Año construcción</td>
-          <td>{{ id.AnoConstruccion }}</td>
+          <td><a href="#" class="editable">{{ id.AnoConstruccion }}</a></td>
         </tr>
         <tr>
           <td class="title">Plantas sobre rasante</td>
-          <td>{{ dg.NumeroDePlantasSobreRasante }}</td>
+          <td><a href="#" class="editable">{{ dg.NumeroDePlantasSobreRasante }}</a></td>
           <td class="title" width="15%">Plantas bajo rasante</td>
-          <td>{{ dg.NumeroDePlantasBajoRasante }}</td>
+          <td><a href="#" class="editable">{{ dg.NumeroDePlantasBajoRasante }}</a></td>
         </tr>
         <tr>
           <td class="title">Normativa vigente (construcción / rehabilitación)</td>
-          <td colspan="3">{{ id.NormativaVigente }}</td>
+          <td colspan="3"><a href="#" class="editable">{{ id.NormativaVigente }}</a></td>
         </tr>
         <tr>
           <td class="title">Referencia/s catastral/es</td>
-          <td colspan="3">{{ id.ReferenciaCatastral }}</td>
+          <td colspan="3"><a href="#" class="editable">{{ id.ReferenciaCatastral }}</a></td>
         </tr>
       </table>
 
@@ -789,7 +789,7 @@
     <table>
       <tr>
         <td width="20%" class="title">Denominación:</td>
-        <td><strong>{{ medida.Nombre }}</strong></td>
+        <td><strong><a href="#" class="editable">{{ medida.Nombre }}</a></strong></td>
       </tr>
     </table>
 
@@ -908,12 +908,24 @@
 
     <table>
       <tr><td class="title">DESCRIPCIÓN DE LA MEDIDA DE MEJORA</td></tr>
-      <tr><td><strong>Características técnicas de la medida (modelo de equipos, materiales, parámetros característicos)</strong><br /><br />
-      {{ medida.Descripcion|safe }}</td></tr>
-      <tr><td><strong>Coste estimado de la medida</strong><br /><br />
-          {{ medida.CosteEstimado|safe }}</td><tr/>
-      <tr><td><strong>Otros datos de interés</strong><br /><br />
-      {{ medida.OtrosDatos|safe }}</td><tr/>
+      <tr>
+        <td>
+          <strong>Características técnicas de la medida (modelo de equipos, materiales, parámetros característicos)</strong><br /><br />
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom" data-inputclass="form-control">{{ medida.Descripcion|safe }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Coste estimado de la medida</strong><br /><br />
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom">{{ medida.CosteEstimado|safe }}</a>
+        </td>
+      <tr/>
+      <tr>
+        <td>
+          <strong>Otros datos de interés</strong><br /><br />
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom">{{ medida.OtrosDatos|safe }}</a>
+        </td>
+      <tr/>
     </table>
     {% endfor %}
     {% endif %}
@@ -946,12 +958,14 @@
   {% endwith %}
 </div>
 
-<div id="preparing-file-modal" title="Preparando informe..." style="display: none;" >
-    Por favor, espere mientras preparamos su informe...
-    <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-indeterminate" role="progressbar"></div>
-</div>
-<div id="error-modal" title="Error" style="display: none;">
-    Ocurrió un problema al preparar el informe. Pruebe más tarde.
-</div>
+{% endblock %}
 
+{% block extra_js %}
+  <script>
+  $(function() {
+    $('.editable').editable({
+      mode: 'inline'
+    });
+  });
+  </script>
 {% endblock %}

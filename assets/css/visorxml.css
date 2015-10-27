@@ -171,6 +171,12 @@
     page-break-before: always !important;
   }
 
+  .editable-click,
+  a.editable-click {
+    text-decoration: none !important;
+    border-bottom: 0;
+  }
+
   h1 {
     font-size: 11pt !important;
   }

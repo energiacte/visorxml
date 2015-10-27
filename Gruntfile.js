@@ -11,7 +11,8 @@ module.exports = function(grunt) {
     // external libraries
     'vendor/js/jquery.js',
     'vendor/js/bootstrap.js',
-    'vendor/js/bootstrap-fileinput.js'
+    'vendor/js/bootstrap-fileinput.js',
+    'vendor/js/x-editable.js'
   ];
 
   var srcFiles = [
@@ -22,6 +23,7 @@ module.exports = function(grunt) {
   var cssFiles = [
     'vendor/css/bootstrap.css',
     'vendor/css/bootstrap-fileinput.css',
+    'vendor/css/x-editable.css',
     'assets/css/visorxml.css'
   ];
 
@@ -39,7 +41,8 @@ module.exports = function(grunt) {
         files: {
           'jquery.js': 'jquery/dist/jquery.js',
           'bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-          'bootstrap-fileinput.js': 'bootstrap-fileinput/js/fileinput.js'
+          'bootstrap-fileinput.js': 'bootstrap-fileinput/js/fileinput.js',
+          'x-editable.js': 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js'
         }
       },
       css: {
@@ -48,7 +51,8 @@ module.exports = function(grunt) {
         },
         files: {
           'bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
-          'bootstrap-fileinput.css': 'bootstrap-fileinput/css/fileinput.css'
+          'bootstrap-fileinput.css': 'bootstrap-fileinput/css/fileinput.css',
+          'x-editable.css': 'x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css'
         }
       },
       fonts: {

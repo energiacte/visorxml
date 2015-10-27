@@ -15,7 +15,8 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "bootstrap-fileinput": "~4.2.7"
+    "bootstrap-fileinput": "~4.2.7",
+    "x-editable": "~1.5.1"
   },
   "private": true
 }
