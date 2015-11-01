@@ -33,14 +33,13 @@ class Bunch(OrderedDict):
     """Contenedor genérico"""
 
     def __init__(self, *args, **kwds):
-        OrderedDict.__init__(self, *args, **kwds)
+        super(Bunch, self).__init__()
 
     def __str__(self):
         state = ['%s=%s' % (attribute, value)
                  for (attribute, value) in self.__dict__.items()
                  if not attribute.startswith('_OrderedDict')]
         return '\n'.join(state)
-    __unicode__ = __str__
 
 
 def astext(tree, path):
@@ -114,7 +113,6 @@ class XMLReport(object):
 
     def calculate_improvement_measures(self, xml_strings):
         # Get the base XML data
-        print(type(xml_strings))
         base_xml_filename, base_xml_string = xml_strings[0]
         base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
 
@@ -144,8 +142,6 @@ class XMLReport(object):
             self.improvement_fragment_add_calificacion_emisiones_co2(improvement_xml_tree, improvement_xml_fragment)
 
             self.append_improvement_fragment(base_xml_tree, improvement_xml_fragment)
-
-            print(lxml.etree.tostring(improvement_xml_fragment))
 
         return base_xml_tree
 
@@ -398,9 +394,10 @@ class XMLReport(object):
                      'VentilacionTotal',
                      'DemandaDiariaACS']:
             setattr(datos_generales_y_geometria, attr, asfloat(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
-        datos_generales_y_geometria.PorcentajeSuperficieAcristalada = Bunch(
-            **{key: asint(self.xmltree, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
-               for key in 'N NE E SE S SO O NO'.split()})
+        datos_generales_y_geometria.PorcentajeSuperficieAcristalada = {
+            key: asint(self.xmltree, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
+            for key in 'N NE E SE S SO O NO'.split()
+            }
 
         return datos_generales_y_geometria
 
@@ -714,7 +711,9 @@ class XMLReport(object):
     def get_consumo(self):
         consumo = Bunch()
         consumo.FactoresdePaso = self.get_factores_de_paso()
-        consumo.EnergiaFinalVectores = self.get_energia_final_vectores()
+        (consumo.EnergiaFinalVectores,
+         consumo.EnergiaFinalPorVector,
+         consumo.EnergiaFinalPorServicio) = self.get_energia_final_vectores()
         consumo.EnergiaFinal = self.get_energia_final_por_servicios(consumo.EnergiaFinalVectores)
         consumo.EnergiaPrimariaNoRenovable = self.get_energia_primaria_no_renovable()
 
@@ -743,16 +742,30 @@ class XMLReport(object):
 
     def get_energia_final_vectores(self):
         energia_final_vectores = Bunch()
+        energia_final_por_vector = {}
+        energia_final_por_servicio = defaultdict(float)
 
         for vec in VECTORES:
             vector = Bunch()
             if self.xmltree.find('./Consumo/EnergiaFinalVectores/%s' % vec) is not None:
+                total_por_vector = 0
                 for servicio in SERVICIOS:
-                    setattr(vector, servicio,
-                            asfloat(self.xmltree, './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio)))
+                    energia = asfloat(self.xmltree, './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio))
+                    setattr(vector, servicio, energia)
+
+                    if servicio != 'Global' and energia is not None:
+                        total_por_vector += energia
+                        energia_final_por_servicio[servicio] += energia
+
                 setattr(energia_final_vectores, vec, vector)
 
-        return energia_final_vectores
+                # Si el vector tiene un campo Global, usamos ese campo. Si no, sumamos todos los demás
+                if vector.get('Global', None) is not None:
+                    energia_final_por_vector[vec] = vector['Global']
+                else:
+                    energia_final_por_vector[vec] = total_por_vector
+
+        return energia_final_vectores, energia_final_por_vector, dict(energia_final_por_servicio)
 
     def get_energia_final_por_servicios(self, energia_final_vectores):
         energia_final_por_servicios = Bunch()

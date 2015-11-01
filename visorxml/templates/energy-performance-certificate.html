@@ -11,7 +11,7 @@
   {% with id=report.data.IdentificacionEdificio dg=report.data.DatosGeneralesyGeometria dc=report.data.DatosDelCertificador consef=report.data.Consumo.EnergiaFinal consepnr=report.data.Consumo.EnergiaPrimariaNoRenovable emis=report.data.EmisionesCO2 calemis=report.data.Calificacion.EmisionesCO2 calepnr=report.data.Calificacion.EnergiaPrimariaNoRenovable %}
 
   <nav class="hidden-print">
-    <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'get_pdf' %}">Obtener PDF</a>
+    <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'certificate-pdf' %}">Obtener PDF</a>
   </nav>
 
   <div class="informe" id="informe">

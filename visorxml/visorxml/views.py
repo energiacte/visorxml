@@ -72,48 +72,34 @@ class ValidatorView(FormSetView):
         return xml_strings
 
 
-class ViewerView(TemplateView):
-    template_name = "viewer.html"
+class EnergyPerformanceCertificateView(TemplateView):
+    template_name = "energy-performance-certificate.html"
 
     def get(self, request, *args, **kwargs):
         session = request.session
         if session.get('report_xml_name', False):
-            return super(ViewerView, self).get(request, *args, **kwargs)
+            return super(EnergyPerformanceCertificateView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse_lazy('validator'))
 
     def get_context_data(self, **kwargs):
-        context = super(ViewerView, self).get_context_data(**kwargs)
+        context = super(EnergyPerformanceCertificateView, self).get_context_data(**kwargs)
         session = self.request.session
         file_name = session['report_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         with open(file_path, 'rb') as xmlfile:
-            print(file_path)
-            context['report'] = XMLReport([(file_name, xmlfile.read())])
+            report = XMLReport([(file_name, xmlfile.read())])
+
+        espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
+                       report.data.InstalacionesIluminacion.Espacios)
+
+        context['report'] = report
+        context['espacios'] = espacios
 
         return context
 
 
-class GetPDFView(TemplateView):
-    template_name = "viewer.html"
-
-    def get(self, request, *args, **kwargs):
-        session = request.session
-        if session.get('base_stored_name', False):
-            return super(GetPDFView, self).get(request, *args, **kwargs)
-        else:
-            return HttpResponseRedirect(reverse_lazy('validator'))
-
-    def get_context_data(self, **kwargs):
-        context = super(GetPDFView, self).get_context_data(**kwargs)
-        session = self.request.session
-        file_name = session['report_xml_name']
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        with open(file_path, 'rb') as xmlfile:
-            context['report'] = XMLReport([(file_name, xmlfile.read())])
-
-        return context
-
+class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
     def render_to_response(self, context, **response_kwargs):
         html = render_to_string(self.template_name, context)
 
@@ -121,4 +107,12 @@ class GetPDFView(TemplateView):
             'generation_date': context['report'].data.DatosDelCertificador.Fecha,
             'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
         }
-        return render_to_pdf(html, 'pepe.pdf', env)
+        return render_to_pdf(html, '%s.pdf' % env['reference'], env)
+
+
+class SupplementaryReportView(EnergyPerformanceCertificateView):
+    template_name = "supplementary-report.html"
+
+
+class SupplementaryReportPDFView(EnergyPerformanceCertificatePDFView):
+    template_name = "supplementary-report.html"

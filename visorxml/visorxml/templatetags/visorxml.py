@@ -6,6 +6,38 @@ from visorxml.reports import ALERT
 
 register = template.Library()
 
+def _getcalif(report, value, scale_type):
+    """Calcula letra para el valor, dentro de una escala"""
+
+    if scale_type == 'EnergiaPrimariaNoRenovable':
+        scale = report.data.Calificacion.EnergiaPrimariaNoRenovable.EscalaGlobal
+    elif scale_type == 'EmisionesCO2':
+        scale = report.data.Calificacion.EmisionesCO2.EscalaGlobal
+    elif scale_type == 'DemandaCalefaccion':
+        scale = report.data.Calificacion.Demanda.EscalaCalefaccion
+    elif scale_type == 'DemandaRefrigeracion':
+        scale = report.data.Calificacion.Demanda.EscalaRefrigeracion
+
+    calif = 'G'
+    for letra in 'A B C D E F'.split():
+        limsup = getattr(scale, letra)
+        if value < limsup:
+            calif = letra
+            break
+
+    catlimits = {letra: getattr(scale, letra) for letra in 'A B C D E F'.split()}
+
+    return calif, catlimits
+
+
+@register.simple_tag
+def scalevalue(value, report, scale_type='EnergiaPrimariaNoRenovable'):
+    """Devuelve el valor de la escala aplicable al valor que se pasa por parámetro"""
+    calif, catlimits = _getcalif(report, value, scale_type)
+
+    return calif
+
+
 @register.simple_tag
 def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
     """Devuelve imagen de la escala y su calificación como SVG inline"""
@@ -48,31 +80,11 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
 </svg>
 """
 
-    def _getcalif(value, escala):
-        """Calcula letra para el valor, dentro de una escala"""
-        for letra in 'A B C D E F'.split():
-            limsup = getattr(escala, letra)
-            if value < limsup:
-                calif = letra
-                break
-        else: # caso de salir sin break del for
-            calif = 'G'
-        return calif
-
     try:
-        if scale_type == 'EnergiaPrimariaNoRenovable':
-            scale = report.data.Calificacion.EnergiaPrimariaNoRenovable.EscalaGlobal
-        elif scale_type == 'EmisionesCO2':
-            scale = report.data.Calificacion.EmisionesCO2.EscalaGlobal
-        elif scale_type == 'DemandaCalefaccion':
-            scale = report.data.Calificacion.Demanda.EscalaCalefaccion
-        elif scale_type == 'DemandaRefrigeracion':
-            scale = report.data.Calificacion.Demanda.EscalaRefrigeracion
-
         value = float(value)
         califnum = "{0:.2f}".format(value).replace('.', ',') if value else ''
-        calif = _getcalif(value, scale)
-        catlimits = {letra: getattr(scale, letra) for letra in 'A B C D E F'.split()}
+        calif, catlimits = _getcalif(report, value, scale_type)
+
         ypos = 17 * {
             'A': 0,
             'B': 1,
