@@ -71,7 +71,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'visorxml.log',
+            'filename': os.path.join(BASE_DIR, '..', 'visorxml.log'),
             'formatter': 'verbose'
         },
     },
@@ -96,6 +96,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'served-static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, '..', 'static'),
 )
