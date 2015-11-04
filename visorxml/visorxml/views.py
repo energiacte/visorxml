@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import os.path
+from datetime import date
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -101,13 +102,16 @@ class EnergyPerformanceCertificateView(TemplateView):
 
 class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
     def render_to_response(self, context, **response_kwargs):
+        session = self.request.session
+        filename = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
+
         html = render_to_string(self.template_name, context)
 
         env = {
             'generation_date': context['report'].data.DatosDelCertificador.Fecha,
             'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
         }
-        return render_to_pdf(html, '%s.pdf' % env['reference'], env)
+        return render_to_pdf(html, '%s.pdf' % filename, env)
 
 
 class SupplementaryReportView(EnergyPerformanceCertificateView):
