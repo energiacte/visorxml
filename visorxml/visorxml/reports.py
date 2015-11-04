@@ -287,8 +287,11 @@ class XMLReport(object):
             lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % emisiones_iluminacion
 
     def append_improvement_fragment(self, base_xml_tree, improvement_xml_fragment):
-        improvement_measures = base_xml_tree.find('./MedidasDeMejora')
-        improvement_measures.append(improvement_xml_fragment)
+        if improvement_xml_fragment is not None:
+            improvement_measures = base_xml_tree.find('./MedidasDeMejora')
+            if improvement_measures is None:
+                improvement_measures = lxml.etree.SubElement(base_xml_tree, 'MedidasDeMejora')
+            improvement_measures.append(improvement_xml_fragment)
 
     @property
     def version(self):
