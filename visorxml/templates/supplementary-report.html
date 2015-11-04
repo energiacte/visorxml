@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <td>{% trans "Ventilación [ren/h]" %}</td>
-          <td>{{ dg.VentilacionUsoResidencial }}</td>
+          <td>{{ dg.VentilacionUsoResidencial|asnum }}</td>
         </tr>
         <tr>
           <td>{% trans "Ventilación + infiltraciones [ren/h]" %}</td>
@@ -193,15 +193,19 @@
           <td class="scale_color_{{ report.data.Calificacion.Demanda.Calefaccion }}">
             {{ report.data.Demanda.EdificioObjeto.Calefaccion }}
             {{ report.data.Calificacion.Demanda.Calefaccion }}
+            {% if 'Terciario' not in id.TipoDeEdificio %}
             [{{ report.data.Demanda.Exigencias.LimiteCalefaccionVivienda }}]*
+            {% endif %}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.Demanda.Refrigeracion }}">
             {{ report.data.Demanda.EdificioObjeto.Refrigeracion }}
             {{ report.data.Calificacion.Demanda.Refrigeracion }}
+            {% if 'Terciario' not in id.TipoDeEdificio %}
             [{{ report.data.Demanda.Exigencias.LimiteRefrigeracionVivienda }}]*
+            {% endif %}
           </td>
           <td>
-            {{ report.data.Demanda.EdificioObjeto.Conjunta }}
+            {{ report.data.Demanda.EdificioObjeto.Conjunta|asnum }}
             {% if report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos %}
               [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos }}%]**
             {% endif %}
@@ -332,7 +336,7 @@
         <tr>
           <td>{{ e.Nombre }}</td>
           <td>{{ e.Tipo }}</td>
-          <td></td>
+          <td>{{ e.Orientacion }}</td>
           <td class="num">{{ e.Superficie|asnum}}</td>
           <td class="num">{{ e.Transmitancia|asnum }}</td>
         </tr>
@@ -382,7 +386,7 @@
         <tr>
           <td>{{ e.Nombre }}</td>
           <td>{{ e.Tipo }}</td>
-          <td></td>
+          <td>{{ e.Orientacion }}</td>
           <td class="num">{{ e.Superficie|asnum }}</td>
           <td class="num">{{ e.Transmitancia|asnum }}</td>
           <td class="num">{{ e.FactorSolar|asnum }}</td>
