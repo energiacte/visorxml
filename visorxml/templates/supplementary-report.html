@@ -39,9 +39,9 @@
           <td colspan="2">{% trans "Características geométricas" %} </td>
           <td rowspan="5">
             {% if dg.Imagen %}
-            <img src="{{ dg.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+            <img src="{{ dg.Imagen }}" alt="Imagen general del edificio" class="img-responsive" />
             {% else %}
-            <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+            <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive" />
             {% endif %}
           </td>
         </tr>
