@@ -34,15 +34,8 @@
           <ul class="nav navbar-nav">
             <li><a href="{% url "home" %}">{% trans "Home" %}</a></li>
             <li><a href="{% url "validator" %}">{% trans "Validador" %}</a></li>
-            <li>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              {% trans "Visor" %} <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url "certificate" %}">{% trans "Certificado de Eficiencia Energética" %}</a></li>
-              <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
-            </ul>
-            </li>
+            <li><a href="{% url "certificate" %}">{% trans "Certificado de Eficiencia Energética" %}</a></li>
+            <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
