@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
 from extra_views import FormSetView
@@ -40,7 +41,7 @@ class ValidatorView(FormSetView):
 
         xml_strings = self.save_session_info(xml_files)
         report = XMLReport(xml_strings)
-        report_file = report.save_to_file(settings.MEDIA_ROOT)
+        report_file = report.save_to_file()
         session['report_xml_name'] = report_file
 
         context_data = self.get_context_data(formset=formset)
@@ -76,11 +77,14 @@ class ValidatorView(FormSetView):
 class GetXMLView(View):
     def get(self, request, *args, **kwargs):
         session = self.request.session
+
         file_name = session['report_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        output_file_name = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
+
         with open(file_path, 'rb') as xmlfile:
             response = HttpResponse(xmlfile.read(), content_type='application/xml')
-            response['Content-Disposition'] = 'attachment;filename=%s' % file_name
+            response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
             return response
 
 
@@ -131,3 +135,23 @@ class SupplementaryReportView(EnergyPerformanceCertificateView):
 
 class SupplementaryReportPDFView(EnergyPerformanceCertificatePDFView):
     template_name = "supplementary-report.html"
+
+
+class UpdateXMLView(View):
+    def post(self, request, *args, **kwargs):
+        element = request.POST['name']
+        value = request.POST['value']
+
+        session = self.request.session
+        file_name = session['report_xml_name']
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        with open(file_path, 'rb') as xmlfile:
+            report = XMLReport([(file_name, xmlfile.read())])
+
+        report.update_element(element, value)
+
+        return HttpResponse()
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateXMLView, self).dispatch(*args, **kwargs)

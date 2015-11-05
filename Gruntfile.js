@@ -66,6 +66,15 @@ module.exports = function(grunt) {
           'glyphicons-halflings-regular.woff': 'bootstrap/dist/fonts/glyphicons-halflings-regular.woff',
           'glyphicons-halflings-regular.woff2': 'bootstrap/dist/fonts/glyphicons-halflings-regular.woff2'
         }
+      },
+      imgs: {
+        options: {
+          destPrefix: 'visorxml/static/img'
+        },
+        files: {
+          'loading.gif': 'x-editable/dist/bootstrap3-editable/img/loading.gif',
+          'clear.png': 'x-editable/dist/bootstrap3-editable/img/clear.png'
+        }
       }
     },
 

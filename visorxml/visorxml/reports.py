@@ -77,6 +77,9 @@ def asfloat(tree, path):
 
 class XMLReport(object):
     def __init__(self, xml_strings):
+        '''
+        xml_strings es una lista de tuplas. Las tuplas son de la forma (nombre_fichero, contenido)
+        '''
         self.xml_parser = lxml.etree.XMLParser(resolve_entities=False,  # no sustituye unicode a entidades
                                                remove_blank_text=True,
                                                ns_clean=True,  # limpia namespaces
@@ -89,21 +92,35 @@ class XMLReport(object):
             'info': None
         }
         self._data = None
+        self._xml_strings = xml_strings
 
-        self.xmltree = self.calculate_improvement_measures(xml_strings)
+        self.xmltree = self.calculate_improvement_measures()
         self._parsetree()
 
         self.validate()
         self.analize()
 
-    def save_to_file(self, path):
+    def save_to_file(self, filename=None):
         xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
-        hashkey = hashlib.md5(xml_string).hexdigest()
+        if filename is None:
+            filename = hashlib.md5(xml_string).hexdigest()
 
-        with open(os.path.join(path, hashkey), 'wb') as output_file:
+        path = settings.MEDIA_ROOT
+
+        with open(os.path.join(path, filename), 'wb') as output_file:
             output_file.write(xml_string)
 
-        return hashkey
+        return filename
+
+    def update_element(self, element, value):
+        path = './%s' % '/'.join(element.split('.'))
+        try:
+            self.xmltree.find(path).text = value
+
+            base_xml_filename, base_xml_string = self._xml_strings[0]
+            self.save_to_file(base_xml_filename)
+        except AttributeError:
+            pass
 
     def get_XML_value(self, xml_tree, path, default_value=0):
         try:
@@ -111,16 +128,13 @@ class XMLReport(object):
         except AttributeError:
             return default_value
 
-    def calculate_improvement_measures(self, xml_strings):
+    def calculate_improvement_measures(self):
         # Get the base XML data
-        base_xml_filename, base_xml_string = xml_strings[0]
+        base_xml_filename, base_xml_string = self._xml_strings[0]
         base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
 
-        # Remove the base XML from the list
-        del xml_strings[0]
-
-        errors = defaultdict(list)
-        for improvement_xml_filename, improvement_xml_string in xml_strings:
+        # Loop over the xml strings list, except the first element, which is the base file
+        for improvement_xml_filename, improvement_xml_string in self._xml_strings[1:]:
             improvement_xml_tree = lxml.etree.XML(improvement_xml_string, parser=self.xml_parser)
             improvement_xml_fragment = lxml.etree.Element('Medida')
 

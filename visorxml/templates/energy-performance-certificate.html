@@ -22,43 +22,91 @@
       <table class="top">
         <tr>
           <td class="title" width="30%">Nombre del Edificio</td>
-          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.NombreDelEdificio }}</a></td>
+          <td colspan="3">
+            <a href="#" class="editable" id="IdentificacionEdificio.NombreDelEdificio">
+              {{ report.data.IdentificacionEdificio.NombreDelEdificio }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Dirección</td>
-          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Direccion }}</a></td>
+          <td colspan="3">
+            <a href="#" class="editable" id="IdentificacionEdificio.Direccion">
+              {{ report.data.IdentificacionEdificio.Direccion }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Municipio</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Municipio }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.Municipio">
+              {{ report.data.IdentificacionEdificio.Municipio }}
+            </a>
+          </td>
           <td class="title" width="15%">Código Postal</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.CodigoPostal }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.CodigoPostal">
+              {{ report.data.IdentificacionEdificio.CodigoPostal }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Provincia</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Provincia }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.Provincia">
+              {{ report.data.IdentificacionEdificio.Provincia }}
+            </a>
+          </td>
           <td class="title" width="15%">Comunidad Autónoma</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ComunidadAutonoma }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.ComunidadAutonoma">
+              {{ report.data.IdentificacionEdificio.ComunidadAutonoma }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Zona climática</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ZonaClimatica }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.ZonaClimatica">
+              {{ report.data.IdentificacionEdificio.ZonaClimatica }}
+            </a>
+          </td>
           <td class="title" width="15%">Año construcción</td>
-          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.AnoConstruccion }}</a></td>
+          <td>
+            <a href="#" class="editable" id="IdentificacionEdificio.AnoConstruccion">
+              {{ report.data.IdentificacionEdificio.AnoConstruccion }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Plantas sobre rasante</td>
-          <td><a href="#" class="editable">{{ report.data.DatosGeneralesyGeometria.NumeroDePlantasSobreRasante }}</a></td>
+          <td>
+            <a href="#" class="editable" id="DatosGeneralesyGeometria.NumeroDePlantasSobreRasante">
+              {{ report.data.DatosGeneralesyGeometria.NumeroDePlantasSobreRasante }}
+            </a>
+          </td>
           <td class="title" width="15%">Plantas bajo rasante</td>
-          <td><a href="#" class="editable">{{ report.data.DatosGeneralesyGeometria.NumeroDePlantasBajoRasante }}</a></td>
+          <td>
+            <a href="#" class="editable" id="DatosGeneralesyGeometria.NumeroDePlantasBajoRasante">
+              {{ report.data.DatosGeneralesyGeometria.NumeroDePlantasBajoRasante }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Normativa vigente (construcción / rehabilitación)</td>
-          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.NormativaVigente }}</a></td>
+          <td colspan="3">
+            <a href="#" class="editable" id="IdentificacionEdificio.NormativaVigente">
+              {{ report.data.IdentificacionEdificio.NormativaVigente }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Referencia/s catastral/es</td>
-          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}</a></td>
+          <td colspan="3">
+            <a href="#" class="editable" id="IdentificacionEdificio.ReferenciaCatastral">
+              {{ report.data.IdentificacionEdificio.ReferenciaCatastral }}
+            </a>
+          </td>
         </tr>
       </table>
 
@@ -148,45 +196,97 @@
       <table class="top">
         <tr>
           <td class="title" width="30%">Nombre y Apellidos</td>
-          <td>{{ report.data.DatosDelCertificador.NombreyApellidos }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.NombreyApellidos">
+              {{ report.data.DatosDelCertificador.NombreyApellidos }}
+            </a>
+          </td>
           <td class="title" width="17%">NIF/NIE</td>
-          <td>{{ report.data.DatosDelCertificador.NIF }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.NIF">
+              {{ report.data.DatosDelCertificador.NIF }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Razón Social</td>
-          <td>{{ report.data.DatosDelCertificador.RazonSocial }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.RazonSocial">
+              {{ report.data.DatosDelCertificador.RazonSocial }}
+            </a>
+          </td>
           <td class="title">NIF</td>
-          <td>{{ report.data.DatosDelCertificador.NIFEntidad }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.NIFEntidad">
+              {{ report.data.DatosDelCertificador.NIFEntidad }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Domicilio</td>
-          <td colspan="3">{{ report.data.DatosDelCertificador.Domicilio }}</td>
+          <td colspan="3">
+            <a href="#" class="editable" id="DatosDelCertificador.Domicilio">
+              {{ report.data.DatosDelCertificador.Domicilio }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Municipio</td>
-          <td>{{ report.data.DatosDelCertificador.Municipio }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.Municipio">
+              {{ report.data.DatosDelCertificador.Municipio }}
+            </a>
+          </td>
           <td class="title">Código Postal</td>
-          <td>{{ report.data.DatosDelCertificador.CodigoPostal }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.CodigoPostal">
+              {{ report.data.DatosDelCertificador.CodigoPostal }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Provincia</td>
-          <td>{{ report.data.DatosDelCertificador.Provincia }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.Provincia">
+              {{ report.data.DatosDelCertificador.Provincia }}
+            </a>
+          </td>
           <td class="title">Comunidad Autónoma</td>
-          <td>{{ report.data.DatosDelCertificador.ComunidadAutonoma }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.ComunidadAutonoma">
+              {{ report.data.DatosDelCertificador.ComunidadAutonoma }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">e-mail</td>
-          <td>{{ report.data.DatosDelCertificador.Email }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.Email">
+              {{ report.data.DatosDelCertificador.Email }}
+            </a>
+          </td>
           <td class="title">Teléfono</td>
-          <td>{{ report.data.DatosDelCertificador.Telefono }}</td>
+          <td>
+            <a href="#" class="editable" id="DatosDelCertificador.Telefono">
+              {{ report.data.DatosDelCertificador.Telefono }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title">Titulación habilitante según normativa vigente</td>
-          <td colspan="3">{{ report.data.DatosDelCertificador.Titulacion }}</td>
+          <td colspan="3">
+            <a href="#" class="editable" id="DatosDelCertificador.Titulacion">
+              {{ report.data.DatosDelCertificador.Titulacion }}
+            </a>
+          </td>
         </tr>
         <tr>
           <td class="title" colspan="2">Procedimiento reconocido de calificación energética utilizado y versión:</td>
-          <td colspan="2">{{ report.data.IdentificacionEdificio.Procedimiento }}</td>
+          <td colspan="2">
+            <a href="#" class="editable" id="DatosDelCertificador.Procedimiento">
+              {{ report.data.IdentificacionEdificio.Procedimiento }}
+            </a>
+          </td>
         </tr>
       </table>
     </div>
@@ -788,7 +888,13 @@
     <table>
       <tr>
         <td width="20%" class="title">Denominación:</td>
-        <td><strong><a href="#" class="editable">{{ medida.Nombre }}</a></strong></td>
+        <td>
+          <strong>
+            <a href="#" class="editable">
+              {{ medida.Nombre }}
+            </a>
+          </strong>
+        </td>
       </tr>
     </table>
 
@@ -961,8 +1067,11 @@
 {% block extra_js %}
   <script>
   $(function() {
+    $.fn.editable.defaults.mode = 'inline';
+
     $('.editable').editable({
-      mode: 'inline'
+      url: '{% url "update-xml" %}',
+      pk: 1
     });
   });
   </script>
