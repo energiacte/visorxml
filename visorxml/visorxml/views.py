@@ -5,9 +5,9 @@ from datetime import date
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 
 from extra_views import FormSetView
 
@@ -71,6 +71,17 @@ class ValidatorView(FormSetView):
                     session['file_%s_stored_name' % file_index] = file_path
 
         return xml_strings
+
+
+class GetXMLView(View):
+    def get(self, request, *args, **kwargs):
+        session = self.request.session
+        file_name = session['report_xml_name']
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        with open(file_path, 'rb') as xmlfile:
+            response = HttpResponse(xmlfile.read(), content_type='application/xml')
+            response['Content-Disposition'] = 'attachment;filename=%s' % file_name
+            return response
 
 
 class EnergyPerformanceCertificateView(TemplateView):
