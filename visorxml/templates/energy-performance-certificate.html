@@ -8,8 +8,6 @@
 {% block content %}
 
 <div class="page">
-  {% with id=report.data.IdentificacionEdificio dg=report.data.DatosGeneralesyGeometria dc=report.data.DatosDelCertificador consef=report.data.Consumo.EnergiaFinal consepnr=report.data.Consumo.EnergiaPrimariaNoRenovable emis=report.data.EmisionesCO2 calemis=report.data.Calificacion.EmisionesCO2 calepnr=report.data.Calificacion.EnergiaPrimariaNoRenovable %}
-
   <nav class="hidden-print">
     <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'certificate-pdf' %}">Obtener PDF</a>
     <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'get-xml' %}">Obtener XML</a>
@@ -24,43 +22,43 @@
       <table class="top">
         <tr>
           <td class="title" width="30%">Nombre del Edificio</td>
-          <td colspan="3"><a href="#" class="editable">{{ id.NombreDelEdificio }}</a></td>
+          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.NombreDelEdificio }}</a></td>
         </tr>
         <tr>
           <td class="title">Dirección</td>
-          <td colspan="3"><a href="#" class="editable">{{ id.Direccion }}</a></td>
+          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Direccion }}</a></td>
         </tr>
         <tr>
           <td class="title">Municipio</td>
-          <td><a href="#" class="editable">{{ id.Municipio }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Municipio }}</a></td>
           <td class="title" width="15%">Código Postal</td>
-          <td><a href="#" class="editable">{{ id.CodigoPostal }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.CodigoPostal }}</a></td>
         </tr>
         <tr>
           <td class="title">Provincia</td>
-          <td><a href="#" class="editable">{{ id.Provincia }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.Provincia }}</a></td>
           <td class="title" width="15%">Comunidad Autónoma</td>
-          <td><a href="#" class="editable">{{ id.ComunidadAutonoma }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ComunidadAutonoma }}</a></td>
         </tr>
         <tr>
           <td class="title">Zona climática</td>
-          <td><a href="#" class="editable">{{ id.ZonaClimatica }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ZonaClimatica }}</a></td>
           <td class="title" width="15%">Año construcción</td>
-          <td><a href="#" class="editable">{{ id.AnoConstruccion }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.IdentificacionEdificio.AnoConstruccion }}</a></td>
         </tr>
         <tr>
           <td class="title">Plantas sobre rasante</td>
-          <td><a href="#" class="editable">{{ dg.NumeroDePlantasSobreRasante }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.DatosGeneralesyGeometria.NumeroDePlantasSobreRasante }}</a></td>
           <td class="title" width="15%">Plantas bajo rasante</td>
-          <td><a href="#" class="editable">{{ dg.NumeroDePlantasBajoRasante }}</a></td>
+          <td><a href="#" class="editable">{{ report.data.DatosGeneralesyGeometria.NumeroDePlantasBajoRasante }}</a></td>
         </tr>
         <tr>
           <td class="title">Normativa vigente (construcción / rehabilitación)</td>
-          <td colspan="3"><a href="#" class="editable">{{ id.NormativaVigente }}</a></td>
+          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.NormativaVigente }}</a></td>
         </tr>
         <tr>
           <td class="title">Referencia/s catastral/es</td>
-          <td colspan="3"><a href="#" class="editable">{{ id.ReferenciaCatastral }}</a></td>
+          <td colspan="3"><a href="#" class="editable">{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}</a></td>
         </tr>
       </table>
 
@@ -71,14 +69,14 @@
         <tr>
           <td width="50%">
             <span style="margin-left:20px" />
-            {% if 'Nuevo' in id.AlcanceInformacionXML %}
+            {% if 'Nuevo' in report.data.IdentificacionEdificio.AlcanceInformacionXML %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Edificio de nueva construcción
           </td>
           <td><span style="margin-left:20px" />
-            {% if 'Existente' in id.AlcanceInformacionXML %}
+            {% if 'Existente' in report.data.IdentificacionEdificio.AlcanceInformacionXML %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
@@ -88,31 +86,31 @@
         <tr>
           <td>
             <span style="margin-left:20px" />
-            {% if 'Vivienda' in id.TipoDeEdificio %}
+            {% if 'Vivienda' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Vivienda<br />
             <span style="margin-left:40px" />
-            {% if 'Unifamiliar' in id.TipoDeEdificio %}
+            {% if 'Unifamiliar' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Unifamiliar<br />
             <span style="margin-left:40px" />
-            {% if 'Bloque' in id.TipoDeEdificio %}
+            {% if 'Bloque' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Bloque<br />
             <span style="margin-left:60px" />
-            {% if 'Completo' in id.TipoDeEdificio %}
+            {% if 'Completo' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Bloque Completo<br />
             <span style="margin-left:60px" />
-            {% if 'EnBloque' in id.TipoDeEdificio %}
+            {% if 'EnBloque' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
@@ -120,19 +118,19 @@
           </td>
           <td>
             <span style="margin-left:20px" />
-            {% if 'Terciario' in id.TipoDeEdificio %}
+            {% if 'Terciario' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Terciario<br />
             <span style="margin-left:40px" />
-            {% if 'EdificioUsoTerciario' in id.TipoDeEdificio %}
+            {% if 'EdificioUsoTerciario' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
             {% endif %} Edificio completo<br />
             <span style="margin-left:40px" />
-            {% if 'Local' in id.TipoDeEdificio %}
+            {% if 'Local' in report.data.IdentificacionEdificio.TipoDeEdificio %}
               <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
             {% else %}
               <span class="glyphicon glyphicon-bordered glyphicon-empty" aria-hidden="true"></span>
@@ -150,45 +148,45 @@
       <table class="top">
         <tr>
           <td class="title" width="30%">Nombre y Apellidos</td>
-          <td>{{ dc.NombreyApellidos }}</td>
+          <td>{{ report.data.DatosDelCertificador.NombreyApellidos }}</td>
           <td class="title" width="17%">NIF/NIE</td>
-          <td>{{ dc.NIF }}</td>
+          <td>{{ report.data.DatosDelCertificador.NIF }}</td>
         </tr>
         <tr>
           <td class="title">Razón Social</td>
-          <td>{{ dc.RazonSocial }}</td>
+          <td>{{ report.data.DatosDelCertificador.RazonSocial }}</td>
           <td class="title">NIF</td>
-          <td>{{ dc.NIFEntidad }}</td>
+          <td>{{ report.data.DatosDelCertificador.NIFEntidad }}</td>
         </tr>
         <tr>
           <td class="title">Domicilio</td>
-          <td colspan="3">{{ dc.Domicilio }}</td>
+          <td colspan="3">{{ report.data.DatosDelCertificador.Domicilio }}</td>
         </tr>
         <tr>
           <td class="title">Municipio</td>
-          <td>{{ dc.Municipio }}</td>
+          <td>{{ report.data.DatosDelCertificador.Municipio }}</td>
           <td class="title">Código Postal</td>
-          <td>{{ dc.CodigoPostal }}</td>
+          <td>{{ report.data.DatosDelCertificador.CodigoPostal }}</td>
         </tr>
         <tr>
           <td class="title">Provincia</td>
-          <td>{{ dc.Provincia }}</td>
+          <td>{{ report.data.DatosDelCertificador.Provincia }}</td>
           <td class="title">Comunidad Autónoma</td>
-          <td>{{ dc.ComunidadAutonoma }}</td>
+          <td>{{ report.data.DatosDelCertificador.ComunidadAutonoma }}</td>
         </tr>
         <tr>
           <td class="title">e-mail</td>
-          <td>{{ dc.Email }}</td>
+          <td>{{ report.data.DatosDelCertificador.Email }}</td>
           <td class="title">Teléfono</td>
-          <td>{{ dc.Telefono }}</td>
+          <td>{{ report.data.DatosDelCertificador.Telefono }}</td>
         </tr>
         <tr>
           <td class="title">Titulación habilitante según normativa vigente</td>
-          <td colspan="3">{{ dc.Titulacion }}</td>
+          <td colspan="3">{{ report.data.DatosDelCertificador.Titulacion }}</td>
         </tr>
         <tr>
           <td class="title" colspan="2">Procedimiento reconocido de calificación energética utilizado y versión:</td>
-          <td colspan="2">{{ id.Procedimiento }}</td>
+          <td colspan="2">{{ report.data.IdentificacionEdificio.Procedimiento }}</td>
         </tr>
       </table>
     </div>
@@ -205,8 +203,8 @@
             <td class="title">EMISIONES DE DIÓXIDO DE CARBONO<br />[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
           </tr>
           <tr>
-            <td>{% if consepnr.Global %}<img class="escala" src="{% escalasvg consepnr.Global report 'EnergiaPrimariaNoRenovable' %}" />{% endif %}</td>
-            <td>{% if emis.Global %}<img class="escala" src="{% escalasvg emis.Global report 'EmisionesCO2' %}" />{% endif %}</td>
+            <td>{% if report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}<img class="escala" src="{% escalasvg report.data.Consumo.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" />{% endif %}</td>
+            <td>{% if report.data.EmisionesCO2.Global %}<img class="escala" src="{% escalasvg report.data.EmisionesCO2.Global report 'EmisionesCO2' %}" />{% endif %}</td>
           </tr>
         </table>
       </div>
@@ -215,9 +213,9 @@
         de acuerdo con el procedimiento establecido por la normativa vigente y que son ciertos los datos que figuran en el presente
         documento, y sus anexos:</p>
 
-      <p>Fecha: {{ dc.Fecha }}</p>
+      <p>Fecha: {{ report.data.DatosDelCertificador.Fecha }}</p>
       <br />
-      <p class="text-center">Firma del técnico certificador: {{ dc.NombreyApellidos}} - {{ dc.NIF}}</p>
+      <p class="text-center">Firma del técnico certificador: {{ report.data.DatosDelCertificador.NombreyApellidos}} - {{ report.data.DatosDelCertificador.NIF}}</p>
 
       <ol>
         <li><strong>Anexo I. </strong>Descripción de las características energéticas del edificio.</li>
@@ -241,7 +239,7 @@
     <table>
       <tr>
         <td class="title col-md-5">Superficie habitable [m<sup>2</sup>]</td>
-        <td class="col-md-7">{{ dg.SuperficieHabitable|asnum }}</td>
+        <td class="col-md-7">{{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|asnum }}</td>
       </tr>
     </table>
 
@@ -254,15 +252,15 @@
       </tr>
       <tr>
         <td class="col-md-6" align="center">
-          {% if dg.Imagen %}
-          <img src="{{ dg.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+          {% if report.data.DatosGeneralesyGeometria.Imagen %}
+          <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
           {% else %}
           <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
           {% endif %}
         </td>
         <td class="col-md-6" align="center">
-          {% if dg.Plano %}
-          <img src="{{ dg.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
+          {% if report.data.DatosGeneralesyGeometria.Plano %}
+          <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
           {% else %}
           <img src="{% static 'img/sinimagen.png' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
           {% endif %}
@@ -398,7 +396,7 @@
       <table style="width:65%">
         <tr>
           <td width="45%" class="title">Demanda diaria de ACS a 60ºC (litros/dia)</td>
-          <td width="20%" class="num">{{ dg.DemandaDiariaACS|asnum }}</td>
+          <td width="20%" class="num">{{ report.data.DatosGeneralesyGeometria.DemandaDiariaACS|asnum }}</td>
         </tr>
       </table>
 
@@ -639,9 +637,9 @@
     <table>
       <tr>
         <td class="title">Zona Climática</td>
-        <td>{{ id.ZonaClimatica }}</td>
+        <td>{{ report.data.IdentificacionEdificio.ZonaClimatica }}</td>
         <td class="title">Uso</td>
-        <td width="40%">{{ id.TipoDeEdificio }}</td>
+        <td width="40%">{{ report.data.IdentificacionEdificio.TipoDeEdificio }}</td>
       </tr>
     </table>
 
@@ -655,7 +653,7 @@
         </tr>
         <tr>
           <td rowspan="6" align="center" class="info">
-            <img class="escala" src="{% escalasvg emis.Global report 'EmisionesCO2' %}" />
+            <img class="escala" src="{% escalasvg report.data.EmisionesCO2.Global report 'EmisionesCO2' %}" />
             <div>Emisiones globales [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</p></div>
           </td>
           <td class="title" colspan="2">CALEFACCIÓN</td>
@@ -663,13 +661,13 @@
         </tr>
         <tr>
           <td class="info">Emisiones calefacción [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calemis.Calefaccion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.Calefaccion|default:'-' }}</td>
           <td class="info">Emisiones ACS [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calemis.ACS|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.ACS|default:'-' }}</td>
         </tr>
         <tr>
-          <td class="info">{{ emis.Calefaccion|asnum }}</td>
-          <td class="info">{{ emis.ACS|asnum }}</td>
+          <td class="info">{{ report.data.EmisionesCO2.Calefaccion|asnum }}</td>
+          <td class="info">{{ report.data.EmisionesCO2.ACS|asnum }}</td>
         </tr>
         <tr>
           <td class="title" colspan="2">REFRIGERACIÓN</td>
@@ -677,13 +675,13 @@
         </tr>
         <tr>
           <td class="info">Emisiones refrigeración [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calemis.Refrigeracion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.Refrigeracion|default:'-' }}</td>
           <td class="info">Emisiones iluminación [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calemis.Iluminacion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.Iluminacion|default:'-' }}</td>
         </tr>
         <tr>
-          <td class="info">{{ emis.Refrigeracion|asnum }}</td>
-          <td class="info">{{ emis.Iluminacion|asnum }}</td>
+          <td class="info">{{ report.data.EmisionesCO2.Refrigeracion|asnum }}</td>
+          <td class="info">{{ report.data.EmisionesCO2.Iluminacion|asnum }}</td>
         </tr>
       </table>
 
@@ -697,12 +695,12 @@
         </tr>
         <tr>
           <td class="info">Emisiones CO<sub>2</sub> por consumo eléctrico</td>
-          <td class="num">{{ emis.ConsumoElectrico|asnum }}</td>
-          <td class="num">{{ emis.TotalConsumoElectrico|asint }}</td>
+          <td class="num">{{ report.data.EmisionesCO2.ConsumoElectrico|asnum }}</td>
+          <td class="num">{{ report.data.EmisionesCO2.TotalConsumoElectrico|asint }}</td>
         <tr>
           <td class="info">Emisiones CO<sub>2</sub> por otros combustibles</td>
-          <td class="num">{{ emis.ConsumoOtros|asnum }}</td>
-          <td class="num">{{ emis.TotalConsumoOtros|asint }}</td>
+          <td class="num">{{ report.data.EmisionesCO2.ConsumoOtros|asnum }}</td>
+          <td class="num">{{ report.data.EmisionesCO2.TotalConsumoOtros|asint }}</td>
         </tr>
       </table>
     </div>
@@ -719,7 +717,7 @@
         </tr>
         <tr>
           <td rowspan="6" align="center" class="info">
-            <img class="escala" src="{% escalasvg consepnr.Global report 'EnergiaPrimariaNoRenovable' %}" />
+            <img class="escala" src="{% escalasvg report.data.Consumo.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" />
             <div>Consumo global de energía primaria no renovable [kWh/m<sup>2</sup>·año]</div>
           </td>
           <td class="title" colspan="2">CALEFACCIÓN</td>
@@ -727,13 +725,13 @@
         </tr>
         <tr>
           <td class="info">Energía primaria calefacción [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calepnr.Calefaccion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion|default:'-' }}</td>
           <td class="info">Energía primaria ACS [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calepnr.ACS|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS|default:'-' }}</td>
         </tr>
         <tr>
-          <td class="info">{{ consepnr.Calefaccion|asnum }}</td>
-          <td class="info">{{ consepnr.ACS|asnum }}</td>
+          <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|asnum }}</td>
+          <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|asnum }}</td>
         </tr>
         <tr>
           <td class="title" colspan="2">REFRIGERACIÓN</td>
@@ -741,13 +739,13 @@
         </tr>
         <tr>
           <td class="info">Energía primaria refrigeración [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calepnr.Refrigeracion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion|default:'-' }}</td>
           <td class="info">Energía primaria iluminación [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">{{ calepnr.Iluminacion|default:'-' }}</td>
+          <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
         </tr>
         <tr>
-          <td class="info">{{ consepnr.Refrigeracion|asnum }}</td>
-          <td class="info">{{ consepnr.Iluminacion|asnum }}</td>
+          <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}</td>
+          <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}</td>
         </tr>
       </table>
     </div>
@@ -855,41 +853,41 @@
       <tr>
         <td class="title">Consumo Energía final<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
         <td class="num">{{ medida.EnergiaFinal.Calefaccion|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:consef.Calefaccion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:report.data.Consumo.EnergiaFinal.Calefaccion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.Refrigeracion|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:consef.Refrigeracion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:consef.ACS|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:consef.Iluminacion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:consef.Global|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:report.data.Consumo.EnergiaFinal.Global|safe }}</td>
       </tr>
       <tr>
         <td class="title">Consumo Energía primaria no renovable<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Calefaccion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Calefaccion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Calefaccion|difwith:consepnr.Calefaccion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Calefaccion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Refrigeracion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|difwith:consepnr.Refrigeracion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.ACS|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.ACS|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.ACS|difwith:consepnr.ACS|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.ACS|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|difwith:consepnr.Iluminacion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Global|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Global|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Global|difwith:consepnr.Global|safe }}</td>
+        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Global|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Global|safe }}</td>
       </tr>
       <tr>
         <td class="title">Emisiones de CO<sub>2</sub><br /><small>[kgCO<sub>2e</sub>/m<sup>2</sup>·año]</small></td>
         <td class="num">{{ medida.EmisionesCO2.Calefaccion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Calefaccion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.Calefaccion|difwith:emis.Calefaccion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Calefaccion|difwith:report.data.EmisionesCO2.Calefaccion|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.Refrigeracion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Refrigeracion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.Refrigeracion|difwith:emis.Refrigeracion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Refrigeracion|difwith:report.data.EmisionesCO2.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.ACS|asnum }}<br />{{ medida.CalificacionEmisionesCO2.ACS|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.ACS|difwith:emis.ACS|safe }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.ACS|difwith:report.data.EmisionesCO2.ACS|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.Iluminacion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Iluminacion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.Iluminacion|difwith:emis.Iluminacion|safe }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Iluminacion|difwith:report.data.EmisionesCO2.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.Global|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Global|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.Global|difwith:emis.Global|safe }}</td>
+        <td class="num calc small dif">{{ medida.EmisionesCO2.Global|difwith:report.data.EmisionesCO2.Global|safe }}</td>
       </tr>
       <tr>
         <td class="title">Demanda<br /><small>[kWh/m<sup>2</sup>·año]</small></td>
@@ -952,11 +950,10 @@
   </div>
 
   <script>
-    var generation_date = '{{ dc.Fecha }}';
-    var reference = '{{ id.ReferenciaCatastral }}';
+    var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
+    var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
   </script>
 
-  {% endwith %}
 </div>
 
 {% endblock %}
