@@ -890,7 +890,7 @@
         <td width="20%" class="title">Denominación:</td>
         <td>
           <strong>
-            <a href="#" class="editable">
+            <a href="#" class="editable" id="MedidasDeMejora.Medida[{{ forloop.counter }}].Nombre">
               {{ medida.Nombre }}
             </a>
           </strong>
@@ -1016,19 +1016,19 @@
       <tr>
         <td>
           <strong>Características técnicas de la medida (modelo de equipos, materiales, parámetros característicos)</strong><br /><br />
-          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom" data-inputclass="form-control">{{ medida.Descripcion|safe }}</a>
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom" id="MedidasDeMejora.Medida[{{ forloop.counter }}].Descripcion">{{ medida.Descripcion|safe }}</a>
         </td>
       </tr>
       <tr>
         <td>
           <strong>Coste estimado de la medida</strong><br /><br />
-          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom">{{ medida.CosteEstimado|safe }}</a>
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom" id="MedidasDeMejora.Medida[{{ forloop.counter }}].CosteEstimado">{{ medida.CosteEstimado|safe }}</a>
         </td>
       <tr/>
       <tr>
         <td>
           <strong>Otros datos de interés</strong><br /><br />
-          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom">{{ medida.OtrosDatos|safe }}</a>
+          <a href="#" class="editable" data-type="textarea" data-showbuttons="bottom" id="MedidasDeMejora.Medida[{{ forloop.counter }}].OtrosDatos">{{ medida.OtrosDatos|safe }}</a>
         </td>
       <tr/>
     </table>
