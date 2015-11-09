@@ -105,5 +105,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
 MEDIA_URL = '/media/'
 
 # VISOR_XML SETTINGS
+VERSION = '1.0'
+
 XSDPATH2 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema20.xsd')
 XSDPATH1 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema10.xsd')

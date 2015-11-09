@@ -119,6 +119,10 @@ class XMLReport(object):
         try:
             self.xmltree.find(path).text = value
 
+            procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
+            if procedimiento is not None and 'visorxml' not in procedimiento.text:
+                procedimiento.text += ' - visorxml %s' % settings.VERSION
+
             base_xml_filename, base_xml_string = self._xml_strings[0]
             self.save_to_file(base_xml_filename)
         except AttributeError:
