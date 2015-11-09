@@ -154,6 +154,49 @@
   .scale_color_G {
     background-color: #ee1c25 !important;
   }
+
+  /* WYSIHTML5 overrides */
+
+  .wysihtml5-toolbar .btn {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+  }
+  .icon-list:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e056";
+  }
+
+  .icon-th-list:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e012";
+  }
+
+  .icon-indent-right:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e058";
+  }
+
+  .icon-indent-left:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e057";
+  }
+
+  .icon-share:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e144";
+  }
+
+  .icon-picture:before {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    content: "\e060";
+  }
 }
 
 @media screen {
