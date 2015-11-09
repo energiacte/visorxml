@@ -41,8 +41,11 @@ class ValidatorView(FormSetView):
 
         xml_strings = self.save_session_info(xml_files)
         report = XMLReport(xml_strings)
-        report_file = report.save_to_file()
-        session['report_xml_name'] = report_file
+
+        print(report.errors['validation_errors'])
+        if len(report.errors.get('validation_errors', None)) == 0:
+            report_file = report.save_to_file()
+            session['report_xml_name'] = report_file
 
         context_data = self.get_context_data(formset=formset)
         context_data['validation_data'] = report.errors

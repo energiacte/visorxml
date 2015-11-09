@@ -88,17 +88,19 @@ class XMLReport(object):
         self.xmlschema = None
         self.errors = {
             'extra_files_errors': None,
-            'validation_errors': None,
+            'validation_errors': [],
             'info': None
         }
         self._data = None
         self._xml_strings = xml_strings
 
-        self.xmltree = self.calculate_improvement_measures()
-        self._parsetree()
+        self.xmltree = self.get_xmltree()
+        if self.xmltree is not None:
+            self.calculate_improvement_measures()
+            self._parsetree()
 
-        self.validate()
-        self.analize()
+            self.validate()
+            self.analize()
 
     def save_to_file(self, filename=None):
         xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
@@ -128,14 +130,27 @@ class XMLReport(object):
         except AttributeError:
             return default_value
 
-    def calculate_improvement_measures(self):
+    def get_xmltree(self):
         # Get the base XML data
         base_xml_filename, base_xml_string = self._xml_strings[0]
-        base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
+        try:
+            base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
+            return base_xml_tree
+        except lxml.etree.XMLSyntaxError:
+            error = (None, 'El archivo "<strong>%s</strong>" no está correctamente formateado' % base_xml_filename)
+            self.errors['validation_errors'].append(error)
+            return None
 
+    def calculate_improvement_measures(self):
         # Loop over the xml strings list, except the first element, which is the base file
         for improvement_xml_filename, improvement_xml_string in self._xml_strings[1:]:
-            improvement_xml_tree = lxml.etree.XML(improvement_xml_string, parser=self.xml_parser)
+            try:
+                improvement_xml_tree = lxml.etree.XML(improvement_xml_string, parser=self.xml_parser)
+            except lxml.etree.XMLSyntaxError:
+                error = (None, 'El archivo "<strong>%s</strong>" no está correctamente formateado' % improvement_xml_filename)
+                self.errors['validation_errors'].append(error)
+                continue
+
             improvement_xml_fragment = lxml.etree.Element('Medida')
 
             lxml.etree.SubElement(improvement_xml_fragment, 'Nombre').text = 'NOMBRE'
@@ -143,23 +158,20 @@ class XMLReport(object):
             lxml.etree.SubElement(improvement_xml_fragment, 'CosteEstimado').text = 'COSTE ESTIMADO'
             lxml.etree.SubElement(improvement_xml_fragment, 'OtrosDatos').text = 'OTROS DATOS'
 
-            self.check_building_properties(base_xml_tree,
-                                           improvement_xml_filename,
+            self.check_building_properties(improvement_xml_filename,
                                            improvement_xml_tree)
 
-            self.improvement_fragment_add_demanda(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_demanda(improvement_xml_tree, improvement_xml_fragment)
             self.improvement_fragment_add_calificacion_demanda(improvement_xml_tree, improvement_xml_fragment)
             self.improvement_fragment_add_energia_final(improvement_xml_tree, improvement_xml_fragment)
-            self.improvement_fragment_add_energia_primaria_no_renovable(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_energia_primaria_no_renovable(improvement_xml_tree, improvement_xml_fragment)
             self.improvement_fragment_add_calificacion_energia_primaria_no_renovable(improvement_xml_tree, improvement_xml_fragment)
-            self.improvement_fragment_add_emisiones_co2(base_xml_tree, improvement_xml_tree, improvement_xml_fragment)
+            self.improvement_fragment_add_emisiones_co2(improvement_xml_tree, improvement_xml_fragment)
             self.improvement_fragment_add_calificacion_emisiones_co2(improvement_xml_tree, improvement_xml_fragment)
 
-            self.append_improvement_fragment(base_xml_tree, improvement_xml_fragment)
+            self.append_improvement_fragment(improvement_xml_fragment)
 
-        return base_xml_tree
-
-    def check_building_properties(self, base_xml_tree, improvement_xml_filename, improvement_xml_tree):
+    def check_building_properties(self, improvement_xml_filename, improvement_xml_tree):
         attrs_to_check = {
             './IdentificacionEdificio/Direccion': 'Direccion',
             './IdentificacionEdificio/Municipio': 'Municipio',
@@ -172,7 +184,7 @@ class XMLReport(object):
 
         errors = []
         for attr, attr_name in attrs_to_check.items():
-            main_tree_value = base_xml_tree.find(attr).text
+            main_tree_value = self.xmltree.find(attr).text
             value = improvement_xml_tree.find(attr).text
             if main_tree_value != value:
                 errors.append('"%s" no coincide con el archivo base' % attr_name)
@@ -182,8 +194,8 @@ class XMLReport(object):
                 self.errors['extra_files_errors'] = {}
             self.errors['extra_files_errors'][improvement_xml_filename] = errors
 
-    def improvement_fragment_add_demanda(self, base_xml_tree, improvement_xml_tree, improvement_xml_fragment):
-        base_demanda = Decimal(self.get_XML_value(base_xml_tree,
+    def improvement_fragment_add_demanda(self, improvement_xml_tree, improvement_xml_fragment):
+        base_demanda = Decimal(self.get_XML_value(self.xmltree,
                                                   './Demanda/EdificioObjeto/Global'))
         improvement_demanda = Decimal(self.get_XML_value(improvement_xml_tree,
                                                          './Demanda/EdificioObjeto/Global'))
@@ -220,13 +232,12 @@ class XMLReport(object):
             lxml.etree.SubElement(element, servicio).text = '%s' % valor
 
     def improvement_fragment_add_energia_primaria_no_renovable(self,
-                                                               base_xml_tree,
                                                                improvement_xml_tree,
                                                                improvement_xml_fragment):
         element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaPrimariaNoRenovable')
 
         energia_global = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Global'))
-        energia_global_base = Decimal(self.get_XML_value(base_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Global'))
+        energia_global_base = Decimal(self.get_XML_value(self.xmltree, './Consumo/EnergiaPrimariaNoRenovable/Global'))
         energia_calefaccion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Calefaccion'))
         energia_refrigeracion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Refrigeracion'))
         energia_acs = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/ACS'))
@@ -262,11 +273,11 @@ class XMLReport(object):
         if energia_iluminacion:
             lxml.etree.SubElement(element, 'Iluminacion').text = energia_iluminacion
 
-    def improvement_fragment_add_emisiones_co2(self, base_xml_tree, improvement_xml_tree, improvement_xml_fragment):
+    def improvement_fragment_add_emisiones_co2(self, improvement_xml_tree, improvement_xml_fragment):
         element = lxml.etree.SubElement(improvement_xml_fragment, 'EmisionesCO2')
 
         emisiones_global = Decimal(self.get_XML_value(improvement_xml_tree, './EmisionesCO2/Global'))
-        emisiones_global_base = Decimal(self.get_XML_value(base_xml_tree, './EmisionesCO2/Global'))
+        emisiones_global_base = Decimal(self.get_XML_value(self.xmltree, './EmisionesCO2/Global'))
         emisiones_calefaccion = Decimal(self.get_XML_value(improvement_xml_tree, './EmisionesCO2/Calefaccion'))
         emisiones_refrigeracion = Decimal(self.get_XML_value(improvement_xml_tree, './EmisionesCO2/Refrigeracion'))
         emisiones_acs = Decimal(self.get_XML_value(improvement_xml_tree, './EmisionesCO2/ACS'))
@@ -300,11 +311,11 @@ class XMLReport(object):
         if emisiones_iluminacion:
             lxml.etree.SubElement(element, 'Iluminacion').text = '%s' % emisiones_iluminacion
 
-    def append_improvement_fragment(self, base_xml_tree, improvement_xml_fragment):
+    def append_improvement_fragment(self, improvement_xml_fragment):
         if improvement_xml_fragment is not None:
-            improvement_measures = base_xml_tree.find('./MedidasDeMejora')
+            improvement_measures = self.xmltree.find('./MedidasDeMejora')
             if improvement_measures is None:
-                improvement_measures = lxml.etree.SubElement(base_xml_tree, 'MedidasDeMejora')
+                improvement_measures = lxml.etree.SubElement(self.xmltree, 'MedidasDeMejora')
             improvement_measures.append(improvement_xml_fragment)
 
     @property
@@ -973,64 +984,59 @@ class XMLReport(object):
             self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH2, encoding='UTF-8')))
         self.xmlschema.validate(self.xmltree)
 
-        for error in self.xmlschema.error_log:
-            print(error.line, error.message)
         errors = [(error.line, error.message) for error in self.xmlschema.error_log]
-        self.errors['validation_errors'] = errors
+        self.errors['validation_errors'] += errors
 
     def analize(self):
         """Analiza contenidos de un Informe XML en busca de posibles errores"""
-        dd = self.data
-        ddid = dd.IdentificacionEdificio
-        ddgeo = dd.DatosGeneralesyGeometria
-        zci = ddid.ZonaClimatica[:-1]
-        zcv = ddid.ZonaClimatica[-1]
-        esvivienda = 'Vivienda' in ddid.TipoDeEdificio
+        zci = self.data.IdentificacionEdificio.ZonaClimatica[:-1]
+        zcv = self.data.IdentificacionEdificio.ZonaClimatica[-1]
+        esvivienda = 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
 
         info = []
-        if ddid.AnoConstruccion == '-':
+        if self.data.IdentificacionEdificio.AnoConstruccion == '-':
             info.append(('AVISO', 'No se ha definido el año de construcción'))
-        if ddid.ReferenciaCatastral == '-':
+        if self.data.IdentificacionEdificio.ReferenciaCatastral == '-':
             info.append(('AVISO', 'No se ha definido la referencia catastral'))
 
-        if sum(dd.superficies.values()) > ddgeo.SuperficieHabitable:
+        if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
             info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios'))
         if zcv not in '1234':
             info.append(('ERROR', 'Zona climática de verano incorrecta'))
         if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
             info.append(('ERROR', 'Zona climática de invierno incorrecta'))
 
-        plano_ = ddgeo.Plano
+        plano_ = self.data.DatosGeneralesyGeometria.Plano
         if not plano_:
             info.append(('AVISO', 'Sin datos de plano'))
         elif not base64check(plano_):
             info.append(('AVISO', 'Datos de plano incorrectos'))
 
-        imagen_ = ddgeo.Imagen
+        imagen_ = self.data.DatosGeneralesyGeometria.Imagen
         if not imagen_:
             info.append(('AVISO', 'Sin datos de imagen'))
         elif not base64check(imagen_):
             info.append(('AVISO', 'Datos de imagen incorrectos'))
 
-        if ((0 > ddgeo.PorcentajeSuperficieHabitableCalefactada > 100) or
-                (0 > ddgeo.PorcentajeSuperficieHabitableRefrigerada > 100)):
+        if ((0 > self.data.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableCalefactada > 100) or
+                (0 > self.data.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableRefrigerada > 100)):
             info.append(('ERROR', 'Porcentajes de superficies acondicionadas fuera de rango'))
 
         if esvivienda:
             # Sin chequear
             if (zcv == '1' and
-                    (dd.Demanda.EdificioDeReferencia.Refrigeracion or
-                     dd.Calificacion.EmisionesCO2.Refrigeracion or
-                     dd.Calificacion.Demanda.Refrigeracion or
-                     dd.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion)):
+                    (self.data.Demanda.EdificioDeReferencia.Refrigeracion or
+                     self.data.Calificacion.EmisionesCO2.Refrigeracion or
+                     self.data.Calificacion.Demanda.Refrigeracion or
+                     self.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion)):
                 info.append(('ERROR',
                              'Zona sin demanda de refrigeración de referencia y para el que se ha definido calificación para ese servicio'))
             # Sin chequear
             if (zci in ('alpha', 'alfa', 'a') and
-                    (dd.Demanda.EdificioDeReferencia.Calefaccion or
-                     dd.Calificacion.EmisionesCO2.Calefaccion or
-                     dd.Calificacion.Demanda.Calefaccion or
-                     dd.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion)):
+                    (self.data.Demanda.EdificioDeReferencia.Calefaccion or
+                     self.data.Calificacion.EmisionesCO2.Calefaccion or
+                     self.data.Calificacion.Demanda.Calefaccion or
+                     self.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion)):
                 info.append(('ERROR',
                              'Zona sin demanda de calefacción de referencia y para la que se ha definido calificación para ese servicio'))
 

@@ -127,7 +127,12 @@
               </p>
               <ul>
                 {% for error in validation_data.validation_errors %}
-                  <li><strong>Línea {{ error.0 }}:</strong> {{ error.1 }}</li>
+                  <li>
+                    {% if error.0 %}
+                      <strong>Línea {{ error.0 }}:</strong>
+                    {% endif %}
+                    {{ error.1|safe }}
+                  </li>
                 {% endfor %}
               </ul>
             </div>
