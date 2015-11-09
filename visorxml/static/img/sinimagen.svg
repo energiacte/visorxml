@@ -1,0 +1,10 @@
+<svg xmlns='http://www.w3.org/2000/svg' width="275" height="275">
+    <g id="layer1" stroke="none">
+      <rect style="fill:#eeeeee;stroke:gray;stroke-width:2" width="250" height="250" x="13" y="13" />
+      <g font-family="Arial" font-size="30" fill="gray" text-anchor="middle">
+      <text x="135" y="75">IMAGEN</text>
+      <text x="135" y="150">NO</text>
+      <text x="135" y="225">DISPONIBLE</text>
+      </g>
+    </g>
+</svg>
