@@ -1,7 +1,9 @@
+import base64
 import hashlib
 import logging
 import os.path
 from datetime import date
+from io import BytesIO, StringIO
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -11,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
 from extra_views import FormSetView
+from PIL import Image
 
 from .forms import XMLFileForm
 from .reports import XMLReport
@@ -18,6 +21,14 @@ from .pdf_utils import render_to_pdf
 
 
 logger = logging.getLogger(__name__)
+
+
+def load_report(session):
+    file_name = session['report_xml_name']
+    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+    with open(file_path, 'rb') as xmlfile:
+        report = XMLReport([(file_name, xmlfile.read())])
+        return report
 
 
 class HomeView(TemplateView):
@@ -103,11 +114,7 @@ class EnergyPerformanceCertificateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(EnergyPerformanceCertificateView, self).get_context_data(**kwargs)
-        session = self.request.session
-        file_name = session['report_xml_name']
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        with open(file_path, 'rb') as xmlfile:
-            report = XMLReport([(file_name, xmlfile.read())])
+        report = load_report(self.request.session)
 
         espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
                        report.data.InstalacionesIluminacion.Espacios)
@@ -145,12 +152,7 @@ class UpdateXMLView(View):
         element = request.POST['name']
         value = request.POST['value']
 
-        session = self.request.session
-        file_name = session['report_xml_name']
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        with open(file_path, 'rb') as xmlfile:
-            report = XMLReport([(file_name, xmlfile.read())])
-
+        report = load_report(self.request.session)
         report.update_element(element, value)
 
         return HttpResponse()
@@ -158,3 +160,28 @@ class UpdateXMLView(View):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UpdateXMLView, self).dispatch(*args, **kwargs)
+
+
+class UploadImageView(View):
+    def post(self, request, *args, **kwargs):
+        uploaded_image = request.FILES['image']
+        section = request.POST['section']
+
+        # Read and resize the image
+        image = Image.open(BytesIO(uploaded_image.read()))
+        maxsize = (460, 460)
+        image.thumbnail(maxsize, Image.ANTIALIAS)
+
+        # Convert the image to a base64 string
+        image_buffer = BytesIO()
+        image.save(image_buffer, format="PNG")
+        image_string = base64.b64encode(image_buffer.getvalue())
+
+        report = load_report(self.request.session)
+        report.update_image(section, image_string)
+
+        return HttpResponse()
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(UploadImageView, self).dispatch(*args, **kwargs)

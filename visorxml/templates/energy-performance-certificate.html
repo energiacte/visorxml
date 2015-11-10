@@ -352,18 +352,22 @@
       </tr>
       <tr>
         <td class="col-md-6" align="center">
-          {% if report.data.DatosGeneralesyGeometria.Imagen %}
-          <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
-          {% else %}
-          <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
-          {% endif %}
+          <a href="#" class="upload-image" data-section="Imagen">
+            {% if report.data.DatosGeneralesyGeometria.Imagen %}
+            <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+            {% else %}
+            <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+            {% endif %}
+          </a>
         </td>
         <td class="col-md-6" align="center">
-          {% if report.data.DatosGeneralesyGeometria.Plano %}
-          <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
-          {% else %}
-          <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
-          {% endif %}
+          <a href="#" class="upload-image" data-section="Plano">
+            {% if report.data.DatosGeneralesyGeometria.Plano %}
+            <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
+            {% else %}
+            <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+            {% endif %}
+          </a>
         </td>
       </tr>
     </table>
@@ -1072,6 +1076,35 @@
     $('.editable').editable({
       url: '{% url "update-xml" %}',
       pk: 1
+    });
+
+    $('.upload-image').click(function(event) {
+      event.preventDefault();
+
+      var section = $(this).data('section');
+
+      var fileSelector = $('<input type="file" />')
+        .change(function() {
+          var file = this.files[0];
+          var form = new FormData();
+          form.append('image', file);
+          form.append('section', section);
+
+          $.ajax({
+            url: '{% url 'upload-image' %}',
+            type: 'POST',
+            data: form,
+            processData: false,
+            contentType: false
+          }).done(function(){
+            location.reload();
+          }).fail(function(){
+            console.log("An error occurred, the files couldn't be sent!");
+          });
+        })
+
+      fileSelector.click();
+
     });
   });
   </script>

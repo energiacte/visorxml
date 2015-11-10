@@ -8,7 +8,8 @@ from .views import (HomeView,
                     EnergyPerformanceCertificatePDFView,
                     SupplementaryReportView,
                     SupplementaryReportPDFView,
-                    UpdateXMLView)
+                    UpdateXMLView,
+                    UploadImageView)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -19,5 +20,6 @@ urlpatterns = [
     url(r'^certificate-pdf$', EnergyPerformanceCertificatePDFView.as_view(), name='certificate-pdf'),
     url(r'^supplementary-report$', SupplementaryReportView.as_view(), name='supplementary-report'),
     url(r'^supplementary-report-pdf$', SupplementaryReportPDFView.as_view(), name='supplementary-report-pdf'),
-    url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml')
+    url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml'),
+    url(r'^upload-image$', UploadImageView.as_view(), name='upload-image'),
 ]

@@ -128,6 +128,26 @@ class XMLReport(object):
         except AttributeError:
             pass
 
+    def update_image(self, section, value):
+        path = './DatosGeneralesyGeometria/%s' % section
+        try:
+            element = self.xmltree.find(path)
+            if element is None:
+                parent = self.xmltree.find('./DatosGeneralesyGeometria')
+                element = lxml.etree.SubElement(parent, section)
+
+            element.text = lxml.etree.CDATA('data:image/png;base64,%s' % value.decode("utf-8"))
+
+            procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
+            if procedimiento is not None and 'visorxml' not in procedimiento.text:
+                procedimiento.text += ' - visorxml %s' % settings.VERSION
+
+            base_xml_filename, base_xml_string = self._xml_strings[0]
+            self.save_to_file(base_xml_filename)
+        except AttributeError as e:
+            print('cacola', e)
+            pass
+
     def get_XML_value(self, xml_tree, path, default_value=0):
         try:
             return xml_tree.find(path).text
