@@ -5,17 +5,44 @@ Añadir valores especiales para poder mostrar en el informe cuándo un campo cal
 
 Ver la posibilidad de generar PDFs híbridos con el XML empotrado
 
-- Comprobar tamaño del PDF
 - Hacer editables más campos administrativos
-- Permitir cambiar fotos?
-- Edición enriquecida de algunos campos de texto
+- Edición enriquecida de algunos campos de texto (memorias)
+- Sustituir sinimagen.png por SVG
+- Evitar excepciones al crear medida de mejora cuando no existan datos suficientes (hacer testfile)
+- Marcar los XML modificados añadiendo cadena en <Procedimiento>: p.e. + visorxml1.0_20151107
+- Espaciador al final de los informes
+- Cambiar cadena de visorxml 1.0 -> VisorXML v1.0
+- Los campos editables deben abarcar el ancho de su celda
 
 IDEAS para versiones posteriores
 ================================
 
-- Posibilidad de eliminar bloque de medida de mejora en el visor
+- PDF híbridos
+- Posibilidad de añadir anexo de justificación de soluciones singulares
 - Traducción de la interfaz a lenguas cooficiales
-- Posibilidad de firmar y registrar, con un formulario intermedio adicional, si fuese necesario
-- Servidor REST para gestionar los registros
-- Incorporar más comprobaciones de tipo energético (predimensionado)
+- Permitir añadir o eliminar bloques de "visitas, inspecciones o comprobaciones", con botones de añadir o eliminar inline (overlay)
+- Comprobación y mejora de capacidades de edición de texto enriquecido (con imágenes) en secciones CDATA (controlar tamaño de imagen, sanear y serializar a CDATA)
+- Comprobar tamaños/resolución de imágenes en campos de imagen (igual ya está).
+
+- Eliminar página intermedia de selección de archivos, evitando validación previa independiente
+    - mover la entrada de archivo XML a parte superior de informe de certificación
+    - mover entrada de XML adicionales a zona de bloques de medidas de mejora (noprint), eliminando (botón de) validación expresa
+    - uso de mensajes, avisos y errores en bloques inline que se muestran al ir seleccionando archivos (no se imprimen).
+- Marcar imágenes editables con un overlay (lápiz). ¿Hacer lo mismo para los otros campos?
+- Mover el botón de descarga de XML al encabezado
+- Añadir icono de descarga a los botones de descarga de PDF y XML (flecha abajo o similar)
+- Permitir eliminar medidas de mejora
+
+- Implementación de sistema para firma y registro, con un formulario intermedio adicional, si fuese necesario (¿Interfaz REST para gestionar los registros?)
+- Nuevas comprobaciones de tipo energético (predimensionado)
+- Comprobaciones básicas adicionales:
+    - rendimientos anómalos (p.e. > 500%)
+    - número total de plantas = 0
+    - no hay definidos puentes térmicos
+    - no hay definidos circuitos de bombas o ventiladores en edificios terciarios (para Calener GT)
+    - no hay demanda de ACS definida
+- Indicar en informe adicional el nivel de cumplimiento cuando haya restricciones DB-HE con ticks o cruces
+- Integrar testsuite para funciones de validación, generación de medidas de mejora, parseado, etc, independiente de la interfaz web
+- Informe de costes a partir de datos de precios (usar precios de medios de referencia?) y consumos finales
+- Poner en color distinto cuando el XML ha sido modificado por el visorxml
 
