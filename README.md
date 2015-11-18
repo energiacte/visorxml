@@ -30,7 +30,7 @@ Requisitos de instalación:
     * bower
     * grunt
 
-* python (2.x)
+* python (>= 3.4)
     * pip
 
 Pasos de instalación:
