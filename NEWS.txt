@@ -1,0 +1,28 @@
+.. Archivo de Novedades con las notas de cada versión
+
+News
+====
+
+10/11/2015
+----------
+
+* Versión con nuevas funcionalidades:
+
+    - Informe adicional
+    - Campos editables
+    - Medidas de mejora
+
+16/9/2015
+---------
+
+* Reescritura en Django
+
+8/4/2015
+--------
+
+* Versión inicial:
+
+    - Validación de archivos XML
+    - Generación del certificado energético 
+    - Impresión en PDF
+
