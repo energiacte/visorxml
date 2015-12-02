@@ -23,25 +23,44 @@ Instalación
 
 La aplicación está desarrollada en lenguaje Python y Javascript para algunos aspectos del frontend. Se basa en la plataforma Django y PhantomJS para la generación de archivos PDF.
 
-Requisitos de instalación:
+Requisitos de instalación (paquetes de sistema suponiendo Debian/jessie(stable)):
 
-* nodejs
-    * npm
-    * bower
-    * grunt
+* nodejs (`$ sudo aptitude install nodejs`)
+    * npm (`$ sudo aptitude install npm`)
+    * bower (`$ npm install -g bower`)
+    * grunt (`$ npm install -g grunt-cli`)
 
-* python (>= 3.4)
-    * pip
+* python (>= 3.4) (`$ sudo aptitude install python3`)
+    * pip (`$ sudo aptitude install python3-pip`)
 
 Pasos de instalación:
 
-* Instalar las dependencias de PIP:
+* Instalar las dependencias de PIP en un entorno virtual (llamado `venvvisorxml`):
+    * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlib1g-dev`)
+    * `$ pyvenv venvvisorxml` # suponemos usuario `usuariovisorxml`
     * `$ pip install -r requirements.txt`
 * Instalar las dependencias de bower:
-    * `$ bower`
+    * git para acceso a repositorios (`$ sudo aptitude install git`)
+        * NOTA: si un firewall bloquea URLs de git, indicar uso de https: (`$ git config --global url."https://".insteadOf git://`)
+    * `$ bower install`
 * Instalar las dependencias de npm:
     * `$ npm install`
 * Ejecutar grunt para construir la aplicación:
     * `$ grunt`
 * Configuración del servidor web para ejecutar la aplicación WSGI
+    * apache-mod-wsgi (`$ sudo aptitude install apache2 libapache2-mod-wsgi-py3`)
+    * Ejemplo de configuración para apache2 bajo la ruta `/visorxml` de la URL base:
+        ```
+        # Visor XML
+        WSGIDaemonProcess visorxml python-path=/var/www/visorxml:/home/usuariovisorxml/venvvisorxml/lib/python3.4/site-packages user=www-data group=www-data threads=5
+        WSGIScriptReloading On
+        WSGIScriptAlias /visorxml /var/www/visorxml/visorxml.wsgi process-group=visorxml
+
+        <Directory /var/www/visorxml>
+                WSGIProcessGroup visorxml
+                WSGIApplicationGroup %{GLOBAL}
+                Require all granted
+        </Directory>
+        # FIN VisorXML
+        ```
 
