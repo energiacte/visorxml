@@ -18,6 +18,11 @@ IDEAS para versiones posteriores
 ================================
 
 - PDF híbridos
+    1. Empaquetar archivos
+        - `pdftk informe.pdf attach_file informe.xml output informe_xml.pdf`
+    2. Desempaquetar archivos
+        1. `pdftk  informe_xml.pdf  unpack_files`
+        2. `pdfdetach -list informe_xml.pdf; pdfdetach -save 1 informe_xml.pdf` o `pdfdetach -saveall informe_xml.pdf`, usando `pdfdetach`de poppler-utils
 - Posibilidad de añadir anexo de justificación de soluciones singulares
 - Traducción de la interfaz a lenguas cooficiales
 - Permitir añadir o eliminar bloques de "visitas, inspecciones o comprobaciones", con botones de añadir o eliminar inline (overlay)
