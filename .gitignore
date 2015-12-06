@@ -12,3 +12,5 @@ visorxml/media/*
 visorxml/static/css
 visorxml/static/js
 visorxml/static/fonts
+visorxml/static/img/clear.png
+visorxml/static/img/loading.gif
