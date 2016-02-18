@@ -41,7 +41,7 @@ from PIL import Image
 
 from .forms import XMLFileForm
 from .reports import XMLReport
-from .pdf_utils import render_to_pdf
+from .pdf_utils import render_to_pdf, get_xml_string_from_pdf
 import string
 import random
 
@@ -81,7 +81,7 @@ class ValidatorView(FormSetView):
                 xml_files.append(uploaded_file)
 
 
-        xml_strings = self.save_session_info(xml_files)
+        xml_strings = self.get_xml_strings(xml_files)
         report = XMLReport(xml_strings)
 
         print(report.errors['validation_errors'])
@@ -94,31 +94,23 @@ class ValidatorView(FormSetView):
 
         return self.render_to_response(context_data)
 
-    def save_session_info(self, xml_files):
+    def get_xml_strings(self, xml_files):
         """
         Get a list of uploaded XML files and save some data in the user session.
         Returns a list of tuples, [(file_name, xml_file_content), ...]
         """
-        session = self.request.session
         xml_strings = []
 
-        for file_index, xml_file in enumerate(xml_files):
-            hashkey = random_name()
+        for new_file in xml_files:
+            xml_string = ""
+            if os.path.splitext(new_file.name)[1] == ".pdf":
+                xml_string = get_xml_string_from_pdf(new_file)
 
-            if os.path.splitext(xml_file.name)[1] == ".pdf":
-                pass
+            elif os.path.splitext(new_file.name)[1] == ".xml":
+                xml_string = new_file.read()
 
-            else:
-                xml_string = xml_file.read()
-                xml_strings.append((xml_file.name, xml_string))
-                file_path = os.path.join(settings.MEDIA_ROOT, hashkey)
+            xml_strings.append((new_file.name, xml_string))
 
-
-                if session.get('file_%s_hashkey' % file_index) != hashkey or not os.path.exists(file_path):
-                    session['file_%s_hashkey' % file_index] = hashkey
-                    with open(file_path, 'wb') as f:
-                        f.write(xml_string)
-                        session['file_%s_stored_name' % file_index] = file_path
 
         return xml_strings
 
@@ -172,7 +164,7 @@ class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
         }
         xml_name = session['report_xml_name']
         xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
-        return render_to_pdf(html, '%s.pdf' % filename, xml_path, env)
+        return render_to_pdf(html, filename, xml_path, env)
 
 
 class SupplementaryReportView(EnergyPerformanceCertificateView):

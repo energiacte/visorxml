@@ -96,7 +96,6 @@ def asfloat(tree, path):
     return val
 
 
-
 def random_name(size=20, ext=".xml"):
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 

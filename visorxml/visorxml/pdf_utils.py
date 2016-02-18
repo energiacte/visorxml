@@ -26,7 +26,8 @@
 import tempfile
 import subprocess
 import os
-
+import random
+import string
 from django.conf import settings
 from django.http import HttpResponse
 from PyPDF2 import PdfFileWriter as PdfWriter
@@ -82,3 +83,24 @@ def render_to_pdf(html, filename, xml_filename, env={}):
         os.remove(filename_pdf)
         os.remove(filename_pdf2)
         return response
+
+
+def get_xml_string_from_pdf(file):
+    pdf_name = random_name(ext=".pdf")
+    xml_name = random_name()
+    pdf = open(pdf_name, "wb")
+    pdf.write(file.read())
+    pdf.close()
+    cmd = "pdfdetach %s -save 1 -o %s" % (pdf_name, xml_name)
+    os.system(cmd)
+    xml = open(xml_name, "rb")
+    xml_string = xml.read()
+    os.remove(pdf_name)
+    os.remove(xml_name)
+
+    return xml_string
+
+
+
+def random_name(size=20, ext=".xml"):
+    return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
