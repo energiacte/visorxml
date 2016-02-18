@@ -24,10 +24,9 @@
 # 
 
 import base64
-import hashlib
 import logging
 import os.path
-from datetime import date
+from datetime import date, datetime
 from io import BytesIO, StringIO
 
 from django.conf import settings
@@ -43,6 +42,8 @@ from PIL import Image
 from .forms import XMLFileForm
 from .reports import XMLReport
 from .pdf_utils import render_to_pdf
+import string
+import random
 
 
 logger = logging.getLogger(__name__)
@@ -54,6 +55,10 @@ def load_report(session):
     with open(file_path, 'rb') as xmlfile:
         report = XMLReport([(file_name, xmlfile.read())])
         return report
+
+
+def random_name(size=20, ext=".xml"):
+    return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 
 
 class HomeView(TemplateView):
@@ -75,6 +80,7 @@ class ValidatorView(FormSetView):
             if uploaded_file:
                 xml_files.append(uploaded_file)
 
+
         xml_strings = self.save_session_info(xml_files)
         report = XMLReport(xml_strings)
 
@@ -94,21 +100,25 @@ class ValidatorView(FormSetView):
         Returns a list of tuples, [(file_name, xml_file_content), ...]
         """
         session = self.request.session
-
         xml_strings = []
+
         for file_index, xml_file in enumerate(xml_files):
-            session['file_%s_name' % file_index] = xml_file.name
+            hashkey = random_name()
 
-            xml_string = xml_file.read()
-            xml_strings.append((xml_file.name, xml_string))
-            hashkey = hashlib.md5(xml_string).hexdigest()
-            file_path = os.path.join(settings.MEDIA_ROOT, hashkey)
-            if session.get('file_%s_hashkey' % file_index) != hashkey or not os.path.exists(file_path):
-                session['file_%s_hashkey' % file_index] = hashkey
+            if os.path.splitext(xml_file.name)[1] == ".pdf":
+                pass
 
-                with open(file_path, 'wb') as f:
-                    f.write(xml_string)
-                    session['file_%s_stored_name' % file_index] = file_path
+            else:
+                xml_string = xml_file.read()
+                xml_strings.append((xml_file.name, xml_string))
+                file_path = os.path.join(settings.MEDIA_ROOT, hashkey)
+
+
+                if session.get('file_%s_hashkey' % file_index) != hashkey or not os.path.exists(file_path):
+                    session['file_%s_hashkey' % file_index] = hashkey
+                    with open(file_path, 'wb') as f:
+                        f.write(xml_string)
+                        session['file_%s_stored_name' % file_index] = file_path
 
         return xml_strings
 
@@ -116,10 +126,9 @@ class ValidatorView(FormSetView):
 class GetXMLView(View):
     def get(self, request, *args, **kwargs):
         session = self.request.session
-
         file_name = session['report_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        output_file_name = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
+        output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
 
         with open(file_path, 'rb') as xmlfile:
             response = HttpResponse(xmlfile.read(), content_type='application/xml')
@@ -153,7 +162,7 @@ class EnergyPerformanceCertificateView(TemplateView):
 class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
     def render_to_response(self, context, **response_kwargs):
         session = self.request.session
-        filename = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
+        filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
 
         html = render_to_string(self.template_name, context)
 
@@ -161,7 +170,9 @@ class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
             'generation_date': context['report'].data.DatosDelCertificador.Fecha,
             'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
         }
-        return render_to_pdf(html, '%s.pdf' % filename, env)
+        xml_name = session['report_xml_name']
+        xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
+        return render_to_pdf(html, '%s.pdf' % filename, xml_path, env)
 
 
 class SupplementaryReportView(EnergyPerformanceCertificateView):
@@ -187,17 +198,18 @@ class UpdateXMLView(View):
         return super(UpdateXMLView, self).dispatch(*args, **kwargs)
 
 
+
 class UploadImageView(View):
     def post(self, request, *args, **kwargs):
         uploaded_image = request.FILES['image']
         section = request.POST['section']
 
-        # Read and resize the image
+        #Read and resize the image
         image = Image.open(BytesIO(uploaded_image.read()))
         maxsize = (460, 460)
         image.thumbnail(maxsize, Image.ANTIALIAS)
 
-        # Convert the image to a base64 string
+        #Convert the image to a base64 string
         image_buffer = BytesIO()
         image.save(image_buffer, format="PNG")
         image_string = base64.b64encode(image_buffer.getvalue())
@@ -210,3 +222,5 @@ class UploadImageView(View):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UploadImageView, self).dispatch(*args, **kwargs)
+
+

@@ -26,17 +26,17 @@
 """Definición de entidades para el análisis de informes de resultados en XML"""
 
 import os.path
-import hashlib
 import numbers
 from collections import OrderedDict, defaultdict
 from decimal import Decimal
-
+import string
+import random
 from django.conf import settings
-
 import lxml.etree
 from lxml.html.clean import clean_html
-
 from .imgb64 import base64check
+
+
 
 XSDPATH2 = settings.XSDPATH2
 XSDPATH1 = settings.XSDPATH1
@@ -53,7 +53,6 @@ ALERT = ALERTINT / 100
 
 class Bunch(OrderedDict):
     """Contenedor genérico"""
-
     def __init__(self, *args, **kwds):
         super(Bunch, self).__init__()
 
@@ -97,6 +96,10 @@ def asfloat(tree, path):
     return val
 
 
+
+def random_name(size=20, ext=".xml"):
+    return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
+
 class XMLReport(object):
     def __init__(self, xml_strings):
         '''
@@ -127,7 +130,7 @@ class XMLReport(object):
     def save_to_file(self, filename=None):
         xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
         if filename is None:
-            filename = hashlib.md5(xml_string).hexdigest()
+            filename = random_name()
 
         path = settings.MEDIA_ROOT
 
