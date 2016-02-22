@@ -8147,3 +8147,7 @@ ul.wysihtml5-toolbar div[data-wysihtml5-command-value="orange"] {
   position: relative;
   top: -10px;
 }
+
+.get-file-li{
+  height: 72px;
+}
