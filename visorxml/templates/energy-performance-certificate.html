@@ -130,7 +130,7 @@
 {% if validated %}
 <div class="page">
   <nav class="hidden-print">
-        
+
   </nav>
 
   <div class="informe" id="informe">
@@ -471,21 +471,25 @@
         <td class="title col-md-6">Plano de situación</td>
       </tr>
       <tr>
+          <div class="img-responsive-building"></div>
         <td class="col-md-6" align="center">
+
           <a href="#" class="upload-image" data-section="Imagen">
             {% if report.data.DatosGeneralesyGeometria.Imagen %}
-            <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+                <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
             {% else %}
-            <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+                <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
             {% endif %}
           </a>
         </td>
+
+        <div class="img-responsive-plane"></div>
         <td class="col-md-6" align="center">
           <a href="#" class="upload-image" data-section="Plano">
             {% if report.data.DatosGeneralesyGeometria.Plano %}
-            <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
+                <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
             {% else %}
-            <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+                <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
             {% endif %}
           </a>
         </td>
@@ -1191,7 +1195,6 @@
 {% endblock %}
 
 {% block extra_js %}
-
 
     <script src="{%  static "js/jquery.formset.js" %}"></script>
     <script>
