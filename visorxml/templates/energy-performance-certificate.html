@@ -2,11 +2,132 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load visorxml %}
+{% load formset_tags %}
 
 {% block title %}{% trans "Visor de informes" %}{% endblock %}
 
 {% block content %}
 
+
+<div class="page hidden-print">
+  <hr>
+  <p class="lead">
+    {% blocktrans %}
+    Seleccione un archivo de informe de eficiencia energética en XML
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% static "docs/EjemploTerciario.xml" as xml_example_1_url %}
+    {% static "docs/EjemploResidencial.xml" as xml_example_2_url %}
+    {% blocktrans %}
+    Puede probar la validación con un <a href="{{ xml_example_1_url }}">informe de ejemplo de edificio con uso
+    terciario</a> o con un <a href="{{ xml_example_2_url }}">informe de ejemplo de edificio con uso residencial</a>.
+    {% endblocktrans %}
+  </p>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      {% trans "Selección de archivos de informe de evaluación de la eficiencia energética." %}
+    </div>
+    <div class="panel-body">
+      <div class="form-group col-md-6">
+        <form action="{% url "validator" %}" class="form" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div id="formset">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+              <h5>{% trans "Informe de evaluación de la eficiencia energética en formato XML." %}</h5>
+              <h5>{% trans "Archivo base:" %}</h5>
+            </div>
+            <div class="panel-body">
+              <div data-formset-body>
+                <div class="form-group" data-formset-form>
+                  <input id="certificate-file" name="certificate-file" type="file" />
+                </div>
+              </div>
+
+            </div>
+            <div class="panel-footer">
+              <button type="submit" class="btn btn-primary">{% trans "Validar" %}</button>
+            </div>
+          </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-md-6">
+        {% if validation_data %}
+          {% if validation_data.extra_files_errors %}
+            <div class="alert alert-warning">
+              <h2>{% trans "Archivos de mejora" %}</h2>
+              <p>
+                Se han encontrado <strong>{{ validation_data.extra_files_errors|length }}</strong> errores al tratar los
+                archivos de mejora:
+              </p>
+              <ul>
+                {% for filename, errors in validation_data.extra_files_errors.items %}
+                  <li>
+                    <strong>{{ filename }}</strong>:
+                    <ul>
+                    {% for error in errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+
+          {% if validation_data.validation_errors %}
+            <div class="alert alert-danger">
+              <h2>{% trans "Errores de validación" %}</h2>
+              <p>
+                Se han encontrado <strong>{{ validation_data.validation_errors|length }}</strong> errores de
+                validación en el archivo {{ request.session.base_name }}:
+              </p>
+              <ul>
+                {% for error in validation_data.validation_errors %}
+                  <li>
+                    {% if error.0 %}
+                      <strong>Línea {{ error.0 }}:</strong>
+                    {% endif %}
+                    {{ error.1|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            <div class="alert alert-success">
+              <p>El informe activo, no contiene errores de validación.</p>
+              {# <p>Puede <a href="{{ url_for('visor')}}" class="alert-link">ver su contenido</a> o seleccionar un nuevo informe para su validación.</p>#}
+            </div>
+          {% endif %}
+
+          {% if validation_data.info %}
+            <div class="alert alert-warning">
+              <h2>Avisos de validación</h2>
+              <p>Se han encontrado <strong>{{ validation_data.info|length }}</strong> avisos de validación:</p>
+              <ul>
+                {% for messagetype, message in validation_data.info %}
+                  <li><strong>{{ messagetype }}:</strong> {{ message }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+        {% else %}
+          <div class="alert alert-warning">
+            <p>No existe un informe activo.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% if validated %}
 <div class="page">
   <nav class="hidden-print">
     <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'certificate-pdf' %}">Obtener PDF</a>
@@ -1059,6 +1180,7 @@
 
   </div>
 
+
   <script>
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
     var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
@@ -1066,9 +1188,35 @@
 
 </div>
 
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+
+
+    <script src="{%  static "js/jquery.formset.js" %}"></script>
+    <script>
+      $(function(){
+        var fileInputOptions = {
+          'showUpload': false,
+          'showPreview': false,
+          'showRemove': false,
+          'browseClass': 'btn btn-default'
+        }
+
+        $("#formset").formset({
+          animateForms: true
+        })
+        .on('formAdded', function(event) {
+            var newForm = $(event.target);
+            newForm.find('input:file').fileinput(fileInputOptions);
+        });
+
+        $("input:file").fileinput(fileInputOptions);
+      });
+   </script>
+
+
   <script>
   $(function() {
     $.fn.editable.defaults.mode = 'inline';

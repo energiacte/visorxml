@@ -32,9 +32,12 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="{% url "validator" %}">{% trans "Validador" %}</a></li>
             <li><a href="{% url "certificate" %}">{% trans "Certificado de Eficiencia Energética" %}</a></li>
-            <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
+            {% if validated %}
+              <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
+
+              {# Aquí van los botones de descarga #}
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>

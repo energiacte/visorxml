@@ -28,22 +28,22 @@ import logging
 import os.path
 from datetime import date, datetime
 from io import BytesIO, StringIO
-
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
-
 from extra_views import FormSetView
 from PIL import Image
-
+from django.template import RequestContext
 from .forms import XMLFileForm
 from .reports import XMLReport
 from .pdf_utils import render_to_pdf, get_xml_string_from_pdf
 import string
 import random
+from django.shortcuts import render_to_response, get_object_or_404
+from django.forms import formset_factory
 
 
 logger = logging.getLogger(__name__)
@@ -61,58 +61,12 @@ def random_name(size=20, ext=".xml"):
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 
 
-class HomeView(TemplateView):
-    template_name = "home.html"
-
-
-class ValidatorView(FormSetView):
-    template_name = "validator.html"
-    form_class = XMLFileForm
-    extra = 2
-    success_url = reverse_lazy('validator')
-
-    def formset_valid(self, formset):
-        session = self.request.session
-
-        xml_files = []
-        for form_index, form in enumerate(formset.forms):
-            uploaded_file = form.cleaned_data.get('file', None)
-            if uploaded_file:
-                xml_files.append(uploaded_file)
-
-
-        xml_strings = self.get_xml_strings(xml_files)
-        report = XMLReport(xml_strings)
-
-        print(report.errors['validation_errors'])
-        if len(report.errors.get('validation_errors', None)) == 0:
-            report_file = report.save_to_file()
-            session['report_xml_name'] = report_file
-
-        context_data = self.get_context_data(formset=formset)
-        context_data['validation_data'] = report.errors
-
-        return self.render_to_response(context_data)
-
-    def get_xml_strings(self, xml_files):
-        """
-        Get a list of uploaded XML files and save some data in the user session.
-        Returns a list of tuples, [(file_name, xml_file_content), ...]
-        """
-        xml_strings = []
-
-        for new_file in xml_files:
-            xml_string = ""
-            if os.path.splitext(new_file.name)[1] == ".pdf":
-                xml_string = get_xml_string_from_pdf(new_file)
-
-            elif os.path.splitext(new_file.name)[1] == ".xml":
-                xml_string = new_file.read()
-
-            xml_strings.append((new_file.name, xml_string))
-
-
-        return xml_strings
+def home(request):
+    if request.session.get('report_xml_name', False):
+        validated = True
+    else:
+        validated = False
+    return render_to_response("home.html", {"validated":validated}, RequestContext(request))
 
 
 class GetXMLView(View):
@@ -128,51 +82,103 @@ class GetXMLView(View):
             return response
 
 
-class EnergyPerformanceCertificateView(TemplateView):
-    template_name = "energy-performance-certificate.html"
 
-    def get(self, request, *args, **kwargs):
-        session = request.session
-        if session.get('report_xml_name', False):
-            return super(EnergyPerformanceCertificateView, self).get(request, *args, **kwargs)
+def get_xml_strings(new_file):
+    """
+    Returns a list of tuples, [(file_name, xml_file_content), ...]
+    """
+    xml_strings = []
+
+    xml_string = ""
+    if os.path.splitext(new_file.name)[1] == ".pdf":
+        xml_string = get_xml_string_from_pdf(new_file)
+
+    elif os.path.splitext(new_file.name)[1] == ".xml":
+        xml_string = new_file.read()
+
+    xml_strings.append((new_file.name, xml_string))
+
+    return xml_strings
+
+def validate(request):
+    try:
+        xml_file = request.FILES.get("certificate-file", None)
+        xml_strings = get_xml_strings(xml_file)
+        report = XMLReport(xml_strings)
+        if len(report.errors.get('validation_errors', None)) == 0:
+                report_file = report.save_to_file()
+                if request.session.get('report_xml_name', False):
+                    os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+                request.session['report_xml_name'] = report_file
+                validated = True
         else:
-            return HttpResponseRedirect(reverse_lazy('validator'))
+            validated = False
+        validation_data = report.errors
+    except:
+        validated = False
 
-    def get_context_data(self, **kwargs):
-        context = super(EnergyPerformanceCertificateView, self).get_context_data(**kwargs)
-        report = load_report(self.request.session)
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
 
+
+def view_certificate(request):
+    if request.session.get('report_xml_name', False):
+        report = load_report(request.session)
+        validation_data = report.errors
+        validated = True
+    else:
+        validated = False
+    
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+
+
+def view_suplementary_report(request):
+    if request.session.get('report_xml_name', False):
+        report = load_report(request.session)
         espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
                        report.data.InstalacionesIluminacion.Espacios)
+        validated = True
+        return render_to_response("supplementary-report.html", locals(), RequestContext(request))
+        
+    else:
+        return HttpResponseRedirect(reverse_lazy("certificate"))
+        
+    
 
-        context['report'] = report
-        context['espacios'] = espacios
+def download_pdf(request):
+    if not request.session.get('report_xml_name', False):
+        return HttpResponseRedirect(reverse_lazy("certificate"))
 
-        return context
+    session = request.session
+    filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
+    report = load_report(session)
+    validated = True
+    html = render_to_string('energy-performance-certificate.html', locals())
 
-
-class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
-    def render_to_response(self, context, **response_kwargs):
-        session = self.request.session
-        filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
-
-        html = render_to_string(self.template_name, context)
-
-        env = {
-            'generation_date': context['report'].data.DatosDelCertificador.Fecha,
-            'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
-        }
-        xml_name = session['report_xml_name']
-        xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
-        return render_to_pdf(html, filename, xml_path, env)
+    env = {
+        'generation_date': report.data.DatosDelCertificador.Fecha,
+        'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
+    }
+    xml_name = session['report_xml_name']
+    xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
+    return render_to_pdf(html, filename, xml_path, env)
 
 
-class SupplementaryReportView(EnergyPerformanceCertificateView):
-    template_name = "supplementary-report.html"
+def download_pdf_suplementary(request):
+    if not request.session.get('report_xml_name', False):
+        return HttpResponseRedirect(reverse_lazy("certificate"))
 
+    session = request.session
+    filename = 'certificado-suplementario-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
+    report = load_report(session)
+    espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
+                       report.data.InstalacionesIluminacion.Espacios)
+    html = render_to_string('supplementary-report.html', locals())
 
-class SupplementaryReportPDFView(EnergyPerformanceCertificatePDFView):
-    template_name = "supplementary-report.html"
+    env = {
+        'generation_date': report.data.DatosDelCertificador.Fecha,
+        'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
+    }
+    return render_to_pdf(html, filename, None, env)
 
 
 class UpdateXMLView(View):

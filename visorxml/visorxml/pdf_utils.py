@@ -64,28 +64,43 @@ def render_to_pdf(html, filename, xml_filename, env={}):
         os.remove(filename_html)
 
 
-    with open(filename_pdf, 'rb') as pdf:
-        reader = PdfReader(pdf, strict=False)
-        writer = PdfWriter()
-        writer.appendPagesFromReader(reader)
-        with open(xml_filename, "rb") as xml:
-            writer.addAttachment("certificado.xml",xml.read())
-            with open(filename_pdf2, "wb") as out:
-                writer.write(out)
-                out.close()
+    if xml_filename:
+        with open(filename_pdf, 'rb') as pdf:
+            reader = PdfReader(pdf, strict=False)
+            writer = PdfWriter()
+            writer.appendPagesFromReader(reader)
+            with open(xml_filename, "rb") as xml:
+                writer.addAttachment("certificado.xml",xml.read())
+                with open(filename_pdf2, "wb") as out:
+                    writer.write(out)
+                    out.close()
+                pdf.close()
+
+        with open(filename_pdf2, 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment;filename=%s' % filename
+
             pdf.close()
 
-    with open(filename_pdf2, 'rb') as pdf:
-        response = HttpResponse(pdf.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment;filename=%s' % filename
+            os.remove(filename_pdf)
+            os.remove(filename_pdf2)
+            return response
 
-        pdf.close()
-        os.remove(filename_pdf)
-        os.remove(filename_pdf2)
-        return response
+    else:
+        with open(filename_pdf, 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment;filename=%s' % filename
+
+            pdf.close()
+
+            os.remove(filename_pdf)
+            os.remove(filename_pdf2)
+            return response
+
 
 
 def get_xml_string_from_pdf(file):
+    import ipdb; ipdb.set_trace()
     pdf_name = random_name(ext=".pdf")
     xml_name = random_name()
     pdf = open(pdf_name, "wb")
