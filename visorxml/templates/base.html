@@ -35,8 +35,8 @@
             <li><a href="{% url "certificate" %}">{% trans "Certificado de Eficiencia Energética" %}</a></li>
             {% if validated %}
               <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
-              <li><a href="{% url 'certificate-pdf' %}"><img class="get_file_header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
-              <li><a href="{% url 'get-xml' %}"><img class="get_file_header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
+              <li><a href="{% url 'certificate-pdf' %}"><img class="get-file-header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
+              <li><a href="{% url 'get-xml' %}"><img class="get-file-header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
@@ -44,6 +44,7 @@
     </nav>
 
     <div class="container">
+      <hr class="hidden-print" />
       {% block content %}{% endblock %}
     </div>
 
