@@ -122,7 +122,6 @@ class XMLReport(object):
         if self.xmltree is not None:
             self.calculate_improvement_measures()
             self._parsetree()
-
             self.validate()
             self.analize()
 
