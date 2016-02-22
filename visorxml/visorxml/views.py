@@ -3,17 +3,17 @@
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,7 +21,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
+#
 
 import base64
 import logging
@@ -127,7 +127,7 @@ def view_certificate(request):
         validated = True
     else:
         validated = False
-    
+
     return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
 
 
@@ -138,11 +138,11 @@ def view_suplementary_report(request):
                        report.data.InstalacionesIluminacion.Espacios)
         validated = True
         return render_to_response("supplementary-report.html", locals(), RequestContext(request))
-        
+
     else:
         return HttpResponseRedirect(reverse_lazy("certificate"))
-        
-    
+
+
 
 def download_pdf(request):
     if not request.session.get('report_xml_name', False):
@@ -220,5 +220,3 @@ class UploadImageView(View):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UploadImageView, self).dispatch(*args, **kwargs)
-
-

@@ -35,8 +35,8 @@
             <li><a href="{% url "certificate" %}">{% trans "Certificado de Eficiencia Energética" %}</a></li>
             {% if validated %}
               <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
-
-              {# Aquí van los botones de descarga #}
+              <li><a href="{% url 'certificate-pdf' %}"><img class="get_file_header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
+              <li><a href="{% url 'get-xml' %}"><img class="get_file_header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
