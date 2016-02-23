@@ -37,6 +37,7 @@ IDEAS para versiones posteriores
 - Mover el botón de descarga de XML al encabezado
 - Añadir icono de descarga a los botones de descarga de PDF y XML (flecha abajo o similar)
 - Permitir eliminar medidas de mejora
+- Usar validación más laxa (esquema menos elementos obligatorios) para visualizar, aunque se reporten errores de validación con el esquema estricto.
 
 - Implementación de sistema para firma y registro, con un formulario intermedio adicional, si fuese necesario (¿Interfaz REST para gestionar los registros?)
 - Nuevas comprobaciones de tipo energético (predimensionado)
