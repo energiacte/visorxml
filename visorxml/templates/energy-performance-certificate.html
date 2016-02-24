@@ -43,7 +43,7 @@
             <div class="panel-body">
               <div data-formset-body>
                 <div class="form-group" data-formset-form>
-                  <input id="certificate-file" name="certificate-file" type="file" />
+                  <input id="certificate-file" name="certificate-file" type="file" class="file-input" />
                 </div>
               </div>
 
@@ -472,25 +472,28 @@
       </tr>
       <tr>
         <td class="col-md-6" align="center">
-    
-          <a href="#" class="upload-image" data-section="Imagen">
+          <a href="#" class="upload-image" data-section="Imagen"
             {% if report.data.DatosGeneralesyGeometria.Imagen %}
-                <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="Imagen general del edificio" class="img-responsive fotos" />
+               style=" background: url('{{ report.data.DatosGeneralesyGeometria.Imagen }}')"
                 
             {% else %}
-                <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+                style=" background: url('{% static 'img/sinimagen.svg' %}')"
             {% endif %}
+            >
+            <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
           </a>
         </td>
 
         <td class="col-md-6" align="center">
-          <a href="#" class="upload-image" data-section="Plano">
+          <a href="#" class="upload-image" data-section="Plano"
             {% if report.data.DatosGeneralesyGeometria.Plano %}
-                <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="Plano del edificio" class="img-responsive fotos" />
+                style=" background: url('{{ report.data.DatosGeneralesyGeometria.Plano }}')"
                 
             {% else %}
-                <img src="{% static 'img/sinimagen.svg' %}" alt="Imagen no definida o incorrecta" class="img-responsive fotos" />
+                style=" background: url('{% static 'img/sinimagen.svg' %}')"
             {% endif %}
+            >
+            <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
           </a>
         </td>
       </tr>
@@ -1007,6 +1010,15 @@
     <div class="page-break"></div>
     <!-- ANEXO III - Medidas de mejora -->
     <h3 class="text-center">ANEXO III<br />RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA</h3>
+    <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
+      {% csrf_token %}
+      <a href="#" class="hidden-print measures-xml-link">
+        <span>
+          Subir XML con medidas de mejora
+        </span>
+        <input type="file" class="measures-xml hidden" name="measures-xml"/>
+      </a>
+    </form>
 
     {% if not report.data.MedidasDeMejora %}
     <table><tr><td>No se han definido medidas de mejora de la eficiencia energética</td></tr></table>
@@ -1180,8 +1192,11 @@
       </tr>
       {% endfor %}
     </table>
-
   </div>
+  <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  </form>
 
 
   <script>
@@ -1196,37 +1211,45 @@
 
 {% block extra_js %}
 
-    <script src="{%  static "js/jquery.formset.js" %}"></script>
-    <script>
-      $(function(){
-        var fileInputOptions = {
+  <script src="{%  static "js/jquery.formset.js" %}"></script>
+
+  <script>
+  $(function() {
+
+    $(".measures-xml-link").on("click", function(e){
+      event.preventDefault();
+      var fileSelector = $('<input type="file" name="measures-xml" />')
+        .change(function() {
+          $("#secret-form").submit()
+        })
+      $("#secret-form").append(fileSelector);
+      fileSelector.click();
+    });
+
+
+    var fileInputOptions = {
           'showUpload': false,
           'showPreview': false,
           'showRemove': false,
           'browseClass': 'btn btn-default'
         }
+    $("#formset").formset({
+      animateForms: true
+    })
+    .on('formAdded', function(event) {
+        var newForm = $(event.target);
+        newForm.find('input:file').fileinput(fileInputOptions);
+    });
 
-        $("#formset").formset({
-          animateForms: true
-        })
-        .on('formAdded', function(event) {
-            var newForm = $(event.target);
-            newForm.find('input:file').fileinput(fileInputOptions);
-        });
-
-        $("input:file").fileinput(fileInputOptions);
-      });
-   </script>
+    $("input.file-input").fileinput(fileInputOptions);
 
 
-  <script>
-  $(function() {
     $.fn.editable.defaults.mode = 'inline';
-
     $('.editable').editable({
       url: '{% url "update-xml" %}',
       pk: 1
     });
+
 
     $('.upload-image').click(function(event) {
       event.preventDefault();
@@ -1247,7 +1270,7 @@
             processData: false,
             contentType: false
           }).done(function(){
-            location.reload();
+            window.location.href = "{% url 'certificate'%}";
           }).fail(function(){
             console.log("An error occurred, the files couldn't be sent!");
           });

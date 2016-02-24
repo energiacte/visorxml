@@ -19,6 +19,7 @@ module.exports = function(grunt) {
   ];
 
   var srcFiles = [
+  'assets/js/imageTools.js'
   ];
 
   var allFiles = contribFiles.concat(srcFiles);

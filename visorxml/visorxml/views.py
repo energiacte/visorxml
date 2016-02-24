@@ -100,6 +100,29 @@ def get_xml_strings(new_file):
 
     return xml_strings
 
+
+def measures_xml_upload(request):
+    xml = request.FILES["measures-xml"]
+    xml_str = xml.read()
+    base_xml = request.session['report_xml_name']
+    with open(os.path.join(settings.MEDIA_ROOT, base_xml), "rb") as base_file:
+        base_str = base_file.read()
+    xml_strings = [(base_xml, base_str), (xml.name, xml_str)]
+    report = XMLReport(xml_strings)
+    if len(report.errors.get('validation_errors', None)) == 0:
+        report_file = report.save_to_file()
+        if request.session.get('report_xml_name', False):
+            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+        request.session['report_xml_name'] = report_file
+        validated = True
+    else:
+        validated = False
+    validation_data = report.errors
+
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+
+
+
 def validate(request):
     try:
         xml_file = request.FILES.get("certificate-file", None)
