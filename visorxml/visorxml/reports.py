@@ -184,7 +184,7 @@ class XMLReport(object):
             base_xml_tree = lxml.etree.XML(base_xml_string, parser=self.xml_parser)
             return base_xml_tree
         except lxml.etree.XMLSyntaxError:
-            error = (None, 'El archivo "<strong>%s</strong>" no está correctamente formateado' % base_xml_filename)
+            error = (None, 'El archivo "<strong>%s</strong>" no está bien formado' % base_xml_filename)
             self.errors['validation_errors'].append(error)
             return None
 
@@ -695,10 +695,17 @@ class XMLReport(object):
                 setattr(obj, attr, asfloat(elemento, './%s' % attr))
             instalaciones_iluminacion.Espacios.append(obj)
         _eiluminados = dict((e.Nombre, e) for e in instalaciones_iluminacion.Espacios)
-        _supiluminada = sum(superficies[e] for e in _eiluminados)
 
-        instalaciones_iluminacion.totalpotenciamedia = sum(
-            1.0 * superficies[e] * _eiluminados[e].PotenciaInstalada / _supiluminada for e in _eiluminados)
+        try:
+            _supiluminada = sum(superficies[e] for e in _eiluminados)
+            potmedia = sum(1.0 * superficies[e] * _eiluminados[e].PotenciaInstalada / _supiluminada
+                           for e in _eiluminados)
+        except KeyError:
+            error = (None, 'Espacio(s) iluminado(s) no definido(s) en las condiciones operacionales.'
+                     ' No se puede calcular la potencia media de iluminación.')
+            self.errors['validation_errors'].append(error)
+            potmedia = None
+        instalaciones_iluminacion.totalpotenciamedia = potmedia
 
         return instalaciones_iluminacion
 
@@ -1036,6 +1043,9 @@ class XMLReport(object):
 
     def analize(self):
         """Analiza contenidos de un Informe XML en busca de posibles errores"""
+        if self.data is None:
+            return
+
         zci = self.data.IdentificacionEdificio.ZonaClimatica[:-1]
         zcv = self.data.IdentificacionEdificio.ZonaClimatica[-1]
         esvivienda = 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
