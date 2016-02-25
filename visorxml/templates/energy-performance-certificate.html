@@ -474,10 +474,16 @@
         <td class="col-md-6" align="center">
           <a href="#" class="upload-image" data-section="Imagen"
             {% if report.data.DatosGeneralesyGeometria.Imagen %}
-               style=" background: url('{{ report.data.DatosGeneralesyGeometria.Imagen }}')"
-                
+               style=" background: url('{{ report.data.DatosGeneralesyGeometria.Imagen }}');
+               background-size: contain;
+               background-position: center;
+               background-repeat: no-repeat;"
+
             {% else %}
-                style=" background: url('{% static 'img/sinimagen.svg' %}')"
+                style=" background: url('{% static 'img/sinimagen.svg' %}');
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;"
             {% endif %}
             >
             <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
@@ -487,10 +493,16 @@
         <td class="col-md-6" align="center">
           <a href="#" class="upload-image" data-section="Plano"
             {% if report.data.DatosGeneralesyGeometria.Plano %}
-                style=" background: url('{{ report.data.DatosGeneralesyGeometria.Plano }}')"
-                
+                style=" background: url('{{ report.data.DatosGeneralesyGeometria.Plano }}');
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;"
+
             {% else %}
-                style=" background: url('{% static 'img/sinimagen.svg' %}')"
+                style=" background: url('{% static 'img/sinimagen.svg' %}');
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;"
             {% endif %}
             >
             <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
