@@ -400,3 +400,15 @@
   font-size: 16px;
   font-weight: 600;
 }
+
+.upload-image {
+  background-size: contain;
+               background-position: center;
+               background-repeat: no-repeat;"
+}
+
+.wysihtml5-toolbar li:nth-child(4){
+  display: none;
+}
+
+.modal-backdrop{display: none!important}

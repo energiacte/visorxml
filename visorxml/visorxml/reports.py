@@ -140,7 +140,11 @@ class XMLReport(object):
     def update_element(self, element, value):
         path = './%s' % '/'.join(element.split('.'))
         try:
-            self.xmltree.find(path).text = value
+            if path.split("/")[1] == "MedidasDeMejora" and path.split("/")[-1] == "Descripcion":
+                self.xmltree.find(path).text = lxml.etree.CDATA(value)
+                print("CDATA!!")
+            else:
+                self.xmltree.find(path).text = value
 
             procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
             if procedimiento is not None and 'visorxml' not in procedimiento.text:

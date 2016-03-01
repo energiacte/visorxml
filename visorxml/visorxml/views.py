@@ -50,14 +50,26 @@ logger = logging.getLogger(__name__)
 
 
 def load_report(session):
+    """ Load current report from filesystem if it exists
+    else: return None
+    """
     file_name = session['report_xml_name']
     file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-    with open(file_path, 'rb') as xmlfile:
-        report = XMLReport([(file_name, xmlfile.read())])
-        return report
+    try:
+        with open(file_path, 'rb') as xmlfile:
+            report = XMLReport([(file_name, xmlfile.read())])
+            return report
+    except FileNotFoundError:
+        session.pop("report_xml_name")
+        return None
+
 
 
 def random_name(size=20, ext=".xml"):
+    """ return random string of letters and digits with an extension.
+    size -> length of the string
+    ext -> extension
+    """
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 
 
@@ -70,6 +82,8 @@ def home(request):
 
 
 class GetXMLView(View):
+    """CBV that serve the current centificate info as XML
+    """
     def get(self, request, *args, **kwargs):
         session = self.request.session
         file_name = session['report_xml_name']
@@ -84,8 +98,8 @@ class GetXMLView(View):
 
 
 def get_xml_strings(new_file):
-    """
-    Returns a list of tuples, [(file_name, xml_file_content), ...]
+    """Extracts the file name and the XML string from XML file or PDF file
+    returns the tuple into a list
     """
     xml_strings = []
 
@@ -102,6 +116,8 @@ def get_xml_strings(new_file):
 
 
 def measures_xml_upload(request):
+    """ processes a XML with improvement features ("MedidasdeMejora/Medida/"). Inserts it in the current XML file.
+    """
     xml = request.FILES["measures-xml"]
     xml_str = xml.read()
     base_xml = request.session['report_xml_name']
@@ -124,6 +140,8 @@ def measures_xml_upload(request):
 
 
 def validate(request):
+    """ processes a XML of Energy Certificate. If it's valid, it's saved in the FS and the old is removed.
+    """
     try:
         xml_file = request.FILES.get("certificate-file", None)
         xml_strings = get_xml_strings(xml_file)
@@ -144,6 +162,8 @@ def validate(request):
 
 
 def view_certificate(request):
+    """ View the current energy certificate in a web page
+    """
     if request.session.get('report_xml_name', False):
         report = load_report(request.session)
         validation_data = report.errors
@@ -155,6 +175,8 @@ def view_certificate(request):
 
 
 def view_suplementary_report(request):
+    """ View the current energy suplementary certificate in a web page
+    """
     if request.session.get('report_xml_name', False):
         report = load_report(request.session)
         espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
@@ -168,6 +190,8 @@ def view_suplementary_report(request):
 
 
 def download_pdf(request):
+    """ View the current energy certificate as PDF
+    """
     if not request.session.get('report_xml_name', False):
         return HttpResponseRedirect(reverse_lazy("certificate"))
 
@@ -186,7 +210,10 @@ def download_pdf(request):
     return render_to_pdf(html, filename, xml_path, env)
 
 
+
 def download_pdf_suplementary(request):
+    """ View the current energy suplementary certificate as pdf
+    """
     if not request.session.get('report_xml_name', False):
         return HttpResponseRedirect(reverse_lazy("certificate"))
 
@@ -195,6 +222,7 @@ def download_pdf_suplementary(request):
     report = load_report(session)
     espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
                        report.data.InstalacionesIluminacion.Espacios)
+
     html = render_to_string('supplementary-report.html', locals())
 
     env = {
@@ -204,7 +232,11 @@ def download_pdf_suplementary(request):
     return render_to_pdf(html, filename, None, env)
 
 
+
 class UpdateXMLView(View):
+    """CBV for update current energy certificate.
+    POST: receives name and value from the attr to update
+    """
     def post(self, request, *args, **kwargs):
         element = request.POST['name']
         value = request.POST['value']
@@ -221,10 +253,13 @@ class UpdateXMLView(View):
 
 
 class UploadImageView(View):
+    """CBV for upload images to the energy certificate.
+    POST: receives image and section. Downsize the image (Max_Height(260), Max_Width(260)) and save it 
+    into the current XML with base64 encoding.
+    """
     def post(self, request, *args, **kwargs):
         uploaded_image = request.FILES['image']
         section = request.POST['section']
-
         #Read and resize the image
         image = Image.open(BytesIO(uploaded_image.read()))
         maxsize = (460, 460)
