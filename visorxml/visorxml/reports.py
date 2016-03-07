@@ -35,6 +35,7 @@ from django.conf import settings
 import lxml.etree
 from lxml.html.clean import clean_html
 from .imgb64 import base64check
+import datetime
 
 
 
@@ -140,9 +141,14 @@ class XMLReport(object):
     def update_element(self, element, value):
         path = './%s' % '/'.join(element.split('.'))
         try:
-            if path.split("/")[1] == "MedidasDeMejora" and path.split("/")[-1] == "Descripcion":
+            if (
+                (path.split("/")[1] == "MedidasDeMejora" and path.split("/")[-1] == "Descripcion") or 
+                (path.split("/")[1] == "PruebasComprobacionesInspecciones" and path.split("/")[-1] == "Datos") or 
+                (path.split("/")[1] == "DatosPersonalizados" and path.split("/")[-1] == "SolucionesSingulares")
+                ):
+
                 self.xmltree.find(path).text = lxml.etree.CDATA(value)
-                print("CDATA!!")
+
             else:
                 self.xmltree.find(path).text = value
 
@@ -423,6 +429,55 @@ class XMLReport(object):
         data.DatosPersonalizados = self.get_datos_personalizados()
 
         return data
+
+    def delete_element(self, type, index):
+        change = False
+        if type == "measure":
+            measures = self.xmltree.find('./MedidasDeMejora')
+            measures.remove(measures[int(index)])
+            change = True
+
+        elif type == "visit":
+            visits = self.xmltree.find('./PruebasComprobacionesInspecciones')
+            visits.remove(visits[int(index)])
+            change = True
+
+        elif type == "solutions":
+            singular_solutions = self.xmltree.find('./DatosPersonalizados/SolucionesSingulares')
+            if singular_solutions is not None:
+                self.xmltree.find('./DatosPersonalizados').remove(singular_solutions)
+                change = True
+
+
+        if change:
+            self.save_to_file(self._xml_strings[0][0])
+
+        
+    def add_singular_solutions(self):
+        if self.xmltree.find('./DatosPersonalizados/SolucionesSingulares') is None:
+            new_node = lxml.etree.Element("SolucionesSingulares")
+            new_node.text = lxml.etree.CDATA(u'DESCRIPCIÓN')
+            self.xmltree.find('./DatosPersonalizados').append(new_node)
+            self.save_to_file(self._xml_strings[0][0])
+
+    def has_annex_v(self):
+        return self.xmltree.find('./DatosPersonalizados/SolucionesSingulares') is not None
+
+    def get_annex_v(self):
+        return self.xmltree.find('./DatosPersonalizados/SolucionesSingulares').text
+
+
+    def new_visit(self):
+        visits = self.xmltree.find('./PruebasComprobacionesInspecciones')
+        if visits == None:
+           visits = lxml.etree.Element("PruebasComprobacionesInspecciones")
+           self.xmltree.find(".").append(visits)
+
+        new_visit = lxml.etree.Element("Visita")
+        lxml.etree.SubElement(new_visit, 'FechaVisita').text = datetime.date.today().strftime("%d/%m/%y")
+        lxml.etree.SubElement(new_visit, 'Datos').text = lxml.etree.CDATA(u'DESCRIPCIÓN')
+        visits.append(new_visit)
+        self.save_to_file(self._xml_strings[0][0])
 
     def get_datos_certificador(self):
         datos_certificador = Bunch()
@@ -1056,32 +1111,32 @@ class XMLReport(object):
 
         info = []
         if self.data.IdentificacionEdificio.AnoConstruccion == '-':
-            info.append(('AVISO', 'No se ha definido el año de construcción'))
+            info.append(('AVISO', 'No se ha definido el año de construcción', "IdentificacionEdificio.AnoConstruccion"))
         if self.data.IdentificacionEdificio.ReferenciaCatastral == '-':
-            info.append(('AVISO', 'No se ha definido la referencia catastral'))
+            info.append(('AVISO', 'No se ha definido la referencia catastral',"IdentificacionEdificio.ReferenciaCatastral"))
 
         if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
-            info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios'))
+            info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
         if zcv not in '1234':
-            info.append(('ERROR', 'Zona climática de verano incorrecta'))
+            info.append(('ERROR', 'Zona climática de verano incorrecta', "IdentificacionEdificio.ZonaClimatica"))
         if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
-            info.append(('ERROR', 'Zona climática de invierno incorrecta'))
+            info.append(('ERROR', 'Zona climática de invierno incorrecta', "IdentificacionEdificio.ZonaClimatica"))
 
         plano_ = self.data.DatosGeneralesyGeometria.Plano
         if not plano_:
-            info.append(('AVISO', 'Sin datos de plano'))
+            info.append(('AVISO', 'Sin datos de plano', "DatosGeneralesyGeometria.Plano"))
         elif not base64check(plano_):
-            info.append(('AVISO', 'Datos de plano incorrectos'))
+            info.append(('AVISO', 'Datos de plano incorrectos', "DatosGeneralesyGeometria.Plano"))
 
         imagen_ = self.data.DatosGeneralesyGeometria.Imagen
         if not imagen_:
-            info.append(('AVISO', 'Sin datos de imagen'))
+            info.append(('AVISO', 'Sin datos de imagen', "DatosGeneralesyGeometria.Imagen"))
         elif not base64check(imagen_):
-            info.append(('AVISO', 'Datos de imagen incorrectos'))
+            info.append(('AVISO', 'Datos de imagen incorrectos', "DatosGeneralesyGeometria.Imagen"))
 
         if ((0 > self.data.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableCalefactada > 100) or
                 (0 > self.data.DatosGeneralesyGeometria.PorcentajeSuperficieHabitableRefrigerada > 100)):
-            info.append(('ERROR', 'Porcentajes de superficies acondicionadas fuera de rango'))
+            info.append(('ERROR', 'Porcentajes de superficies acondicionadas fuera de rango',"DatosGeneralesyGeometria.PorcentajeSuperficieHabitableCalefactada", ""))
 
         if esvivienda:
             # Sin chequear
@@ -1091,7 +1146,7 @@ class XMLReport(object):
                      self.data.Calificacion.Demanda.Refrigeracion or
                      self.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion)):
                 info.append(('ERROR',
-                             'Zona sin demanda de refrigeración de referencia y para el que se ha definido calificación para ese servicio'))
+                             'Zona sin demanda de refrigeración de referencia y para el que se ha definido calificación para ese servicio', ""))
             # Sin chequear
             if (zci in ('alpha', 'alfa', 'a') and
                     (self.data.Demanda.EdificioDeReferencia.Calefaccion or
@@ -1099,13 +1154,13 @@ class XMLReport(object):
                      self.data.Calificacion.Demanda.Calefaccion or
                      self.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion)):
                 info.append(('ERROR',
-                             'Zona sin demanda de calefacción de referencia y para la que se ha definido calificación para ese servicio'))
+                             'Zona sin demanda de calefacción de referencia y para la que se ha definido calificación para ese servicio', ""))
 
         if not esvivienda:
             if not self.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion:
-                info.append(('AVISO', 'No se han definido sistemas secundarios de calefacción y/o refrigeración'))
+                info.append(('AVISO', 'No se han definido sistemas secundarios de calefacción y/o refrigeración', ""))
             if not self.data.InstalacionesTermicas.VentilacionyBombeo:
-                info.append(('AVISO', 'No se han definido sistemas de ventilación y bombeo'))
+                info.append(('AVISO', 'No se han definido sistemas de ventilación y bombeo', ""))
 
         def _visit(res, ckey, obj):
             """Incluye en res la lista de valores numéricos con sus etiquetas"""
@@ -1125,6 +1180,10 @@ class XMLReport(object):
         _visit(values, 'root', self.data)
         suspects = [key for (value, key) in values if value >= ALERT]
         if suspects:
-            info.append(('AVISO', 'Valores numéricos erróneos en : %s' % ', '.join(set(suspects))))
+            info.append(('AVISO', 'Valores numéricos erróneos en : %s' % ', '.join(set(suspects)), ""))
+
+        for i in range(len(info)):
+            info[i] = (info[i][0], info[i][1], info[i][2].replace(".","\\\\.") )
+
 
         self.errors['info'] = info

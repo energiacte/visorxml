@@ -25,6 +25,8 @@ La aplicación está desarrollada en lenguaje Python y Javascript para algunos a
 
 Requisitos de instalación (paquetes de sistema suponiendo Debian/jessie(stable)):
 
+* pdfdetach (`$ sudo aptitude install poppler-utils`)
+
 * nodejs (`$ sudo aptitude install nodejs`)
     * npm (`$ sudo aptitude install npm`)
     * bower (`$ npm install -g bower`)

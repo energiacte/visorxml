@@ -30,7 +30,7 @@ from datetime import date, datetime
 from io import BytesIO, StringIO
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
@@ -231,6 +231,35 @@ def download_pdf_suplementary(request):
     }
     return render_to_pdf(html, filename, None, env)
 
+
+
+def delete_element(request):
+    """ Delete measure with index = request.POST["measure"]
+    """
+    if request.method == "POST":
+        try:
+            report = load_report(request.session)
+            report.delete_element(request.POST["type"],  int(request.POST["index"])-1)
+            return HttpResponse("")
+        except:
+            raise Http404()
+    raise Http404()
+
+
+def new_visit(request):
+    """ Add a new "Visita" node to the XML
+    """
+    report = load_report(request.session)
+    report.new_visit()
+    return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-iv")
+    
+
+def add_singular_solutions(request):
+    """ Create singular solutions node if it doesn't exist
+    """
+    report = load_report(request.session)
+    report.add_singular_solutions()
+    return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-v")
 
 
 class UpdateXMLView(View):

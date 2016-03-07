@@ -412,3 +412,25 @@
 }
 
 .modal-backdrop{display: none!important}
+
+
+.delete-visit{
+  font-weight: 600;
+}
+
+td.editor-html5 a{
+  color: #333;
+  border-bottom: 0px;
+}
+
+td.edited{
+  background: #dfd;
+}
+
+td.report-warning{
+  background: lightcoral;
+}
+
+a.add-singular-solutions{
+  margin-right: 10px;
+}

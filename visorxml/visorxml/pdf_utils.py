@@ -100,7 +100,6 @@ def render_to_pdf(html, filename, xml_filename, env={}):
 
 
 def get_xml_string_from_pdf(file):
-    import ipdb; ipdb.set_trace()
     pdf_name = random_name(ext=".pdf")
     xml_name = random_name()
     pdf = open(pdf_name, "wb")

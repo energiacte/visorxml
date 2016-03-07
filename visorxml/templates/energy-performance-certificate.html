@@ -111,8 +111,8 @@
               <h2>Avisos de validación</h2>
               <p>Se han encontrado <strong>{{ validation_data.info|length }}</strong> avisos de validación:</p>
               <ul>
-                {% for messagetype, message in validation_data.info %}
-                  <li><strong>{{ messagetype }}:</strong> {{ message }}</li>
+                {% for messagetype, message, id in validation_data.info %}
+                  <li><strong>{{ messagetype }}:</strong> {{ message }} | #{{id}}</li>
                 {% endfor %}
               </ul>
             </div>
@@ -472,7 +472,7 @@
       </tr>
       <tr>
         <td class="col-md-6" align="center">
-          <a href="#" class="upload-image" data-section="Imagen"
+          <a href="#" class="upload-image" data-section="Imagen" id="DatosGeneralesyGeometria.Imagen"
             {% if report.data.DatosGeneralesyGeometria.Imagen %}
                style=" background-image: url('{{ report.data.DatosGeneralesyGeometria.Imagen }}'); "
             {% else %}
@@ -484,7 +484,7 @@
         </td>
 
         <td class="col-md-6" align="center">
-          <a href="#" class="upload-image" data-section="Plano"
+          <a href="#" class="upload-image" data-section="Plano" id="DatosGeneralesyGeometria.Plano"
             {% if report.data.DatosGeneralesyGeometria.Plano %}
                 style=" background-image: url('{{ report.data.DatosGeneralesyGeometria.Plano }}'); "
             {% else %}
@@ -655,6 +655,9 @@
 
     <div class="section">
       <h5>Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)</h5>
+      {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion %}
+        <table><tr><td class="report-warning">No se han definido sistemas secundarios de calefacción y/o refrigeración</td></tr></table>
+      {% endif %}
 
       {% for e in report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion|default:' ' %}
       <table>
@@ -729,6 +732,10 @@
     <div class="section">
       <h5>Ventilación y bombeo (sólo edificios terciarios)</h5>
 
+      {% if not report.data.InstalacionesTermicas.VentilacionyBombeo %}
+        
+      <table><tr><td class="report-warning">No se han definido sistemas de ventilación y bombeo</td></tr></table>
+      {% else %}
       <table>
         <tr>
           <td class="title" width="25%">Nombre</td>
@@ -751,6 +758,7 @@
           <td class="total num calc">{{ report.data.InstalacionesTermicas.totalconsumoventilacionybombeo|asnum }}</td>
         </tr>
       </table>
+      {% endif %}
     </div>
 
     <div class="section">
@@ -1022,7 +1030,7 @@
     <table><tr><td>No se han definido medidas de mejora de la eficiencia energética</td></tr></table>
     {% else %}
     {% for medida in report.data.MedidasDeMejora %}
-    <h4>MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA</h4>
+    <h4>MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">(Eliminar medida de mejora)</a></h4>
     <table>
       <tr>
         <td width="20%" class="title">Denominación:</td>
@@ -1173,9 +1181,9 @@
     {% endfor %}
     {% endif %}
 
-    <div class="page-break"></div>
+    <div class="page-break" ></div>
     <!-- ANEXO IV -->
-    <h3 class="text-center">ANEXO IV<br />PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR</h3>
+    <h3 class="text-center" id="anexo-iv">ANEXO IV<br />PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR</h3>
 
     <p>Se describen a continuación las pruebas, comprobaciones e inspecciones llevadas a cabo por el técnico certificador durante el proceso de toma de datos y de calificación de la eficiencia energética del edificio, con la finalidad de establecer la conformidad de la información de partida contenida en el certificado de eficiencia energética.</p>
 
@@ -1183,20 +1191,54 @@
       {% for visita in report.data.PruebasComprobacionesInspecciones %}
       <tr>
         <td width="80%" class="title">Fecha de realización de la visita del técnico certificador</td>
-        <td>{{ visita.FechaVisita }}</td>
+        <td>
+          <a href="#" class="editable" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
+            {{ visita.FechaVisita }}    
+          </a>
+
+
+          <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">Eliminar</a>
+        </td>
       </tr>
       <tr>
-        <td colspan="2">{{ visita.Datos|safe }}</td>
+        <td colspan="2" class="editor-html5">
+          <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{{ visita.Datos|safe }}</a>
+        </td>
       </tr>
       {% endfor %}
     </table>
+
+
+  {% if report.has_annex_v %}
+    
+    <div class="page-break" ></div>
+    <!-- ANEXO V -->
+    <h3 class="text-center" id="anexo-v">ANEXO V<br />Justificación de Soluciones Singulares</h3>
+    <table>
+      <tr><td class="title">
+        Descripción
+        <a class="pull-right delete-element" data-index="0" data-type="solutions" href="#">Eliminar</a>
+      </td></tr>
+      <tr><td class="editor-html5">
+        <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{{ report.get_annex_v|safe }}</a>
+      </td></tr>
+    </table>
+
+  {% endif %}
+
   </div>
   <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-
   </form>
 
+  <br>
+  <a class="hidden-print pull-right btn btn-primary" href="{% url 'new_visit' %}">Nueva Visita</a> 
 
+  {% if not report.has_annex_v %}
+    <a class="hidden-print pull-right btn btn-primary add-singular-solutions" href="{% url 'add_singular_solutions' %}">Añadir Anexo de Justificación de Soluciones Singulares</a> 
+  {% endif %}
+
+  <br><br>
   <script>
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
     var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
@@ -1213,6 +1255,14 @@
 
   <script>
 
+  {% for a,b,id in validation_data.info %}
+    {% if id %}
+      $("#{{id}}").closest("td").addClass("report-warning");
+    {% endif %}
+  {% endfor %}
+
+
+
   Blob.prototype.convertToBase64 = function(callback){
           var FR= new FileReader();
           FR.onload = function(e) {
@@ -1223,6 +1273,35 @@
 
 
   $(function() {
+
+    $("body").on("click", ".editable-submit", function(){
+      $(this).closest("td").removeClass("report-warning");
+      $(this).closest("td").addClass("edited")
+    })
+
+    $(".delete-element").on("click", function(e){
+      e.preventDefault();
+      var data = {
+              index: $(this).data("index"),
+              type: $(this).data("type"),
+              csrfmiddlewaretoken : "{{ csrf_token }}" 
+            };
+
+      if(confirm("{% trans "¿Está seguro de que desea eliminar este elemento?" %}")){
+        $.ajax({
+            url: '{% url 'delete_element' %}',
+            type: 'POST',
+            data: data,
+          }).done(function(){
+              //Reload page
+              window.location.href = "{% url 'certificate'%}";
+          }).fail(function(){
+            console.log("An error occurred, the measure couldn't be deleted!");
+          });
+      }
+
+      return false;
+    });
 
     $(".measures-xml-link").on("click", function(e){
       event.preventDefault();
@@ -1293,10 +1372,11 @@
     });
 
     $(".editor-html5 > a").on("click", function(e){
+      debugger;
       setTimeout(function(){
         $(".wysihtml5-toolbar li:nth-child(5) a.btn").on("click", function(event){
           event.preventDefault();
-
+          debugger;
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
 
           var fileSelector = $('<input type="file" />')

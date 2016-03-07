@@ -34,6 +34,9 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'visorxml.views.home', name='home'),
     url(r'^validator/?$', 'visorxml.views.validate', name='validator'),
+    url(r'^visits/new/?$', 'visorxml.views.new_visit', name='new_visit'),
+    url(r'^singularsolutions/add/?$', 'visorxml.views.add_singular_solutions', name='add_singular_solutions'),
+    url(r'^element/delete/?$', 'visorxml.views.delete_element', name='delete_element'),
     url(r'^measures-xml/?$', 'visorxml.views.measures_xml_upload', name='measures_xml_upload'),
     url(r'^xml$', GetXMLView.as_view(), name='get-xml'),
     url(r'^certificate$', 'visorxml.views.view_certificate', name='certificate'),
@@ -43,3 +46,4 @@ urlpatterns = [
     url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml'),
     url(r'^upload-image$', UploadImageView.as_view(), name='upload-image'),
 ]
+
