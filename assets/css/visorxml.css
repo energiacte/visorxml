@@ -358,3 +358,79 @@
     float: right;
   }
 }
+
+
+.get-file-header{
+  max-height: 60px;
+  position: relative;
+  top: -10px;
+}
+
+
+.get-file-li{
+  height: 72px;
+}
+
+.upload-image{
+  width: 560px;
+  height: 375px;
+  line-height: 375px;
+  text-align: center;
+  display: inline-block;
+}
+
+.upload-image div{
+  height: 375px;
+  width: 560px;
+}
+.upload-image div:hover{
+  background: rgba(200,200,200,0.7);
+}
+
+.upload-image img{
+  vertical-align: middle;
+  display: none;
+}
+
+.upload-image:hover img{
+  display: inline;
+}
+
+.measures-xml-link{
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.upload-image {
+  background-size: contain;
+               background-position: center;
+               background-repeat: no-repeat;"
+}
+
+.wysihtml5-toolbar li:nth-child(4){
+  display: none;
+}
+
+.modal-backdrop{display: none!important}
+
+
+.delete-visit{
+  font-weight: 600;
+}
+
+td.editor-html5 a{
+  color: #333;
+  border-bottom: 0px;
+}
+
+td.edited{
+  background: #dfd;
+}
+
+td.report-warning{
+  background: lightcoral;
+}
+
+a.add-singular-solutions{
+  margin-right: 10px;
+}

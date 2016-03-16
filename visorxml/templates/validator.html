@@ -7,7 +7,8 @@
 {% block content %}
 <div class="page-header">
   <h1>{% trans "Validador de informes en formato XML" %}</h1>
-</div>
+</div>  
+{% endfor %}
 <div class="page">
   <p class="lead">
     {% blocktrans %}
@@ -23,7 +24,7 @@
     terciario</a> o con un <a href="{{ xml_example_2_url }}">informe de ejemplo de edificio con uso residencial</a>.
     {% endblocktrans %}
   </p>
-
+  
   <div class="panel panel-primary">
     <div class="panel-heading">
       {% trans "Selección de archivos de informe de evaluación de la eficiencia energética." %}

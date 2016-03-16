@@ -3,17 +3,17 @@
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,105 +21,74 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
+#
 
 import base64
-import hashlib
 import logging
 import os.path
-from datetime import date
+from datetime import date, datetime
 from io import BytesIO, StringIO
-
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
-
 from extra_views import FormSetView
 from PIL import Image
-
+from django.template import RequestContext
 from .forms import XMLFileForm
 from .reports import XMLReport
-from .pdf_utils import render_to_pdf
+from .pdf_utils import render_to_pdf, get_xml_string_from_pdf
+import string
+import random
+from django.shortcuts import render_to_response, get_object_or_404
+from django.forms import formset_factory
 
 
 logger = logging.getLogger(__name__)
 
 
 def load_report(session):
+    """ Load current report from filesystem if it exists
+    else: return None
+    """
     file_name = session['report_xml_name']
     file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-    with open(file_path, 'rb') as xmlfile:
-        report = XMLReport([(file_name, xmlfile.read())])
-        return report
+    try:
+        with open(file_path, 'rb') as xmlfile:
+            report = XMLReport([(file_name, xmlfile.read())])
+            return report
+    except FileNotFoundError:
+        session.pop("report_xml_name")
+        return None
 
 
-class HomeView(TemplateView):
-    template_name = "home.html"
+
+def random_name(size=20, ext=".xml"):
+    """ return random string of letters and digits with an extension.
+    size -> length of the string
+    ext -> extension
+    """
+    return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 
 
-class ValidatorView(FormSetView):
-    template_name = "validator.html"
-    form_class = XMLFileForm
-    extra = 2
-    success_url = reverse_lazy('validator')
-
-    def formset_valid(self, formset):
-        session = self.request.session
-
-        xml_files = []
-        for form_index, form in enumerate(formset.forms):
-            uploaded_file = form.cleaned_data.get('file', None)
-            if uploaded_file:
-                xml_files.append(uploaded_file)
-
-        xml_strings = self.save_session_info(xml_files)
-        report = XMLReport(xml_strings)
-
-        print(report.errors['validation_errors'])
-        if len(report.errors.get('validation_errors', None)) == 0:
-            report_file = report.save_to_file()
-            session['report_xml_name'] = report_file
-
-        context_data = self.get_context_data(formset=formset)
-        context_data['validation_data'] = report.errors
-
-        return self.render_to_response(context_data)
-
-    def save_session_info(self, xml_files):
-        """
-        Get a list of uploaded XML files and save some data in the user session.
-        Returns a list of tuples, [(file_name, xml_file_content), ...]
-        """
-        session = self.request.session
-
-        xml_strings = []
-        for file_index, xml_file in enumerate(xml_files):
-            session['file_%s_name' % file_index] = xml_file.name
-
-            xml_string = xml_file.read()
-            xml_strings.append((xml_file.name, xml_string))
-            hashkey = hashlib.md5(xml_string).hexdigest()
-            file_path = os.path.join(settings.MEDIA_ROOT, hashkey)
-            if session.get('file_%s_hashkey' % file_index) != hashkey or not os.path.exists(file_path):
-                session['file_%s_hashkey' % file_index] = hashkey
-
-                with open(file_path, 'wb') as f:
-                    f.write(xml_string)
-                    session['file_%s_stored_name' % file_index] = file_path
-
-        return xml_strings
+def home(request):
+    if request.session.get('report_xml_name', False):
+        validated = True
+    else:
+        validated = False
+    return render_to_response("home.html", {"validated":validated}, RequestContext(request))
 
 
 class GetXMLView(View):
+    """CBV that serve the current centificate info as XML
+    """
     def get(self, request, *args, **kwargs):
         session = self.request.session
-
         file_name = session['report_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        output_file_name = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
+        output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
 
         with open(file_path, 'rb') as xmlfile:
             response = HttpResponse(xmlfile.read(), content_type='application/xml')
@@ -127,52 +96,177 @@ class GetXMLView(View):
             return response
 
 
-class EnergyPerformanceCertificateView(TemplateView):
-    template_name = "energy-performance-certificate.html"
 
-    def get(self, request, *args, **kwargs):
-        session = request.session
-        if session.get('report_xml_name', False):
-            return super(EnergyPerformanceCertificateView, self).get(request, *args, **kwargs)
+def get_xml_strings(new_file):
+    """Extracts the file name and the XML string from XML file or PDF file
+    returns the tuple into a list
+    """
+    xml_strings = []
+
+    xml_string = ""
+    if os.path.splitext(new_file.name)[1] == ".pdf":
+        xml_string = get_xml_string_from_pdf(new_file)
+
+    elif os.path.splitext(new_file.name)[1] == ".xml":
+        xml_string = new_file.read()
+
+    xml_strings.append((new_file.name, xml_string))
+
+    return xml_strings
+
+
+def measures_xml_upload(request):
+    """ processes a XML with improvement features ("MedidasdeMejora/Medida/"). Inserts it in the current XML file.
+    """
+    xml = request.FILES["measures-xml"]
+    xml_str = xml.read()
+    base_xml = request.session['report_xml_name']
+    with open(os.path.join(settings.MEDIA_ROOT, base_xml), "rb") as base_file:
+        base_str = base_file.read()
+    xml_strings = [(base_xml, base_str), (xml.name, xml_str)]
+    report = XMLReport(xml_strings)
+    if len(report.errors.get('validation_errors', None)) == 0:
+        report_file = report.save_to_file()
+        if request.session.get('report_xml_name', False):
+            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+        request.session['report_xml_name'] = report_file
+        validated = True
+    else:
+        validated = False
+    validation_data = report.errors
+
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+
+
+
+def validate(request):
+    """ processes a XML of Energy Certificate. If it's valid, it's saved in the FS and the old is removed.
+    """
+    try:
+        xml_file = request.FILES.get("certificate-file", None)
+        xml_strings = get_xml_strings(xml_file)
+        report = XMLReport(xml_strings)
+        if len(report.errors.get('validation_errors', None)) == 0:
+                report_file = report.save_to_file()
+                if request.session.get('report_xml_name', False):
+                    os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+                request.session['report_xml_name'] = report_file
+                validated = True
         else:
-            return HttpResponseRedirect(reverse_lazy('validator'))
+            validated = False
+        validation_data = report.errors
+    except:
+        validated = False
 
-    def get_context_data(self, **kwargs):
-        context = super(EnergyPerformanceCertificateView, self).get_context_data(**kwargs)
-        report = load_report(self.request.session)
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
 
+
+def view_certificate(request):
+    """ View the current energy certificate in a web page
+    """
+    if request.session.get('report_xml_name', False):
+        report = load_report(request.session)
+        validation_data = report.errors
+        validated = True
+    else:
+        validated = False
+
+    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+
+
+def view_suplementary_report(request):
+    """ View the current energy suplementary certificate in a web page
+    """
+    if request.session.get('report_xml_name', False):
+        report = load_report(request.session)
         espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
                        report.data.InstalacionesIluminacion.Espacios)
+        validated = True
+        return render_to_response("supplementary-report.html", locals(), RequestContext(request))
 
-        context['report'] = report
-        context['espacios'] = espacios
-
-        return context
-
-
-class EnergyPerformanceCertificatePDFView(EnergyPerformanceCertificateView):
-    def render_to_response(self, context, **response_kwargs):
-        session = self.request.session
-        filename = '%s-%s' %(date.today().strftime('%Y%m%d'), session['file_0_name'])
-
-        html = render_to_string(self.template_name, context)
-
-        env = {
-            'generation_date': context['report'].data.DatosDelCertificador.Fecha,
-            'reference': context['report'].data.IdentificacionEdificio.ReferenciaCatastral
-        }
-        return render_to_pdf(html, '%s.pdf' % filename, env)
+    else:
+        return HttpResponseRedirect(reverse_lazy("certificate"))
 
 
-class SupplementaryReportView(EnergyPerformanceCertificateView):
-    template_name = "supplementary-report.html"
+
+def download_pdf(request):
+    """ View the current energy certificate as PDF
+    """
+    if not request.session.get('report_xml_name', False):
+        return HttpResponseRedirect(reverse_lazy("certificate"))
+
+    session = request.session
+    filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
+    report = load_report(session)
+    validated = True
+    pdf = True
+    html = render_to_string('energy-performance-certificate.html', locals())
+
+    env = {
+        'generation_date': report.data.DatosDelCertificador.Fecha,
+        'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
+    }
+    xml_name = session['report_xml_name']
+    xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
+    return render_to_pdf(html, filename, xml_path, env)
 
 
-class SupplementaryReportPDFView(EnergyPerformanceCertificatePDFView):
-    template_name = "supplementary-report.html"
+
+def download_pdf_suplementary(request):
+    """ View the current energy suplementary certificate as pdf
+    """
+    if not request.session.get('report_xml_name', False):
+        return HttpResponseRedirect(reverse_lazy("certificate"))
+
+    session = request.session
+    filename = 'certificado-suplementario-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
+    report = load_report(session)
+    espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
+                       report.data.InstalacionesIluminacion.Espacios)
+
+    html = render_to_string('supplementary-report.html', locals())
+
+    env = {
+        'generation_date': report.data.DatosDelCertificador.Fecha,
+        'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
+    }
+    return render_to_pdf(html, filename, None, env)
+
+
+
+def delete_element(request):
+    """ Delete measure with index = request.POST["measure"]
+    """
+    if request.method == "POST":
+        try:
+            report = load_report(request.session)
+            report.delete_element(request.POST["type"],  int(request.POST["index"])-1)
+            return HttpResponse("")
+        except:
+            raise Http404()
+    raise Http404()
+
+
+def new_visit(request):
+    """ Add a new "Visita" node to the XML
+    """
+    report = load_report(request.session)
+    report.new_visit()
+    return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-iv")
+    
+
+def add_singular_solutions(request):
+    """ Create singular solutions node if it doesn't exist
+    """
+    report = load_report(request.session)
+    report.add_singular_solutions()
+    return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-v")
 
 
 class UpdateXMLView(View):
+    """CBV for update current energy certificate.
+    POST: receives name and value from the attr to update
+    """
     def post(self, request, *args, **kwargs):
         element = request.POST['name']
         value = request.POST['value']
@@ -187,17 +281,21 @@ class UpdateXMLView(View):
         return super(UpdateXMLView, self).dispatch(*args, **kwargs)
 
 
+
 class UploadImageView(View):
+    """CBV for upload images to the energy certificate.
+    POST: receives image and section. Downsize the image (Max_Height(260), Max_Width(260)) and save it 
+    into the current XML with base64 encoding.
+    """
     def post(self, request, *args, **kwargs):
         uploaded_image = request.FILES['image']
         section = request.POST['section']
-
-        # Read and resize the image
+        #Read and resize the image
         image = Image.open(BytesIO(uploaded_image.read()))
         maxsize = (460, 460)
         image.thumbnail(maxsize, Image.ANTIALIAS)
 
-        # Convert the image to a base64 string
+        #Convert the image to a base64 string
         image_buffer = BytesIO()
         image.save(image_buffer, format="PNG")
         image_string = base64.b64encode(image_buffer.getvalue())

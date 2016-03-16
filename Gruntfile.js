@@ -19,6 +19,7 @@ module.exports = function(grunt) {
   ];
 
   var srcFiles = [
+  'assets/js/imageTools.js'
   ];
 
   var allFiles = contribFiles.concat(srcFiles);
@@ -48,7 +49,13 @@ module.exports = function(grunt) {
           'bootstrap-fileinput.js': 'bootstrap-fileinput/js/fileinput.js',
           'x-editable.js': 'x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js',
           'wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/wysihtml5.js',
-          'x-editable-wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.js',
+
+          /*'x-editable-wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.js',
+            This script has been replaced by other with support for base64 images into <img> src attribute.
+          */
+          'x-editable-wysihtml5.js': '../assets/js/wysihtml5-base64.js',
+
+
           'x-editable-bootstrap-wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.js'
         }
       },

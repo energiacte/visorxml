@@ -26,25 +26,24 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from .views import (HomeView,
-                    ValidatorView,
-                    GetXMLView,
-                    EnergyPerformanceCertificateView,
-                    EnergyPerformanceCertificatePDFView,
-                    SupplementaryReportView,
-                    SupplementaryReportPDFView,
+from .views import (GetXMLView,
                     UpdateXMLView,
                     UploadImageView)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^validator$', ValidatorView.as_view(), name='validator'),
+    url(r'^$', 'visorxml.views.home', name='home'),
+    url(r'^validator/?$', 'visorxml.views.validate', name='validator'),
+    url(r'^visits/new/?$', 'visorxml.views.new_visit', name='new_visit'),
+    url(r'^singularsolutions/add/?$', 'visorxml.views.add_singular_solutions', name='add_singular_solutions'),
+    url(r'^element/delete/?$', 'visorxml.views.delete_element', name='delete_element'),
+    url(r'^measures-xml/?$', 'visorxml.views.measures_xml_upload', name='measures_xml_upload'),
     url(r'^xml$', GetXMLView.as_view(), name='get-xml'),
-    url(r'^certificate$', EnergyPerformanceCertificateView.as_view(), name='certificate'),
-    url(r'^certificate-pdf$', EnergyPerformanceCertificatePDFView.as_view(), name='certificate-pdf'),
-    url(r'^supplementary-report$', SupplementaryReportView.as_view(), name='supplementary-report'),
-    url(r'^supplementary-report-pdf$', SupplementaryReportPDFView.as_view(), name='supplementary-report-pdf'),
+    url(r'^certificate$', 'visorxml.views.view_certificate', name='certificate'),
+    url(r'^certificate-pdf$', 'visorxml.views.download_pdf', name='certificate-pdf'),
+    url(r'^supplementary-report$', 'visorxml.views.view_suplementary_report', name='supplementary-report'),
+    url(r'^supplementary-report-pdf$', 'visorxml.views.download_pdf_suplementary', name='supplementary-report-pdf'),
     url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml'),
     url(r'^upload-image$', UploadImageView.as_view(), name='upload-image'),
 ]
+

@@ -26,12 +26,14 @@
 import tempfile
 import subprocess
 import os
-
+import random
+import string
 from django.conf import settings
 from django.http import HttpResponse
+from PyPDF2 import PdfFileWriter as PdfWriter
+from PyPDF2 import PdfFileReader as PdfReader
 
-
-def render_to_pdf(html, filename, env={}):
+def render_to_pdf(html, filename, xml_filename, env={}):
     debug = settings.DEBUG
     debug = False
     if debug:
@@ -39,6 +41,7 @@ def render_to_pdf(html, filename, env={}):
 
     fd_html, filename_html = tempfile.mkstemp()
     fd_pdf, filename_pdf = tempfile.mkstemp(suffix=".pdf")
+    fd_pdf2, filename_pdf2 = tempfile.mkstemp(suffix=".pdf")
     os.close(fd_pdf)
     try:
         os.write(fd_html, html.encode('utf8'))
@@ -60,7 +63,58 @@ def render_to_pdf(html, filename, env={}):
     finally:
         os.remove(filename_html)
 
-    with open(filename_pdf, 'rb') as pdf:
-        response = HttpResponse(pdf.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment;filename=%s' % filename
-        return response
+
+    if xml_filename:
+        with open(filename_pdf, 'rb') as pdf:
+            reader = PdfReader(pdf, strict=False)
+            writer = PdfWriter()
+            writer.appendPagesFromReader(reader)
+            with open(xml_filename, "rb") as xml:
+                writer.addAttachment("certificado.xml",xml.read())
+                with open(filename_pdf2, "wb") as out:
+                    writer.write(out)
+                    out.close()
+                pdf.close()
+
+        with open(filename_pdf2, 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment;filename=%s' % filename
+
+            pdf.close()
+
+            os.remove(filename_pdf)
+            os.remove(filename_pdf2)
+            return response
+
+    else:
+        with open(filename_pdf, 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment;filename=%s' % filename
+
+            pdf.close()
+
+            os.remove(filename_pdf)
+            os.remove(filename_pdf2)
+            return response
+
+
+
+def get_xml_string_from_pdf(file):
+    pdf_name = random_name(ext=".pdf")
+    xml_name = random_name()
+    pdf = open(pdf_name, "wb")
+    pdf.write(file.read())
+    pdf.close()
+    cmd = "pdfdetach %s -save 1 -o %s" % (pdf_name, xml_name)
+    os.system(cmd)
+    xml = open(xml_name, "rb")
+    xml_string = xml.read()
+    os.remove(pdf_name)
+    os.remove(xml_name)
+
+    return xml_string
+
+
+
+def random_name(size=20, ext=".xml"):
+    return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
