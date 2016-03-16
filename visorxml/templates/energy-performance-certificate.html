@@ -112,7 +112,7 @@
               <p>Se han encontrado <strong>{{ validation_data.info|length }}</strong> avisos de validación:</p>
               <ul>
                 {% for messagetype, message, id in validation_data.info %}
-                  <li><strong>{{ messagetype }}:</strong> {{ message }} | #{{id}}</li>
+                  <li><strong>{{ messagetype }}:</strong> {{ message }} </li>
                 {% endfor %}
               </ul>
             </div>
@@ -472,6 +472,9 @@
       </tr>
       <tr>
         <td class="col-md-6" align="center">
+          {% if pdf %}
+            <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="">
+          {% else %}
           <a href="#" class="upload-image" data-section="Imagen" id="DatosGeneralesyGeometria.Imagen"
             {% if report.data.DatosGeneralesyGeometria.Imagen %}
                style=" background-image: url('{{ report.data.DatosGeneralesyGeometria.Imagen }}'); "
@@ -481,9 +484,13 @@
             >
             <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
           </a>
+          {% endif %}
         </td>
 
         <td class="col-md-6" align="center">
+          {% if pdf %}
+            <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="">
+          {% else %}
           <a href="#" class="upload-image" data-section="Plano" id="DatosGeneralesyGeometria.Plano"
             {% if report.data.DatosGeneralesyGeometria.Plano %}
                 style=" background-image: url('{{ report.data.DatosGeneralesyGeometria.Plano }}'); "
@@ -493,6 +500,7 @@
             >
             <div><img src="{% static 'img/edit.png'%}" alt=""/></div>
           </a>
+          {% endif %}
         </td>
       </tr>
     </table>

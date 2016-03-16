@@ -199,6 +199,7 @@ def download_pdf(request):
     filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
     report = load_report(session)
     validated = True
+    pdf = True
     html = render_to_string('energy-performance-certificate.html', locals())
 
     env = {
