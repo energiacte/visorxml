@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#encoding:utf8
+#encoding:utf-8
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
