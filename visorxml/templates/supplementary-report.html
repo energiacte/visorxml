@@ -11,7 +11,7 @@
   {% with id=report.data.IdentificacionEdificio dg=report.data.DatosGeneralesyGeometria dc=report.data.DatosDelCertificador consef=report.data.Consumo.EnergiaFinal consepnr=report.data.Consumo.EnergiaPrimariaNoRenovable emis=report.data.EmisionesCO2 calemis=report.data.Calificacion.EmisionesCO2 calepnr=report.data.Calificacion.EnergiaPrimariaNoRenovable %}
 
   <nav class="hidden-print">
-    <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'supplementary-report-pdf' %}">Obtener PDF</a>
+    <a class="btn btn-primary btn-lg getfile" role="button" href="{% url 'supplementary-report-pdf' %}">{% trans "Obtener PDF" %}</a>
   </nav>
 
   <div class="sup-report" id="informe">
@@ -54,8 +54,8 @@
         <tr>
           <td>{% trans "Número de plantas" %}</td>
           <td>
-            Sobre rasante: {{ dg.NumeroDePlantasSobreRasante }},
-            bajo rasante: {{ dg.NumeroDePlantasBajoRasante }}
+            {% trans "Sobre rasante:" %} {{ dg.NumeroDePlantasSobreRasante }},
+            {% trans "bajo rasante:" %} {{ dg.NumeroDePlantasBajoRasante }}
           </td>
         </tr>
         <tr>
