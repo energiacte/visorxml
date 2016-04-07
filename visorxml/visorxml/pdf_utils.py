@@ -3,17 +3,17 @@
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,7 +21,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
+#
 
 import tempfile
 import subprocess
@@ -60,6 +60,8 @@ def render_to_pdf(html, filename, xml_filename, env={}):
             proc.poll()
             if proc.returncode is not None:
                 break
+    except Exception as error:
+        print(error)
     finally:
         os.remove(filename_html)
 
@@ -102,13 +104,16 @@ def render_to_pdf(html, filename, xml_filename, env={}):
 def get_xml_string_from_pdf(file):
     pdf_name = random_name(ext=".pdf")
     xml_name = random_name()
-    pdf = open(pdf_name, "wb")
-    pdf.write(file.read())
-    pdf.close()
+
+    with open(pdf_name, "wb") as pdf:
+        pdf.write(file.read())
+
     cmd = "pdfdetach %s -save 1 -o %s" % (pdf_name, xml_name)
     os.system(cmd)
-    xml = open(xml_name, "rb")
-    xml_string = xml.read()
+
+    with open(xml_name, "rb") as xml:
+        xml_string = xml.read()
+
     os.remove(pdf_name)
     os.remove(xml_name)
 
