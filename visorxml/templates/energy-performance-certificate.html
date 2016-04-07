@@ -741,7 +741,7 @@
       <h5>Ventilación y bombeo (sólo edificios terciarios)</h5>
 
       {% if not report.data.InstalacionesTermicas.VentilacionyBombeo %}
-        
+
       <table><tr><td class="report-warning">No se han definido sistemas de ventilación y bombeo</td></tr></table>
       {% else %}
       <table>
@@ -1201,7 +1201,7 @@
         <td width="80%" class="title">Fecha de realización de la visita del técnico certificador</td>
         <td>
           <a href="#" class="editable" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
-            {{ visita.FechaVisita }}    
+            {{ visita.FechaVisita }}
           </a>
 
 
@@ -1218,14 +1218,14 @@
 
 
   {% if report.has_annex_v %}
-    
+
     <div class="page-break" ></div>
     <!-- ANEXO V -->
     <h3 class="text-center" id="anexo-v">ANEXO V<br />Justificación de Soluciones Singulares</h3>
     <table>
       <tr><td class="title">
         Descripción
-        <a class="pull-right delete-element" data-index="0" data-type="solutions" href="#">Eliminar</a>
+        <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">Eliminar</a>
       </td></tr>
       <tr><td class="editor-html5">
         <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{{ report.get_annex_v|safe }}</a>
@@ -1240,10 +1240,10 @@
   </form>
 
   <br>
-  <a class="hidden-print pull-right btn btn-primary" href="{% url 'new_visit' %}">Nueva Visita</a> 
+  <a class="hidden-print pull-right btn btn-primary" href="{% url 'new_visit' %}">Nueva Visita</a>
 
   {% if not report.has_annex_v %}
-    <a class="hidden-print pull-right btn btn-primary add-singular-solutions" href="{% url 'add_singular_solutions' %}">Añadir Anexo de Justificación de Soluciones Singulares</a> 
+    <a class="hidden-print pull-right btn btn-primary add-singular-solutions" href="{% url 'add_singular_solutions' %}">Añadir Anexo de Justificación de Soluciones Singulares</a>
   {% endif %}
 
   <br><br>
@@ -1275,7 +1275,7 @@
           var FR= new FileReader();
           FR.onload = function(e) {
                callback(e.target.result)
-          };       
+          };
           FR.readAsDataURL(this);
   }
 
@@ -1292,7 +1292,7 @@
       var data = {
               index: $(this).data("index"),
               type: $(this).data("type"),
-              csrfmiddlewaretoken : "{{ csrf_token }}" 
+              csrfmiddlewaretoken : "{{ csrf_token }}"
             };
 
       if(confirm("{% trans "¿Está seguro de que desea eliminar este elemento?" %}")){
