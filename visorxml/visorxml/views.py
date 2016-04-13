@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#encoding:utf8
+#encoding:utf-8
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
@@ -253,7 +253,7 @@ def new_visit(request):
     report = load_report(request.session)
     report.new_visit()
     return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-iv")
-    
+
 
 def add_singular_solutions(request):
     """ Create singular solutions node if it doesn't exist
@@ -284,7 +284,7 @@ class UpdateXMLView(View):
 
 class UploadImageView(View):
     """CBV for upload images to the energy certificate.
-    POST: receives image and section. Downsize the image (Max_Height(260), Max_Width(260)) and save it 
+    POST: receives image and section. Downsize the image (Max_Height(260), Max_Width(260)) and save it
     into the current XML with base64 encoding.
     """
     def post(self, request, *args, **kwargs):
