@@ -114,7 +114,7 @@ class XMLReport(object):
         self.errors = {
             'extra_files_errors': None,
             'validation_errors': [],
-            'info': None
+            'info': []
         }
         self._data = None
         self._xml_strings = xml_strings
@@ -1109,7 +1109,7 @@ class XMLReport(object):
         zcv = self.data.IdentificacionEdificio.ZonaClimatica[-1]
         esvivienda = 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
 
-        info = []
+        info = self.errors['info']
         if self.data.IdentificacionEdificio.AnoConstruccion == '-':
             info.append(('AVISO', 'No se ha definido el año de construcción', "IdentificacionEdificio.AnoConstruccion"))
         if self.data.IdentificacionEdificio.ReferenciaCatastral == '-':
@@ -1185,5 +1185,3 @@ class XMLReport(object):
         for i in range(len(info)):
             info[i] = (info[i][0], info[i][1], info[i][2].replace(".","\\\\.") )
 
-
-        self.errors['info'] = info
