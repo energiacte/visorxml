@@ -72,34 +72,6 @@ def astext(tree, path):
         txt = clean_html(txt) if txt else ''
     return txt
 
-
-def asfloat(tree, path, prec=None, infolist=None):
-    element = tree.find(path)
-    if element is None or not element.text:
-        return None
-    etext = element.text
-    try:
-        val = float(etext)
-    except ValueError:
-        # Corrección de comas
-        etext1 = etext.replace(',', '.')
-        try:
-            val = float(etext1)
-            element.text = etext1
-            if infolist is not None:
-                infolist.append(('AVISO', 'Corregida coma en valor decimal %s en %s' % (etext, path), ''))
-        except ValueError:
-            val = etext
-            if infolist is not None:
-                infolist.append(('ERROR', 'Valor decimal %s incorrecto en %s' % (etext, path), ''))
-    # Corrección de dígitos decimales
-    if (prec is not None) and isinstance(prec, int):
-        if element.text[::-1].find('.') > prec:
-            val = round(val, prec)
-            element.text = "{1:.{0}f}".format(prec, val)
-            infolist.append(('AVISO', 'Corregido %s a %i posiciones decimales en %s' % (etext, prec, path), ''))
-    return val
-
 def random_name(size=20, ext=".xml"):
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
 
@@ -223,7 +195,30 @@ class XMLReport(object):
 
     def asfloat(self, tree, path, prec=None):
         """Value conversion with decimal separator repair and precision control"""
-        return asfloat(tree, path, prec=prec, infolist=self.errors['info'])
+        infolist = self.errors['info']
+        element = tree.find(path)
+        if element is None or not element.text:
+            return None
+        etext = element.text
+        try:
+            val = float(etext)
+        except ValueError:
+            # Corrección de comas
+            etext1 = etext.replace(',', '.')
+            try:
+                val = float(etext1)
+                element.text = etext1
+                infolist.append(('AVISO', 'Corregida coma en valor decimal %s en %s' % (etext, path), ''))
+            except ValueError:
+                val = etext
+                infolist.append(('ERROR', 'Valor decimal %s incorrecto en %s' % (etext, path), ''))
+        # Corrección de dígitos decimales
+        if (prec is not None) and isinstance(prec, int):
+            if element.text[::-1].find('.') > prec:
+                val = round(val, prec)
+                element.text = "{1:.{0}f}".format(prec, val)
+                infolist.append(('AVISO', 'Corregido %s a %i posiciones decimales en %s' % (etext, prec, path), ''))
+        return val
 
     def calculate_improvement_measures(self):
         # Loop over the xml strings list, except the first element, which is the base file
