@@ -25,6 +25,7 @@
 
 import base64
 import logging
+import os
 import os.path
 from datetime import date, datetime
 from io import BytesIO, StringIO
@@ -202,10 +203,11 @@ def download_pdf(request):
     pdf = True
     html = render_to_string('energy-performance-certificate.html', locals())
 
-    env = {
+    env = os.environ.copy()
+    env.update({
         'generation_date': report.data.DatosDelCertificador.Fecha,
         'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
-    }
+    })
     xml_name = session['report_xml_name']
     xml_path = os.path.join(settings.MEDIA_ROOT, xml_name)
     return render_to_pdf(html, filename, xml_path, env)
