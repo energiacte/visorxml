@@ -419,28 +419,6 @@ class XMLReport(object):
             self._data = self._parsetree()
         return self._data
 
-    @property
-    def astext(self):
-        """Contenido del informe como texto"""
-        SECTIONS = ('DatosDelCertificador',
-                    'IdentificacionEdificio',
-                    'DatosGeneralesyGeometria',
-                    'DatosEnvolventeTermica',
-                    'InstalacionesTermicas',
-                    'InstalacionesIluminacion',  # Es lista
-                    'Demanda',
-                    'Consumo',
-                    'CondicionesFuncionamientoyOcupacion',  # Es lista
-                    'EmisionesCO2',
-                    'Calificacion',
-                    'MedidasDeMejora')
-        data = [self.version]
-        for section in SECTIONS:
-            data.append('%s\n%s\n%s\n' % (section, '=' * len(section), getattr(self.data, section)))
-
-        data.append('Potenciamediailum\n===========\n%s\n' % str(self.data.InstalacionesIluminacion.totalpotenciamedia))
-        return '\n'.join(data)
-
     def _parsetree(self):
         data = Bunch()
 
