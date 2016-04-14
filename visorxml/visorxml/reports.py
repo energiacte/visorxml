@@ -102,6 +102,11 @@ class XMLReport(object):
 
         return filename
 
+    def update_procedimiento(self):
+        procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
+        if procedimiento is not None and 'visorxml' not in procedimiento.text:
+            procedimiento.text += ' + [visorxml %s]' % settings.VERSION
+
     def update_element(self, element, value):
         path = './%s' % '/'.join(element.split('.'))
         try:
@@ -116,9 +121,7 @@ class XMLReport(object):
             else:
                 self.xmltree.find(path).text = value
 
-            procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
-            if procedimiento is not None and 'visorxml' not in procedimiento.text:
-                procedimiento.text += ' - visorxml %s' % settings.VERSION
+            self.update_procedimiento()
 
             base_xml_filename, base_xml_string = self._xml_strings[0]
             self.save_to_file(base_xml_filename)
@@ -127,23 +130,20 @@ class XMLReport(object):
 
     def update_image(self, section, value):
         path = './DatosGeneralesyGeometria/%s' % section
-        try:
-            element = self.xmltree.find(path)
-            if element is None:
-                parent = self.xmltree.find('./DatosGeneralesyGeometria')
-                element = lxml.etree.SubElement(parent, section)
+ 
+        element = self.xmltree.find(path)
+        if element is None:
+            parent = self.xmltree.find('./DatosGeneralesyGeometria')
+            element = lxml.etree.SubElement(parent, section)
 
-            element.text = lxml.etree.CDATA('data:image/png;base64,%s' % value.decode("utf-8"))
+        element.text = lxml.etree.CDATA('data:image/png;base64,%s' % value.decode("utf-8"))
 
-            procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
-            if procedimiento is not None and 'visorxml' not in procedimiento.text:
-                procedimiento.text += ' - visorxml %s' % settings.VERSION
+        self.update_procedimiento()
 
-            base_xml_filename, base_xml_string = self._xml_strings[0]
-            self.save_to_file(base_xml_filename)
-        except AttributeError as e:
-            print('cacola', e)
-            pass
+        base_xml_filename, base_xml_string = self._xml_strings[0]
+        self.save_to_file(base_xml_filename)
+        
+            
 
     def get_XML_value(self, xml_tree, path, default_value=0):
         try:
@@ -434,19 +434,25 @@ class XMLReport(object):
         if type == "measure":
             measures = self.xmltree.find('./MedidasDeMejora')
             measures.remove(measures[int(index)])
+            if len(measures) == 0:
+                measures.getparent().remove(measures)
+
             change = True
 
         elif type == "visit":
             visits = self.xmltree.find('./PruebasComprobacionesInspecciones')
             visits.remove(visits[int(index)])
+            if len(visits) == 0:
+                visits.getparent().remove(visits)
+
             change = True
 
         elif type == "solutions":
             singular_solutions = self.xmltree.find('./DatosPersonalizados/SolucionesSingulares')
             if singular_solutions is not None:
-                self.xmltree.find('./DatosPersonalizados').remove(singular_solutions)
+                datos = self.xmltree.find('./DatosPersonalizados')
+                datos.getparent().remove(datos)
                 change = True
-
 
         if change:
             self.save_to_file(self._xml_strings[0][0])
@@ -456,7 +462,14 @@ class XMLReport(object):
         if self.xmltree.find('./DatosPersonalizados/SolucionesSingulares') is None:
             new_node = lxml.etree.Element("SolucionesSingulares")
             new_node.text = lxml.etree.CDATA(u'DESCRIPCIÓN')
-            self.xmltree.find('./DatosPersonalizados').append(new_node)
+            datos_p = self.xmltree.find('./DatosPersonalizados')
+
+            #if ./DatosPersonalizados doesn't exist, create it.
+            if not datos_p:
+                datos_p = lxml.etree.Element("DatosPersonalizados")
+                self.xmltree.find(".").append(datos_p)
+
+            datos_p.append(new_node)
             self.save_to_file(self._xml_strings[0][0])
 
     def has_annex_v(self):

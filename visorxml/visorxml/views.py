@@ -147,17 +147,23 @@ def validate(request):
         xml_file = request.FILES.get("certificate-file", None)
         xml_strings = get_xml_strings(xml_file)
         report = XMLReport(xml_strings)
+        report_file = report.save_to_file()
+        if request.session.get('report_xml_name', False):
+            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+        request.session['report_xml_name'] = report_file
         if len(report.errors.get('validation_errors', None)) == 0:
-                report_file = report.save_to_file()
-                if request.session.get('report_xml_name', False):
-                    os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
-                request.session['report_xml_name'] = report_file
                 validated = True
         else:
             validated = False
         validation_data = report.errors
     except:
         validated = False
+        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado' % xml_file.name)
+        validation_data = {}
+        validation_data['validation_errors'] = [error,]
+        if request.session.get('report_xml_name', False):
+            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+            request.session.pop("report_xml_name")
 
     return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
 
@@ -165,11 +171,14 @@ def validate(request):
 def view_certificate(request):
     """ View the current energy certificate in a web page
     """
-    if request.session.get('report_xml_name', False):
-        report = load_report(request.session)
-        validation_data = report.errors
-        validated = True
-    else:
+    try:   
+        if request.session.get('report_xml_name', False):
+            report = load_report(request.session)
+            validation_data = report.errors
+            validated = True
+        else:
+            validated = False
+    except:
         validated = False
 
     return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))

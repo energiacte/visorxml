@@ -68,6 +68,7 @@ def render_to_pdf(html, filename, xml_filename, env={}):
             proc.poll()
             if proc.returncode is not None:
                 break
+
     except Exception as error:
         print(error)
     finally:
