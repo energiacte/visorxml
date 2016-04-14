@@ -54,7 +54,15 @@ def render_to_pdf(html, filename, xml_filename, env={}):
         except KeyError:
             pass
 
-        proc = subprocess.Popen([path, "-f", filename_html, "-o", filename_pdf], env=env)
+        env.update(dict(os.environ)) # keep OS env vars, such as PATH
+
+        cmd = [path,
+               "-f", filename_html,
+               "-o", filename_pdf,
+               "--mediaroot", settings.MEDIA_ROOT,
+               "--staticroot", settings.STATIC_ROOT,
+               "--scriptname", settings.FORCE_SCRIPT_NAME or '']
+        proc = subprocess.Popen(cmd, env=env)
 
         while True:
             proc.poll()
