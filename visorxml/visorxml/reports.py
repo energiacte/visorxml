@@ -37,8 +37,6 @@ from lxml.html.clean import clean_html
 from .imgb64 import base64check
 import datetime
 
-
-
 XSDPATH2 = settings.XSDPATH2
 XSDPATH1 = settings.XSDPATH1
 
@@ -75,27 +73,53 @@ def astext(tree, path):
     return txt
 
 
-def asint(tree, path):
+def asint(tree, path, infolist=None):
     element = tree.find(path)
     if element is None or not element.text:
         return None
+    etext = element.text
+    # Corrección de separadores decimales / valores decimales
+    for sepchar in ['.', ',']:
+        if sepchar in etext:
+            if infolist is not None:
+                infolist.append(('AVISO', 'Corregido %s a entero en %s' % (etext, path), ''))
+            etext = etext.split(sepchar)[0]
+            element.text = etext
     try:
-        val = int(element.text)
+        val = int(etext)
     except ValueError:
-        val = ALERTINT
+        val = etext
+        if infolist is not None:
+            infolist.append(('ERROR', 'Valor entero %s incorrecto en %s' % (etext, path), ''))
     return val
 
 
-def asfloat(tree, path):
+def asfloat(tree, path, prec=None, infolist=None):
     element = tree.find(path)
     if element is None or not element.text:
         return None
+    etext = element.text
     try:
-        val = float(element.text)
+        val = float(etext)
     except ValueError:
-        val = ALERTFLOAT
+        # Corrección de comas
+        etext1 = etext.replace(',', '.')
+        try:
+            val = float(etext1)
+            element.text = etext1
+            if infolist is not None:
+                infolist.append(('AVISO', 'Corregida coma en valor decimal %s en %s' % (etext, path), ''))
+        except ValueError:
+            val = etext
+            if infolist is not None:
+                infolist.append(('ERROR', 'Valor decimal %s incorrecto en %s' % (etext, path), ''))
+    # Corrección de dígitos decimales
+    if (prec is not None) and isinstance(prec, int):
+        if element.text[::-1].find('.') > prec:
+            val = round(val, prec)
+            element.text = "{1:.{0}f}".format(prec, val)
+            infolist.append(('AVISO', 'Corregido %s a %i posiciones decimales en %s' % (etext, prec, path), ''))
     return val
-
 
 def random_name(size=20, ext=".xml"):
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext
@@ -197,6 +221,14 @@ class XMLReport(object):
             error = (None, 'El archivo "<strong>%s</strong>" no está bien formado' % base_xml_filename)
             self.errors['validation_errors'].append(error)
             return None
+
+    def asint(self, tree, path):
+        """Value conversion with decimal separator repair"""
+        return asint(tree, path, infolist=self.errors['info'])
+
+    def asfloat(self, tree, path, prec=None):
+        """Value conversion with decimal separator repair and precision control"""
+        return asfloat(tree, path, prec=prec, infolist=self.errors['info'])
 
     def calculate_improvement_measures(self):
         # Loop over the xml strings list, except the first element, which is the base file
@@ -518,7 +550,7 @@ class XMLReport(object):
         for attr in ['NumeroDePlantasBajoRasante',
                      'PorcentajeSuperficieHabitableCalefactada',
                      'PorcentajeSuperficieHabitableRefrigerada']:
-            setattr(datos_generales_y_geometria, attr, asint(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
+            setattr(datos_generales_y_geometria, attr, self.asint(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
         for attr in ['SuperficieHabitable',
                      'VolumenEspacioHabitable',
                      'Compacidad',
@@ -527,9 +559,10 @@ class XMLReport(object):
                      'VentilacionUsoResidencial',
                      'VentilacionTotal',
                      'DemandaDiariaACS']:
-            setattr(datos_generales_y_geometria, attr, asfloat(self.xmltree, './DatosGeneralesyGeometria/%s' % attr))
+            setattr(datos_generales_y_geometria, attr,
+                    self.asfloat(self.xmltree, './DatosGeneralesyGeometria/%s' % attr, prec=2))
         datos_generales_y_geometria.PorcentajeSuperficieAcristalada = {
-            key: asint(self.xmltree, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
+            key: self.asint(self.xmltree, './DatosGeneralesyGeometria/PorcentajeSuperficieAcristalada/%s' % key)
             for key in 'N NE E SE S SO O NO'.split()
             }
 
@@ -554,16 +587,18 @@ class XMLReport(object):
             for attr in ['Nombre', 'Tipo', 'Orientacion', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie', 'Transmitancia']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             obj.Capas = []
             for ecapa in elemento.find('./Capas'):
                 capa = Bunch()
                 capa.Material = astext(ecapa, './Material')
-                for attr in ['Espesor',
-                             'ConductividadTermica', 'ResistenciaTermica',
-                             'Densidad', 'FactorResistenciaVapor',
-                             'CalorEspecifico']:
-                    setattr(capa, attr, asfloat(ecapa, './%s' % attr))
+                setattr(capa, 'Espesor',
+                        self.asfloat(ecapa, './Espesor', prec=4))
+                setattr(capa, 'ConductividadTermica',
+                        self.asfloat(ecapa, './ConductividadTermica', prec=3))
+                for attr in ['ResistenciaTermica', 'Densidad',
+                             'FactorResistenciaVapor', 'CalorEspecifico']:
+                    setattr(capa, attr, self.asfloat(ecapa, './%s' % attr, prec=2))
                 obj.Capas.append(capa)
             cerramientos_opacos.append(obj)
 
@@ -581,7 +616,7 @@ class XMLReport(object):
                          'ModoDeObtencionFactorSolar']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie', 'Transmitancia', 'FactorSolar']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             huecos_y_lucernarios.append(obj)
 
         return huecos_y_lucernarios
@@ -596,7 +631,7 @@ class XMLReport(object):
             for attr in ['Nombre', 'Tipo', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Longitud', 'Transmitancia']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             puentes_termicos.append(obj)
 
         return puentes_termicos
@@ -624,7 +659,7 @@ class XMLReport(object):
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             generadores_de_calefaccion.append(obj)
 
         total_potencia_generadores_de_calefaccion = sum(
@@ -643,7 +678,7 @@ class XMLReport(object):
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             generadores_de_refrigeracion.append(obj)
 
         total_potencia_generadores_de_refrigeracion = sum(
@@ -662,7 +697,7 @@ class XMLReport(object):
                          'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaNominal', 'RendimientoNominal', 'RendimientoEstacional']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             instalaciones_acs.append(obj)
 
         return instalaciones_acs
@@ -680,7 +715,7 @@ class XMLReport(object):
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaCalor', 'PotenciaFrio', 'RendimentoCalor', 'RendimientoFrio',
                          'RendimientoEstacionalCalor', 'RendimientoEstacionalFrio']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             sistemas_secundarios_calefaccion_refrigeracion.append(obj)
 
         return sistemas_secundarios_calefaccion_refrigeracion
@@ -695,7 +730,7 @@ class XMLReport(object):
             for attr in ['Nombre', 'Tipo', 'ServicioAsociado']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['ConsumoDeEnergia']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             torres_y_refrigeracion.append(obj)
 
         total_consumo_torres_y_refrigeracion = sum(e.ConsumoDeEnergia for e in torres_y_refrigeracion)
@@ -712,7 +747,7 @@ class XMLReport(object):
             for attr in ['Nombre', 'Tipo', 'ServicioAsociado']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['ConsumoDeEnergia']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             ventilacion_y_bombeo.append(obj)
 
         total_consumo_ventilacion_y_bombeo = sum(e.ConsumoDeEnergia for e in ventilacion_y_bombeo)
@@ -729,7 +764,7 @@ class XMLReport(object):
             for attr in ['Nombre', 'NivelDeAcondicionamiento', 'PerfilDeUso']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['Superficie']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             condiciones_funcionamiento_y_ocupacion.append(obj)
 
         superficies = dict((e.Nombre, e.Superficie) for e in condiciones_funcionamiento_y_ocupacion)
@@ -739,8 +774,8 @@ class XMLReport(object):
     def get_instalaciones_iluminacion(self, superficies):
         instalaciones_iluminacion = Bunch()
 
-        instalaciones_iluminacion.PotenciaTotalInstalada = asfloat(self.xmltree,
-                                                                   './InstalacionesIluminacion/PotenciaTotalInstalada')
+        instalaciones_iluminacion.PotenciaTotalInstalada = self.asfloat(self.xmltree,
+                                        './InstalacionesIluminacion/PotenciaTotalInstalada', prec=2)
         instalaciones_iluminacion.Espacios = []
         elementosilumina = self.xmltree.find('./InstalacionesIluminacion')
         elementosilumina = [] if elementosilumina is None else elementosilumina
@@ -751,7 +786,7 @@ class XMLReport(object):
             for attr in ['Nombre', 'ModoDeObtencion']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['PotenciaInstalada', 'VEEI', 'IluminanciaMedia']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             instalaciones_iluminacion.Espacios.append(obj)
         _eiluminados = dict((e.Nombre, e) for e in instalaciones_iluminacion.Espacios)
 
@@ -787,7 +822,7 @@ class XMLReport(object):
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['ConsumoFinalCalefaccion', 'ConsumoFinalRefrigeracion',
                          'ConsumoFinalACS', 'DemandaACS']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             energia_renovable_termica.append(obj)
 
         energia_renovable_total_termica = self.get_energia_renovable_total_termica(energia_renovable_termica)
@@ -817,7 +852,7 @@ class XMLReport(object):
             for attr in ['Nombre']:
                 setattr(obj, attr, astext(elemento, './%s' % attr))
             for attr in ['EnergiaGeneradaAutoconsumida']:
-                setattr(obj, attr, asfloat(elemento, './%s' % attr))
+                setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             energia_renovable_electrica.append(obj)
 
         energia_renovable_total_electrica = sum(e.EnergiaGeneradaAutoconsumida for e in energia_renovable_electrica)
@@ -832,20 +867,20 @@ class XMLReport(object):
                      'Conjunta', 'Calefaccion08', 'Refrigeracion08',
                      'Conjunta08', 'Ahorro08']:
             setattr(demanda.EdificioObjeto, attr,
-                    asfloat(self.xmltree, './Demanda/EdificioObjeto/%s' % attr))
+                    self.asfloat(self.xmltree, './Demanda/EdificioObjeto/%s' % attr, prec=2))
 
         demanda.EdificioDeReferencia = Bunch()
         for attr in ['Global', 'Calefaccion', 'Refrigeracion', 'ACS',
                      'Conjunta', 'Calefaccion08', 'Refrigeracion08',
                      'Conjunta08']:
             setattr(demanda.EdificioDeReferencia, attr,
-                    asfloat(self.xmltree, './Demanda/EdificioDeReferencia/%s' % attr))
+                    self.asfloat(self.xmltree, './Demanda/EdificioDeReferencia/%s' % attr, prec=2))
 
         demanda.Exigencias = Bunch()
         for attr in ['LimiteCalefaccionVivienda', 'LimiteRefrigeracionVivienda',
                      'LimiteAhorroOtrosUsos']:
             setattr(demanda.Exigencias, attr,
-                    asfloat(self.xmltree, './Demanda/Exigencias/%s' % attr))
+                    self.asfloat(self.xmltree, './Demanda/Exigencias/%s' % attr, prec=2))
 
         return demanda
 
@@ -859,8 +894,9 @@ class XMLReport(object):
         consumo.EnergiaPrimariaNoRenovable = self.get_energia_primaria_no_renovable()
 
         consumo.Exigencias = Bunch()
-        consumo.Exigencias.LimiteViviendaGlobalEPNR = asfloat(self.xmltree,
-                                                              './Consumo/Exigencias/LimiteViviendaGlobalEPNR')
+        consumo.Exigencias.LimiteViviendaGlobalEPNR = self.asfloat(self.xmltree,
+                                                                   './Consumo/Exigencias/LimiteViviendaGlobalEPNR',
+                                                                   prec=2)
 
         return consumo
 
@@ -870,13 +906,14 @@ class XMLReport(object):
         final_a_primaria_no_renovable = Bunch()
         for attr in VECTORES:
             value = './Consumo/FactoresdePaso/FinalAPrimariaNoRenovable/%s' % attr
-            setattr(final_a_primaria_no_renovable, attr, asfloat(self.xmltree, value))
+            setattr(final_a_primaria_no_renovable, attr, self.asfloat(self.xmltree, value, prec=3))
         factores_de_paso.FinalAPrimariaNoRenovable = final_a_primaria_no_renovable
 
         final_a_emisiones = Bunch()
         for attr in VECTORES:
-            setattr(final_a_emisiones, attr, asfloat(self.xmltree,
-                                                     './Consumo/FactoresdePaso/FinalAEmisiones/%s' % attr))
+            setattr(final_a_emisiones, attr, self.asfloat(self.xmltree,
+                                                          './Consumo/FactoresdePaso/FinalAEmisiones/%s' % attr,
+                                                          prec=3))
         factores_de_paso.FinalAEmisiones = final_a_emisiones
 
         return factores_de_paso
@@ -891,7 +928,9 @@ class XMLReport(object):
             if self.xmltree.find('./Consumo/EnergiaFinalVectores/%s' % vec) is not None:
                 total_por_vector = 0
                 for servicio in SERVICIOS:
-                    energia = asfloat(self.xmltree, './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio))
+                    energia = self.asfloat(self.xmltree,
+                                           './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio),
+                                           prec=2)
                     setattr(vector, servicio, energia)
 
                     if servicio != 'Global' and energia is not None:
@@ -930,7 +969,8 @@ class XMLReport(object):
 
         for servicio in SERVICIOS:
             value = './Consumo/EnergiaPrimariaNoRenovable/%s' % servicio
-            setattr(energia_primaria_no_renovable, servicio, asfloat(self.xmltree, value))
+            setattr(energia_primaria_no_renovable, servicio,
+                    self.asfloat(self.xmltree, value, prec=2))
 
         return energia_primaria_no_renovable
 
@@ -938,7 +978,8 @@ class XMLReport(object):
         emisiones_co2 = Bunch()
 
         for servicio in SERVICIOS + 'ConsumoElectrico ConsumoOtros TotalConsumoElectrico TotalConsumoOtros'.split():
-            setattr(emisiones_co2, servicio, asfloat(self.xmltree, './EmisionesCO2/%s' % servicio))
+            setattr(emisiones_co2, servicio,
+                    self.asfloat(self.xmltree, './EmisionesCO2/%s' % servicio, prec=2))
 
         return emisiones_co2
 
@@ -958,14 +999,14 @@ class XMLReport(object):
         if escala is not None:
             dd = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(dd, nivel, asfloat(escala, './%s' % nivel))
+                setattr(dd, nivel, self.asfloat(escala, './%s' % nivel, prec=2))
             calificacion_demanda.EscalaCalefaccion = dd
 
         escala = self.xmltree.find('./Calificacion/Demanda/EscalaRefrigeracion')
         if escala is not None:
             dd = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(dd, nivel, asfloat(escala, './%s' % nivel))
+                setattr(dd, nivel, self.asfloat(escala, './%s' % nivel, prec=2))
             calificacion_demanda.EscalaRefrigeracion = dd
 
         calificacion_demanda.Calefaccion = astext(self.xmltree, './Calificacion/Demanda/Calefaccion')
@@ -980,7 +1021,7 @@ class XMLReport(object):
         if escala is not None:
             escala_global = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(escala_global, nivel, asfloat(escala, './%s' % nivel))
+                setattr(escala_global, nivel, self.asfloat(escala, './%s' % nivel, prec=2))
             calificacion_energia_primaria_no_renovable.EscalaGlobal = escala_global
 
         calificacion_energia_primaria_no_renovable.Global = astext(self.xmltree,
@@ -1003,7 +1044,7 @@ class XMLReport(object):
         if escala is not None:
             escala_global = Bunch()
             for nivel in NIVELESESCALA:
-                setattr(escala_global, nivel, asfloat(escala, './%s' % nivel))
+                setattr(escala_global, nivel, self.asfloat(escala, './%s' % nivel, prec=2))
             calificacion_emisiones_co2.EscalaGlobal = escala_global
 
         calificacion_emisiones_co2.Global = astext(self.xmltree, './Calificacion/EmisionesCO2/Global')
@@ -1031,7 +1072,7 @@ class XMLReport(object):
 
             medida_de_mejora.Demanda = Bunch()
             for attr in 'Global GlobalDiferenciaSituacionInicial Calefaccion Refrigeracion'.split():
-                setattr(medida_de_mejora.Demanda, attr, asfloat(medida, './Demanda/%s' % attr))
+                setattr(medida_de_mejora.Demanda, attr, self.asfloat(medida, './Demanda/%s' % attr, prec=2))
 
             medida_de_mejora.CalificacionDemanda = Bunch()
             for attr in 'Calefaccion Refrigeracion'.split():
@@ -1039,22 +1080,28 @@ class XMLReport(object):
 
             medida_de_mejora.EnergiaFinal = Bunch()
             for attr in SERVICIOS:
-                setattr(medida_de_mejora.EnergiaFinal, attr, asfloat(medida, './EnergiaFinal/%s' % attr))
+                setattr(medida_de_mejora.EnergiaFinal, attr, self.asfloat(medida, './EnergiaFinal/%s' % attr, prec=2))
 
             medida_de_mejora.EnergiaPrimariaNoRenovable = Bunch()
             for attr in SERVICIOS:
-                setattr(medida_de_mejora.EnergiaPrimariaNoRenovable, attr, asfloat(medida, './EnergiaPrimariaNoRenovable/%s' % attr))
-            medida_de_mejora.EnergiaPrimariaNoRenovable.GlobalDiferenciaSituacionInicial = asfloat(medida,
-                                                          './EnergiaPrimariaNoRenovable/GlobalDiferenciaSituacionInicial')
+                setattr(medida_de_mejora.EnergiaPrimariaNoRenovable, attr,
+                        self.asfloat(medida, './EnergiaPrimariaNoRenovable/%s' % attr, prec=2))
+            medida_de_mejora.EnergiaPrimariaNoRenovable.GlobalDiferenciaSituacionInicial = self.asfloat(medida,
+                                                    './EnergiaPrimariaNoRenovable/GlobalDiferenciaSituacionInicial',
+                                                    prec=2)
 
             medida_de_mejora.CalificacionEnergiaPrimariaNoRenovable = Bunch()
             for attr in SERVICIOS:
-                setattr(medida_de_mejora.CalificacionEnergiaPrimariaNoRenovable, attr, astext(medida, './CalificacionEnergiaPrimariaNoRenovable/%s' % attr))
+                setattr(medida_de_mejora.CalificacionEnergiaPrimariaNoRenovable, attr,
+                        astext(medida, './CalificacionEnergiaPrimariaNoRenovable/%s' % attr))
 
             medida_de_mejora.EmisionesCO2 = Bunch()
             for attr in SERVICIOS:
-                setattr(medida_de_mejora.EmisionesCO2, attr, asfloat(medida, './EmisionesCO2/%s' % attr))
-            medida_de_mejora.EmisionesCO2.GlobalDiferenciaSituacionInicial = asfloat(medida, './EmisionesCO2/GlobalDiferenciaSituacionInicial')
+                setattr(medida_de_mejora.EmisionesCO2, attr, self.asfloat(medida,
+                                                                          './EmisionesCO2/%s' % attr, prec=2))
+            medida_de_mejora.EmisionesCO2.GlobalDiferenciaSituacionInicial = self.asfloat(medida,
+                                                                                          './EmisionesCO2/GlobalDiferenciaSituacionInicial',
+                                                                                          prec=2)
 
             medida_de_mejora.CalificacionEmisionesCO2 = Bunch()
             for attr in SERVICIOS:
