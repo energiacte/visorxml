@@ -73,27 +73,6 @@ def astext(tree, path):
     return txt
 
 
-def asint(tree, path, infolist=None):
-    element = tree.find(path)
-    if element is None or not element.text:
-        return None
-    etext = element.text
-    # Corrección de separadores decimales / valores decimales
-    for sepchar in ['.', ',']:
-        if sepchar in etext:
-            if infolist is not None:
-                infolist.append(('AVISO', 'Corregido %s a entero en %s' % (etext, path), ''))
-            etext = etext.split(sepchar)[0]
-            element.text = etext
-    try:
-        val = int(etext)
-    except ValueError:
-        val = etext
-        if infolist is not None:
-            infolist.append(('ERROR', 'Valor entero %s incorrecto en %s' % (etext, path), ''))
-    return val
-
-
 def asfloat(tree, path, prec=None, infolist=None):
     element = tree.find(path)
     if element is None or not element.text:
@@ -224,7 +203,23 @@ class XMLReport(object):
 
     def asint(self, tree, path):
         """Value conversion with decimal separator repair"""
-        return asint(tree, path, infolist=self.errors['info'])
+        infolist = self.errors['info']
+        element = tree.find(path)
+        if element is None or not element.text:
+            return None
+        etext = element.text
+        # Corrección de separadores decimales / valores decimales
+        for sepchar in ['.', ',']:
+            if sepchar in etext:
+                infolist.append(('AVISO', 'Corregido %s a entero en %s' % (etext, path), ''))
+                etext = etext.split(sepchar)[0]
+                element.text = etext
+        try:
+            val = int(etext)
+        except ValueError:
+            val = etext
+            infolist.append(('ERROR', 'Valor entero %s incorrecto en %s' % (etext, path), ''))
+        return val
 
     def asfloat(self, tree, path, prec=None):
         """Value conversion with decimal separator repair and precision control"""
