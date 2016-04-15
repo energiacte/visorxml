@@ -1098,7 +1098,7 @@ class XMLReport(object):
     def validate(self):
         """Valida el informe XML según el esquema XSD"""
         # http://lxml.de/validation.html
-        if self.version == '1':
+        if self.version.startswith('1'):
             self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH1, encoding='UTF-8')))
         else:
             self.xmlschema = lxml.etree.XMLSchema(lxml.etree.parse(open(XSDPATH2, encoding='UTF-8')))
