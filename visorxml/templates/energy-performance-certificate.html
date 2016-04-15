@@ -1452,11 +1452,10 @@
     });
 
     $(".editor-html5 > a").on("click", function(e){
-      debugger;
       setTimeout(function(){
         $(".wysihtml5-toolbar li:nth-child(5) a.btn").on("click", function(event){
           event.preventDefault();
-          debugger;
+
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
 
           var fileSelector = $('<input type="file" />')
@@ -1465,8 +1464,8 @@
               name = file.name,
               date = file.lastModifiedDate;
               ImageTools.resize(file, {
-                width: 450,
-                height: 400,
+                width: 560,
+                height: 560,
               },function(blob, didItResize){
                 console.log(name);
                 console.log(date);

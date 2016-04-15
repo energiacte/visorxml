@@ -229,6 +229,15 @@
   table.fotos {
     table-layout: fixed;
   }
+
+  .editor-html5{
+    zoom:2;
+  }
+
+  .editor-html5 iframe{
+    height: 380px!important;
+  }
+  
 }
 
 @media print {
