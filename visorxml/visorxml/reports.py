@@ -1032,9 +1032,6 @@ class XMLReport(object):
 
             for attr in 'Nombre Descripcion CosteEstimado OtrosDatos'.split():
                 txt = self.astext(medida, './%s' % attr)
-                if txt and txt.startswith('data:/text/html,'):
-                    txt = txt.lstrip('data:/text/html,')
-                    txt = clean_html(txt)
                 setattr(medida_de_mejora, attr, txt)
 
             medida_de_mejora.Demanda = Bunch()
@@ -1089,9 +1086,6 @@ class XMLReport(object):
             bb = Bunch()
             bb.FechaVisita = self.astext(prueba, './FechaVisita')
             txt = self.astext(prueba, './Datos')
-            if txt and txt.startswith('data:/text/html,'):
-                txt = txt.lstrip('data:/text/html,')
-                txt = clean_html(txt)
             bb.Datos = txt
             pruebas_comprobaciones_inspecciones.append(bb)
 
@@ -1099,9 +1093,6 @@ class XMLReport(object):
 
     def get_datos_personalizados(self):
         txt = self.astext(self.xmltree, './DatosPersonalizados')
-        if txt and txt.startswith('data:/text/html,'):
-            txt = txt.lstrip('data:/text/html,')
-            txt = clean_html(txt)
         return txt
 
     def validate(self):
