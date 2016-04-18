@@ -443,3 +443,21 @@ td.report-warning{
 a.add-singular-solutions{
   margin-right: 10px;
 }
+
+.delete-element{
+      text-decoration: none;
+    color: white;
+    display: inline-block;
+    background: #f99;
+    padding: 3px 6px;
+    border-radius: 4px;
+    float: right;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+.delete-element:hover{
+  color: white;
+  background: #faa;
+  text-decoration: none;
+}

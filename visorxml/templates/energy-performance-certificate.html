@@ -1087,7 +1087,11 @@
     </table>
     {% else %}
     {% for medida in report.data.MedidasDeMejora %}
-    <h4>{% trans "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA" %} <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">{% trans "(Eliminar medida de mejora)" %}</a></h4>
+    <h4>{% trans "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA" %}
+      <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">
+        <img src="{% static "img/remove-button.png"%}" /> {% trans "(Eliminar medida de mejora)" %}
+      </a>
+  </h4>
     <table>
       <tr>
         <td width="20%" class="title">{% trans "Denominación:" %}</td>
@@ -1273,7 +1277,10 @@
           </a>
 
 
-          <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">{% trans "Eliminar" %}</a>
+          <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">
+            <img src="{% static "img/remove-button.png"%}" />
+            {% trans "Eliminar" %}
+          </a>
         </td>
       </tr>
       <tr>
@@ -1294,7 +1301,10 @@
       <tr>
         <td class="title">
           {% trans "Descripción" %}
-          <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">{% trans "Eliminar" %}</a>
+          <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">
+            <img src="{% static "img/remove-button.png"%}" />
+            {% trans "Eliminar" %}
+          </a>
         </td>
       </tr>
       <tr>
@@ -1443,6 +1453,7 @@
               window.location.reload();
             else
               window.location.href = "{% url 'certificate'%}#anexo-I";
+            
           }).fail(function(){
             console.log("An error occurred, the files couldn't be sent!");
           });
