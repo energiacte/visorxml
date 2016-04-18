@@ -14,9 +14,10 @@ Funcionalidad
 - Avisos sobre potenciales problemas en el XML suministrado (inconsistencias, valores atípicos, etc)
 - Generación y visualización del certificado de eficiencia energética
 - Generación y visualización de un informe adicional de eficiencia energética
-- Descarga de informes en formato PDF
+- Descarga de informes en formato PDF (con XML incrustado) y XML
 - Incorporación de medidas de mejora a partir de un archivo XML base y archivos XML con medidas de mejora aplicadas
 - Edición de campos del XML que no son generados mediante simulación energética
+- Corrección de errores de formato en archivos XML
 
 Instalación
 -----------
@@ -38,7 +39,7 @@ Requisitos de instalación (paquetes de sistema suponiendo Debian/jessie(stable)
 Pasos de instalación:
 
 * Instalar las dependencias de PIP en un entorno virtual (llamado `venvvisorxml`):
-    * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlib1g-dev`)
+    * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlib1g-dev libjpeg-dev libopenjp-2-7-dev`)
     * `$ pyvenv venvvisorxml` # suponemos usuario `usuariovisorxml`
     * `$ pip install -r requirements.txt`
 * Instalar las dependencias de bower:
