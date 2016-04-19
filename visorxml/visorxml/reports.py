@@ -103,9 +103,10 @@ class XMLReport(object):
         return filename
 
     def update_procedimiento(self):
+        """Update field procedimiento"""
         procedimiento = self.xmltree.find('./IdentificacionEdificio/Procedimiento')
-        if procedimiento is not None and 'visorxml' not in procedimiento.text:
-            procedimiento.text += ' + [visorxml %s]' % settings.VERSION
+        if procedimiento is not None and 'VisorXML' not in procedimiento.text:
+            procedimiento.text += ' + [VisorXML%s]' % settings.VERSION
 
     def update_element(self, element, value):
         path = './%s' % '/'.join(element.split('.'))
@@ -120,9 +121,7 @@ class XMLReport(object):
 
             else:
                 self.xmltree.find(path).text = value
-
             self.update_procedimiento()
-
             base_xml_filename, base_xml_string = self._xml_strings[0]
             self.save_to_file(base_xml_filename)
         except AttributeError:
@@ -130,7 +129,7 @@ class XMLReport(object):
 
     def update_image(self, section, value):
         path = './DatosGeneralesyGeometria/%s' % section
- 
+
         element = self.xmltree.find(path)
         if element is None:
             parent = self.xmltree.find('./DatosGeneralesyGeometria')
@@ -142,8 +141,6 @@ class XMLReport(object):
 
         base_xml_filename, base_xml_string = self._xml_strings[0]
         self.save_to_file(base_xml_filename)
-        
-            
 
     def get_XML_value(self, xml_tree, path, default_value=0):
         try:
