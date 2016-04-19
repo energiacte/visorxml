@@ -55,8 +55,10 @@ module.exports = function(grunt) {
           */
           'x-editable-wysihtml5.js': '../assets/js/wysihtml5-base64.js',
 
-
-          'x-editable-bootstrap-wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.js'
+          /* 'x-editable-bootstrap-wysihtml5.js': 'x-editable/dist/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.js' 
+            This script has been replaces by other with "scroll bug" fixed.
+          */
+          'x-editable-bootstrap-wysihtml5.js': '../assets/js/bootstrap-wysihtml5-base64.js'
         }
       },
       css: {

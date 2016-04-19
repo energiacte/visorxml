@@ -1067,15 +1067,6 @@
     <div class="page-break"></div>
     <!-- ANEXO III - Medidas de mejora -->
     <h3 class="text-center">{% trans "ANEXO III" %}<br />{% trans "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA" %}</h3>
-    <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
-      {% csrf_token %}
-      <a href="#" class="hidden-print measures-xml-link">
-        <span>
-          {% trans "Subir XML con medidas de mejora" %}
-        </span>
-        <input type="file" class="measures-xml hidden" name="measures-xml"/>
-      </a>
-    </form>
 
     {% if not report.data.MedidasDeMejora %}
     <table>
@@ -1087,7 +1078,11 @@
     </table>
     {% else %}
     {% for medida in report.data.MedidasDeMejora %}
-    <h4>{% trans "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA" %} <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">{% trans "(Eliminar medida de mejora)" %}</a></h4>
+    <h4>{% trans "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA" %}
+      <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">
+        <img src="{% static "img/remove-button.png"%}" /> {% trans "(Eliminar medida de mejora)" %}
+      </a>
+  </h4>
     <table>
       <tr>
         <td width="20%" class="title">{% trans "Denominación:" %}</td>
@@ -1250,6 +1245,17 @@
     </table>
     {% endfor %}
     {% endif %}
+    <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
+      {% csrf_token %}
+      <a href="#" class="hidden-print measures-xml-link">
+        <img src="{% static "img/add-button.png"%}" />
+        <span>
+          {% trans "Subir XML con medidas de mejora" %}
+        </span>
+        <input type="file" class="measures-xml hidden" name="measures-xml"/>
+      </a>
+    </form>
+    <br><br>
 
     <div class="page-break" ></div>
     <!-- ANEXO IV -->
@@ -1273,7 +1279,10 @@
           </a>
 
 
-          <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">{% trans "Eliminar" %}</a>
+          <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">
+            <img src="{% static "img/remove-button.png"%}" />
+            {% trans "Eliminar" %}
+          </a>
         </td>
       </tr>
       <tr>
@@ -1294,7 +1303,10 @@
       <tr>
         <td class="title">
           {% trans "Descripción" %}
-          <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">{% trans "Eliminar" %}</a>
+          <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">
+            <img src="{% static "img/remove-button.png"%}" />
+            {% trans "Eliminar" %}
+          </a>
         </td>
       </tr>
       <tr>
@@ -1443,6 +1455,7 @@
               window.location.reload();
             else
               window.location.href = "{% url 'certificate'%}#anexo-I";
+            
           }).fail(function(){
             console.log("An error occurred, the files couldn't be sent!");
           });
@@ -1457,7 +1470,6 @@
           event.preventDefault();
 
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
-
           var fileSelector = $('<input type="file" />')
             .change(function() {
               var file = this.files[0],
