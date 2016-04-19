@@ -1067,15 +1067,6 @@
     <div class="page-break"></div>
     <!-- ANEXO III - Medidas de mejora -->
     <h3 class="text-center">{% trans "ANEXO III" %}<br />{% trans "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA" %}</h3>
-    <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
-      {% csrf_token %}
-      <a href="#" class="hidden-print measures-xml-link">
-        <span>
-          {% trans "Subir XML con medidas de mejora" %}
-        </span>
-        <input type="file" class="measures-xml hidden" name="measures-xml"/>
-      </a>
-    </form>
 
     {% if not report.data.MedidasDeMejora %}
     <table>
@@ -1254,6 +1245,17 @@
     </table>
     {% endfor %}
     {% endif %}
+    <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
+      {% csrf_token %}
+      <a href="#" class="hidden-print measures-xml-link">
+        <img src="{% static "img/add-button.png"%}" />
+        <span>
+          {% trans "Subir XML con medidas de mejora" %}
+        </span>
+        <input type="file" class="measures-xml hidden" name="measures-xml"/>
+      </a>
+    </form>
+    <br><br>
 
     <div class="page-break" ></div>
     <!-- ANEXO IV -->
@@ -1468,7 +1470,6 @@
           event.preventDefault();
 
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
-
           var fileSelector = $('<input type="file" />')
             .change(function() {
               var file = this.files[0],

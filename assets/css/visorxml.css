@@ -370,14 +370,15 @@
 
 
 .get-file-header{
-  max-height: 60px;
-  position: relative;
-  top: -10px;
+  max-height: 40px;
 }
 
-
 .get-file-li{
-  height: 72px;
+  height: 40px;
+}
+
+.navbar-right > li.get-file-li > a {
+    padding: 5px 15px;
 }
 
 .upload-image{
@@ -461,3 +462,4 @@ a.add-singular-solutions{
   background: #faa;
   text-decoration: none;
 }
+
