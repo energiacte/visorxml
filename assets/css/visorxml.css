@@ -409,6 +409,28 @@
 .measures-xml-link{
   font-size: 16px;
   font-weight: 600;
+      display: inline-block;
+    background: #8d9;
+    color: white;
+    padding: 5px 7px;
+    border-radius: 4px;
+    margin: 5px 0px;
+    float: right;
+}
+
+.measures-xml-link:hover{
+  text-decoration: none;
+  color: white;
+  background: #9ea;
+}
+.measures-xml-link:active{
+  text-decoration: none;
+  color: white;
+}
+
+.measures-xml-link span{
+  position: relative;
+  top: 2px;
 }
 
 .upload-image {
