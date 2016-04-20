@@ -202,6 +202,7 @@
 @media screen {
   body {
     padding-top: 50px;
+    padding-bottom: 60px;
   }
 
   img.escala {
@@ -406,7 +407,7 @@
   display: inline;
 }
 
-.measures-xml-link{
+.green-button{
   font-size: 16px;
   font-weight: 600;
       display: inline-block;
@@ -418,25 +419,25 @@
     float: right;
 }
 
-.measures-xml-link:hover{
+.green-button:hover{
   text-decoration: none;
   color: white;
   background: #9ea;
 }
-.measures-xml-link:active{
+.green-button:active, .green-button:focus{
   text-decoration: none;
   color: white;
 }
 
-.measures-xml-link span{
+.green-button span{
   position: relative;
   top: 2px;
 }
 
 .upload-image {
   background-size: contain;
-               background-position: center;
-               background-repeat: no-repeat;"
+  background-position: center;
+  background-repeat: no-repeat;"
 }
 
 .wysihtml5-toolbar li:nth-child(4){

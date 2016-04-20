@@ -1247,7 +1247,7 @@
     {% endif %}
     <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
       {% csrf_token %}
-      <a href="#" class="hidden-print measures-xml-link">
+      <a href="#" class="hidden-print green-button add-measures">
         <img src="{% static "img/add-button.png"%}" />
         <span>
           {% trans "Subir XML con medidas de mejora" %}
@@ -1274,7 +1274,7 @@
       <tr>
         <td width="80%" class="title">{% trans "Fecha de realización de la visita del técnico certificador" %}</td>
         <td>
-          <a href="#" class="editable" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
+          <a href="#" class="editable" data-type="date" data-format="dd/mm/yy" data-mode="popup" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
             {{ visita.FechaVisita }}
           </a>
 
@@ -1324,10 +1324,18 @@
   </form>
 
   <br>
-  <a class="hidden-print pull-right btn btn-primary" href="{% url 'new_visit' %}">{% trans "Nueva Visita" %}</a>
+  <a class="hidden-print green-button" href="{% url 'new_visit' %}">
+    <img src="{% static "img/add-button.png"%}" />
+    {% trans "Nueva Visita" %}
+  </a>
+  <br><br>
+  <br><br>
 
   {% if not report.has_annex_v %}
-    <a class="hidden-print pull-right btn btn-primary add-singular-solutions" href="{% url 'add_singular_solutions' %}">{% trans "Añadir Anexo de Justificación de Soluciones Singulares" %}</a>
+    <a class="hidden-print green-button" href="{% url 'add_singular_solutions' %}">
+      <img src="{% static "img/add-button.png"%}" />
+      {% trans "Añadir Anexo de Justificación de Soluciones Singulares" %}
+    </a>
   {% endif %}
 
   <br><br>
@@ -1395,7 +1403,7 @@
       return false;
     });
 
-    $(".measures-xml-link").on("click", function(e){
+    $(".add-measures").on("click", function(e){
       event.preventDefault();
       var fileSelector = $('<input type="file" name="measures-xml" />')
         .change(function() {
