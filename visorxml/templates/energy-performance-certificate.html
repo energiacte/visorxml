@@ -1403,12 +1403,13 @@
       return false;
     });
 
-    $(".add-measures").on("click", function(e){
-      event.preventDefault();
+
+    $(".measures-xml-link").on("click", function(e){
+      e.preventDefault();
       var fileSelector = $('<input type="file" name="measures-xml" />')
         .change(function() {
           $("#secret-form").submit()
-        })
+        });
       $("#secret-form").append(fileSelector);
       fileSelector.click();
     });
