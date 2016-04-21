@@ -1374,6 +1374,15 @@
 
   $(function() {
 
+    $("span.alert").each(function(){
+      //          Before                                      After
+      // <td><span class="alert">-</span></td>   ==>  <td class="report-alert">-</td>
+      var parent = $(this).parent(),
+      content = $(this).html();
+      parent.html(content);
+      parent.addClass("report-alert");
+    });
+
     $("body").on("click", ".editable-submit", function(){
       $(this).closest("td").removeClass("report-warning");
       $(this).closest("td").addClass("edited")

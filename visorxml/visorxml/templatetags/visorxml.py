@@ -28,6 +28,7 @@ import base64
 from django import template
 
 from visorxml.reports import ALERT
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -131,41 +132,43 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
     encoded_string = base64.b64encode(svgdata.encode('utf-8'))
     return "data:image/svg+xml;charset=utf-8;base64,{}".format(encoded_string.decode())
 
-@register.filter
+ALERT_SPAN = mark_safe("<span class='alert'>-</span>")
+
+@register.filter(is_safe=True)
 def asnum(value):
     "Devuelve un valor numérico con dos decimales"
     try:
         val = float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else '-'
+        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
     except:
-        res = '-'
+        res = ALERT_SPAN
     return res
 
-@register.filter
+@register.filter(is_safe=True)
 def asint(value):
     "Devuelve un valor entero"
     try:
         val = int(value)
-        res = '{0:d}'.format(int(val)) if val <= ALERT else '-'
+        res = '{0:d}'.format(int(val)) if val <= ALERT else ALERT_SPAN
     except:
-        res = '-'
+        res = ALERT_SPAN
     return res
 
-@register.filter
+@register.filter(is_safe=True)
 def aspct(value):
     "Devuelve un porcentaje a partir del tanto por uno"
     try:
         val = 100.0 * float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else '-'
+        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
     except:
-        res = '-'
+        res = ALERT_SPAN
     return res
 
-@register.filter
+@register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
     try:
         res1 = float(valueorig) - float(valuedest)
         res2 = 100.0 * res1 / float(valueorig)
         return '{:0.2f}<br />({:0.2f}%)'.format(res1, res2).replace('.', ',')
     except:
-        return '-'
+        return ALERT_SPAN
