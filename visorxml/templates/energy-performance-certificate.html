@@ -1445,7 +1445,8 @@
     $.fn.editable.defaults.mode = 'inline';
     $('.editable').editable({
       url: '{% url "update-xml" %}',
-      pk: 1
+      pk: 1,
+      emptytext: 'Pulse para editar...',
     });
 
 
