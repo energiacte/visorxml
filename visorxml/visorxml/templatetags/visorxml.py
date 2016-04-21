@@ -178,9 +178,7 @@ def difwith(valuedest, valueorig):
 TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
 @register.simple_tag(takes_context=True)
 def get_uso(context):
-    print(TIPOS_RESIDENCIALES)
     report = context['report']
-    print(report.data.IdentificacionEdificio.TipoDeEdificio)
     if report.data.IdentificacionEdificio.TipoDeEdificio in TIPOS_RESIDENCIALES:
         context["uso"] = "residencial"
     else:
