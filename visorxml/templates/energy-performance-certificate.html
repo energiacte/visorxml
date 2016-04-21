@@ -410,7 +410,7 @@
         </tr>
         <tr>
           <td class="title" colspan="2">{% trans "Procedimiento reconocido de calificación energética utilizado y versión:" %}</td>
-          <td colspan="2">
+          <td colspan="2" class="procedimiento">
             <a href="#" class="editable" id="DatosDelCertificador.Procedimiento">
               {{ report.data.IdentificacionEdificio.Procedimiento }}
             </a>
@@ -1387,6 +1387,7 @@
     $("body").on("click", ".editable-submit", function(){
       $(this).closest("td").removeClass("report-warning");
       $(this).closest("td").addClass("edited")
+      $(".procedimiento").addClass("edited")
     })
 
     $(".delete-element").on("click", function(e){
