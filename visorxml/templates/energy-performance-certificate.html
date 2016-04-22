@@ -1386,8 +1386,12 @@
 
     $("body").on("click", ".editable-submit", function(){
       $(this).closest("td").removeClass("report-warning");
-      $(this).closest("td").addClass("edited")
-      $(".procedimiento").addClass("edited")
+      $(this).closest("td").addClass("edited");
+      $(".procedimiento").addClass("edited");
+      if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
+        $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+      }
+
     })
 
     $(".delete-element").on("click", function(e){
