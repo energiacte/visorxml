@@ -7,14 +7,14 @@
 {% block title %}{% trans "Visor de informes" %}{% endblock %}
 
 {% block content %}
-{% get_uso %} {#  uso <= ["terciario" o "residencial"] #}
+{% get_uso %} {#  es_vivienda <= [True o False] #}
 
 
 <div class="page hidden-print">
   <hr>
   <p class="lead">
     {% blocktrans %}
-    Seleccione un archivo de informe de eficiencia energética en XML
+    Seleccione un archivo de informe de eficiencia energética en XML 
     {% endblocktrans %}
   </p>
   <p>
@@ -680,7 +680,7 @@
 
     <div class="section">
       <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
-      {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion  and uso == "terciario" %}
+      {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion  and not es_vivienda %}
         <table>
           <tr>
             <td class="report-warning">
@@ -763,7 +763,7 @@
     <div class="section">
       <h5>{% trans "Ventilación y bombeo (sólo edificios terciarios)" %}</h5>
 
-      {% if not report.data.InstalacionesTermicas.VentilacionyBombeo and uso == "terciario" %}
+      {% if not report.data.InstalacionesTermicas.VentilacionyBombeo and not es_vivienda %}
 
       <table>
         <tr>
