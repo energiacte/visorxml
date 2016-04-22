@@ -60,11 +60,11 @@
         </tr>
         <tr>
           <td>{% trans "Volumen habitable [m<sup>3</sup>]" %}</td>
-          <td>{{ dg.VolumenEspacioHabitable }}</td>
+          <td>{{ dg.VolumenEspacioHabitable|asnum }}</td>
         </tr>
         <tr>
           <td>{% trans "Compacidad [m<sup>3</sup>/m<sup>2</sup>]" %}</td>
-          <td>{{ dg.Compacidad }}</td>
+          <td>{{ dg.Compacidad|asnum }}</td>
         </tr>
       </table>
 
@@ -88,11 +88,11 @@
         </tr>
         <tr>
           <td>{% trans "Ventilación + infiltraciones [ren/h]" %}</td>
-          <td>{{ dg.VentilacionTotal }}</td>
+          <td>{{ dg.VentilacionTotal|asnum }}</td>
         </tr>
         <tr>
           <td>{% trans "Densidad de fuentes internas [W/m<sup>2</sup>h]" %}</td>
-          <td>{{ dg.DensidadFuentesInternas }}</td>
+          <td>{{ dg.DensidadFuentesInternas|asnum }}</td>
         </tr>
       </table>
     </div>
@@ -116,71 +116,73 @@
         </tr>
         <tr>
           <td>{% trans "Consumo Energía final [kWh/m<sup>2</sup>·año]" %}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Calefaccion }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Refrigeracion }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Calefaccion|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Refrigeracion|asnum }}</td>
           <td></td>
-          <td>{{ report.data.Demanda.EdificioObjeto.ACS }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Iluminacion }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Global }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.ACS|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Iluminacion|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Global|asnum }}</td>
         </tr>
         <tr>
           <td>{% trans "Consumo Energía primaria no renovable [kWh/m<sup>2</sup>·año]" %}</td>
           <td class="scale_color_{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion }}">
-            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion }}
-            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion }}
+            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|asnum }}
+            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion }}">
-            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion }}
-            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion }}
+            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}
+            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}
           </td>
           <td></td>
           <td class="scale_color_{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS }}">
-            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS }}
-            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS }}
+            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|asnum }}
+            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion }}">
-            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default:'' }}
-            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion }}
+            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}
+            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Global }}">
-            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global }}
-            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Global }}
-            [{{ report.data.Consumo.Exigencias.LimiteViviendaGlobalEPNR|default:'B' }}]
+            {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|asnum }}
+            {{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Global|asnum }}
+            [{{ report.data.Consumo.Exigencias.LimiteViviendaGlobalEPNR|asnum }}]
           </td>
         </tr>
         <tr>
           <td>{% trans "Emisiones de CO<sub>2</sub> [kgCO<sub>2</sub>/m<sup>2</sup>·año]" %}</td>
           <td class="scale_color_{{ report.data.Calificacion.EmisionesCO2.Calefaccion }}">
-            {{ report.data.EmisionesCO2.Calefaccion|default:'' }}
-            {{ report.data.Calificacion.EmisionesCO2.Calefaccion }}
+            {{ report.data.EmisionesCO2.Calefaccion|asnum }}
+            {{ report.data.Calificacion.EmisionesCO2.Calefaccion|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EmisionesCO2.Refrigeracion }}">
-            {{ report.data.EmisionesCO2.Refrigeracion|default:'' }}
-            {{ report.data.Calificacion.EmisionesCO2.Refrigeracion }}
+            {{ report.data.EmisionesCO2.Refrigeracion|asnum }}
+            {{ report.data.Calificacion.EmisionesCO2.Refrigeracion|asnum }}
           </td>
           <td></td>
           <td class="scale_color_{{ report.data.Calificacion.EmisionesCO2.ACS }}">
-            {{ report.data.EmisionesCO2.ACS|default:'' }}
-            {{ report.data.Calificacion.EmisionesCO2.ACS }}
+            {{ report.data.EmisionesCO2.ACS|asnum }}
+            {{ report.data.Calificacion.EmisionesCO2.ACS|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EmisionesCO2.Iluminacion }}">
-            {{ report.data.EmisionesCO2.Iluminacion|default:'' }}
-            {{ report.data.Calificacion.EmisionesCO2.Iluminacion }}
+            {{ report.data.EmisionesCO2.Iluminacion|asnum }}
+            {{ report.data.Calificacion.EmisionesCO2.Iluminacion|asnum }}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.EmisionesCO2.Global }}">
-            {{ report.data.EmisionesCO2.Global|default:'' }}
-            {{ report.data.Calificacion.EmisionesCO2.Global }}
+            {{ report.data.EmisionesCO2.Global|asnum }}
+            {{ report.data.Calificacion.EmisionesCO2.Global|asnum }}
           </td>
         </tr>
         {% if 'Terciario' in id.TipoDeEdificio %}
         <tr>
           <td>{% trans "Demanda (0,8 ren/h) [kWh/m<sup>2</sup>·año]" %}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Calefaccion08 }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Refrigeracion08 }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Calefaccion08|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Refrigeracion08|asnum }}</td>
           <td>
-            {{ report.data.Demanda.EdificioObjeto.Conjunta08 }},
-            {{ report.data.Demanda.EdificioObjeto.Ahorro08 }}
-            [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos }}%]**
+            {{ report.data.Demanda.EdificioObjeto.Conjunta08|asnum }},
+            {{ report.data.Demanda.EdificioObjeto.Ahorro08|asnum }}
+            {% if report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos %}
+            [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos|asnum }}%]**
+            {% endif %}
           </td>
           <td></td>
           <td></td>
@@ -190,23 +192,23 @@
         <tr>
           <td>{% trans "Demanda [kWh/m<sup>2</sup>·año]" %}</td>
           <td class="scale_color_{{ report.data.Calificacion.Demanda.Calefaccion }}">
-            {{ report.data.Demanda.EdificioObjeto.Calefaccion }}
-            {{ report.data.Calificacion.Demanda.Calefaccion }}
+            {{ report.data.Demanda.EdificioObjeto.Calefaccion|asnum }}
+            {{ report.data.Calificacion.Demanda.Calefaccion|asnum }}
             {% if 'Terciario' not in id.TipoDeEdificio %}
-            [{{ report.data.Demanda.Exigencias.LimiteCalefaccionVivienda }}]*
+            [{{ report.data.Demanda.Exigencias.LimiteCalefaccionVivienda|asnum }}]*
             {% endif %}
           </td>
           <td class="scale_color_{{ report.data.Calificacion.Demanda.Refrigeracion }}">
-            {{ report.data.Demanda.EdificioObjeto.Refrigeracion }}
-            {{ report.data.Calificacion.Demanda.Refrigeracion }}
+            {{ report.data.Demanda.EdificioObjeto.Refrigeracion|asnum }}
+            {{ report.data.Calificacion.Demanda.Refrigeracion|asnum }}
             {% if 'Terciario' not in id.TipoDeEdificio %}
-            [{{ report.data.Demanda.Exigencias.LimiteRefrigeracionVivienda }}]*
+            [{{ report.data.Demanda.Exigencias.LimiteRefrigeracionVivienda|asnum }}]*
             {% endif %}
           </td>
           <td>
             {{ report.data.Demanda.EdificioObjeto.Conjunta|asnum }}
             {% if report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos %}
-              [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos }}%]**
+              [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos|asnum }}%]**
             {% endif %}
           </td>
           <td></td>
@@ -406,7 +408,7 @@
         <tr>
           <td>{{ e.Nombre }}</td>
           <td>{{ e.Tipo }}</td>
-          <td>{{ e.Longitud }}</td>
+          <td>{{ e.Longitud|asnum }}</td>
           <td class="num">{{ e.Transmitancia|asnum }}</td>
         </tr>
         {% endfor %}
@@ -431,15 +433,15 @@
         </tr>
         <tr>
           <td>{% trans "Generadores de ACS, potencia nominal total [kW]" %}</td>
-          <td></td>
+          <td>-</td>
         </tr>
         <tr>
           <td>{% trans "Sistemas secundarios, potencia nominal total calor [kW]" %}</td>
-          <td></td>
+          <td>-</td>
         </tr>
         <tr>
           <td>{% trans "Sistemas secundarios, potencia nominal total frío [kW]" %}</td>
-          <td></td>
+          <td>-</td>
         </tr>
         <tr>
           <td>{% trans "Torres de refrigeración, consumo total de energía [kWh/año]" %}</td>

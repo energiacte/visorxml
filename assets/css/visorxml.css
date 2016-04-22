@@ -112,16 +112,16 @@
   }
 
   .informe .total {
-    background-color: #fbd4b4 !important;
+    background-color: #fbd4b4 ;
     font-weight: bold
   }
 
   .informe .dif {
-    background-color: #fbd4b4 !important;
+    background-color: #fbd4b4 ;
   }
 
   .informe .shade {
-    background-color: #ebdfd5 !important;
+    background-color: #ebdfd5 ;
   }
 
   .informe .calc {
@@ -486,3 +486,6 @@ a.add-singular-solutions{
   text-decoration: none;
 }
 
+.report-alert{
+  background-color: #F77B32!important;
+}
