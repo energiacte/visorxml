@@ -678,7 +678,7 @@
       </table>
     </div>
 
-    <div class="section">
+    <div class="section solo-terciario">
       <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
       {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion  and not es_vivienda %}
         <table>
@@ -733,7 +733,7 @@
       {% endfor %}
     </div>
 
-    <div class="section">
+    <div class="section solo-terciario">
       <h5>{% trans "Torres de refrigeración (sólo edificios terciarios)" %}</h5>
 
       <table>
@@ -760,7 +760,7 @@
       </table>
     </div>
 
-    <div class="section">
+    <div class="section solo-terciario">
       <h5>{% trans "Ventilación y bombeo (sólo edificios terciarios)" %}</h5>
 
       {% if not report.data.InstalacionesTermicas.VentilacionyBombeo and not es_vivienda %}
@@ -798,7 +798,7 @@
       {% endif %}
     </div>
 
-    <div class="section">
+    <div class="section solo-terciario">
       <h4>{% trans "4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)" %}</h4>
 
       <table>
@@ -828,7 +828,7 @@
       </table>
     </div>
 
-    <div class="section">
+    <div class="section solo-terciario">
       <h4>{% trans "5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)" %}</h4>
 
       <table>
@@ -1383,6 +1383,13 @@
       parent.html(content);
       parent.addClass("report-alert");
     });
+    {% get_uso %}
+    {% if es_vivienda %}
+    console.log("terciario");
+    $(".solo-terciario td.report-alert").html(""); // Empty content in alerts 
+    $(".solo-terciario td.report-alert").removeClass("report-alert");// remove alert in "solo-terciario" sections
+    {% endif %}
+
 
     $("body").on("click", ".editable-submit", function(){
       $(this).closest("td").removeClass("report-warning");
