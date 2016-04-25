@@ -231,13 +231,36 @@
     table-layout: fixed;
   }
 
-  .editor-html5{
-    zoom:2;
+   .editor-html5  .editable-html5 {
+    transform: scale(2);
+    transform-origin: 0 0px;
   }
 
-  .editor-html5 iframe{
-    height: 380px!important;
+  .editable-html5 {
+   display: inline-block;
   }
+
+  .editor-html5 iframe, .wysihtml5-sandbox{
+    width: 1134px!important;
+    height: 650px!important;
+  }
+
+  .editor-html5{
+    vertical-align: top;
+  }
+
+  .editable-submit{
+    display: none;
+  }
+
+  .editable-html5 h1{
+    font-size: 24px;
+  }
+
+  .editable-html5 h2{
+    font-size: 19px;
+  }
+
   
 }
 
@@ -489,3 +512,4 @@ a.add-singular-solutions{
 .report-alert{
   background-color: #F77B32!important;
 }
+
