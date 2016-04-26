@@ -1538,7 +1538,6 @@
       setTimeout(function(){
         $(".wysihtml5-toolbar li:nth-child(5) a.btn").on("click", function(event){
           event.preventDefault();
-          debugger;
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
           var fileSelector = $('<input type="file" />')
             .change(function() {
