@@ -11,12 +11,15 @@
 
 
 <div class="page hidden-print">
+  
+  {% if not validated %}
   <hr>
   <p class="lead">
     {% blocktrans %}
     Seleccione un archivo de informe de eficiencia energética en XML 
     {% endblocktrans %}
   </p>
+
   <p>
     {% static "docs/EjemploTerciario.xml" as xml_example_1_url %}
     {% static "docs/EjemploResidencial.xml" as xml_example_2_url %}
@@ -25,39 +28,31 @@
     terciario</a> o con un <a href="{{ xml_example_2_url }}">informe de ejemplo de edificio con uso residencial</a>.
     {% endblocktrans %}
   </p>
+  {% endif %}
 
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      {% trans "Selección de archivos de informe de evaluación de la eficiencia energética." %}
-    </div>
-    <div class="panel-body">
-      <div class="form-group col-md-6">
-        <form action="{% url "validator" %}" class="form" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-
-          <div id="formset">
-            <div class="panel panel-default">
-            <div class="panel-heading">
-              <h5>{% trans "Informe de evaluación de la eficiencia energética en formato XML." %}</h5>
-              <h5>{% trans "Archivo base:" %}</h5>
-            </div>
-            <div class="panel-body">
-              <div data-formset-body>
-                <div class="form-group" data-formset-form>
-                  <input id="certificate-file" name="certificate-file" type="file" class="file-input" />
-                </div>
-              </div>
-
-            </div>
-            <div class="panel-footer">
-              <button type="submit" class="btn btn-primary">{% trans "Validar" %}</button>
-            </div>
-          </div>
-          </div>
-        </form>
+  <div class="row"><div class="col-md-12">
+    <br>
+    <form action="{% url "validator" %}" class="form" method="POST" enctype="multipart/form-data" id="xml-form">
+      {% csrf_token %}
+      <div class="hidden">
+        <input id="certificate-file" name="certificate-file" type="file"  /><br>
       </div>
+      <button class="btn btn-primary xml-select">
+        {% if validated %}
+          {% trans "Subir otro fichero base XML o PDF+XMl" %}
+          {% else %}
+          {% trans "Añadir Informe base de evaluación energética en formato XML o PDF+XML" %}
+        {% endif %}
+      </button>
+      {% if validated %}
+        <a href="/certificate" class="btn btn-warning">Volver a validar</a>
+      {% endif %}
+    </form>
+  </div></div>
+<hr>
 
-      <div class="col-md-6">
+<div class="row">
+  <div class="col-md-12">
         {% if validation_data %}
           {% if validation_data.extra_files_errors %}
             <div class="alert alert-warning">
@@ -132,15 +127,10 @@
           </div>
         {% endif %}
       </div>
-    </div>
-  </div>
+</div>
 </div>
 {% if validated %}
 <div class="page">
-  <nav class="hidden-print">
-
-  </nav>
-
   <div class="informe" id="informe">
     <h2 class="text-center">{% trans "CERTIFICADO DE EFICIENCIA ENERGÉTICA DE EDIFICIOS" %}</h2>
 
@@ -1531,6 +1521,14 @@
         })
       fileSelector.click();
 
+    });
+
+    $(".xml-select").on("click", function(e){
+      e.preventDefault();
+      $("#certificate-file").click();
+    });
+    $("#certificate-file").on("change",function(){
+      $("#xml-form").submit();
     });
 
 
