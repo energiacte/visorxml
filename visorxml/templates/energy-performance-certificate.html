@@ -106,8 +106,8 @@
           {% endif %}
 
           {% if validation_data.info %}
-            <div class="alert alert-warning">
-              <h2>{% trans "Avisos de validación" %}</h2>
+            <div class="alert alert-warning validation">
+              <h3>{% trans "Avisos de validación" %}</h3>
               <p>
                 {% blocktrans with validation_warnings_count=validation_data.info|length %}
                 Se han encontrado <strong>{{ validation_warnings_count }}</strong> avisos de validación:
