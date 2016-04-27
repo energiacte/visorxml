@@ -1459,15 +1459,14 @@
       emptytext: 'Pulse para editar...',
       onblur: "submit",
       success: function(response, newValue) {
-        debugger
-            if(!response.success){
-              $(this).closest("td").removeClass("report-warning");
-              $(this).closest("td").addClass("edited");
-              $(".procedimiento").addClass("edited");
-              if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-                $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-              }
-            }
+        if(!response.success){
+          $(this).closest("td").removeClass("report-warning");
+          $(this).closest("td").addClass("edited");
+          $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
+            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+          }
+        }
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
