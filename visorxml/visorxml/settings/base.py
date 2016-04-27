@@ -47,6 +47,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -134,3 +135,13 @@ VERSION = '1.0'
 
 XSDPATH2 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema20.xsd')
 XSDPATH1 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema10.xsd')
+
+
+from django.utils.translation import ugettext_lazy as _
+
+LANGUAGES = [
+    ('es', _('Castellano')),
+    ('ca', _('Catalán')),
+    ('eu', _('Euskera')),
+    ('gl', _('Gallego')),
+]
