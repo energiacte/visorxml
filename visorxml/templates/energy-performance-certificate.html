@@ -1281,10 +1281,23 @@
       </tr>
       <tr>
         <td colspan="2" class="editor-html5">
-          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{{ visita.Datos|safe }}</a>
+          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{% if visita.Datos != "-" %}{{ visita.Datos|safe }}{% endif %}</a>
         </td>
       </tr>
       {% endfor %}
+      {% if not  report.data.PruebasComprobacionesInspecciones and not pdf %}
+      <tr>
+        <td width="80%" class="title">{% trans "Fecha de realización de la visita del técnico certificador" %}</td>
+        <td>
+          <a href="#" class="editable" data-type="date" data-format="dd/mm/yy" data-mode="popup" id="PruebasComprobacionesInspecciones.Visita[1].FechaVisita">-</a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="editor-html5">
+          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[1].Datos"></a>
+        </td>
+      </tr>
+      {% endif %}
     </table>
 
   <br>
@@ -1313,7 +1326,7 @@
       </tr>
       <tr>
         <td class="editor-html5">
-          <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{{ report.get_annex_v|safe }}</a>
+          <a href="#" class="editable-html5" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{% if report.get_annex_v %}{{ report.get_annex_v|safe }}{% endif %}</a>
         </td>
       </tr>
     </table>
@@ -1331,7 +1344,7 @@
           </tr>
           <tr>
             <td class="editor-html5">
-              <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
+              <a href="#" class="editable-html5" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
             </td>
           </tr>
         </table>
