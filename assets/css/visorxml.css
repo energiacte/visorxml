@@ -513,3 +513,13 @@ a.add-singular-solutions{
   background-color: #F77B32!important;
 }
 
+.validation h3{
+      margin: 1px 0px;
+}
+
+.alert-success{
+  margin-bottom: 3px;
+  margin-top: -7px;
+  padding: 6px;
+
+}
