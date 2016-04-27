@@ -1338,13 +1338,6 @@
   {% csrf_token %}
   </form>
 
-  {% if not report.has_annex_v %}
-    <a class="hidden-print green-button" href="{% url 'add_singular_solutions' %}">
-      <img src="{% static "img/add-button.png"%}" />
-      {% trans "Añadir Anexo de Justificación de Soluciones Singulares" %}
-    </a>
-  {% endif %}
-
   <br><br>
   <script>
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
