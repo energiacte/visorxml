@@ -266,13 +266,6 @@ def new_visit(request):
     return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-iv")
 
 
-def add_singular_solutions(request):
-    """ Create singular solutions node if it doesn't exist
-    """
-    report = load_report(request.session)
-    report.add_singular_solutions()
-    return HttpResponseRedirect(reverse_lazy("certificate")+"#anexo-v")
-
 
 class UpdateXMLView(View):
     """CBV for update current energy certificate.
