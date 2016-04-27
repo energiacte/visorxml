@@ -1284,6 +1284,14 @@
       {% endfor %}
     </table>
 
+  <br>
+  <a class="hidden-print green-button" href="{% url 'new_visit' %}">
+    <img src="{% static "img/add-button.png"%}" />
+    {% trans "Nueva Visita" %}
+  </a>
+  <br><br>
+  <br><br>
+
 
   {% if report.has_annex_v %}
 
@@ -1313,14 +1321,6 @@
   <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   </form>
-
-  <br>
-  <a class="hidden-print green-button" href="{% url 'new_visit' %}">
-    <img src="{% static "img/add-button.png"%}" />
-    {% trans "Nueva Visita" %}
-  </a>
-  <br><br>
-  <br><br>
 
   {% if not report.has_annex_v %}
     <a class="hidden-print green-button" href="{% url 'add_singular_solutions' %}">
