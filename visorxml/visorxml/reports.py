@@ -124,8 +124,10 @@ class XMLReport(object):
             self.update_procedimiento()
             base_xml_filename, base_xml_string = self._xml_strings[0]
             self.save_to_file(base_xml_filename)
+
         except AttributeError:
-            pass
+            if path == './DatosPersonalizados/SolucionesSingulares':
+                self.add_singular_solutions(value)
 
     def update_image(self, section, value):
         path = './DatosGeneralesyGeometria/%s' % section
@@ -455,10 +457,10 @@ class XMLReport(object):
             self.save_to_file(self._xml_strings[0][0])
 
 
-    def add_singular_solutions(self):
+    def add_singular_solutions(self, text="DESCRIPCIÓN"):
         if self.xmltree.find('./DatosPersonalizados/SolucionesSingulares') is None:
             new_node = lxml.etree.Element("SolucionesSingulares")
-            new_node.text = lxml.etree.CDATA(u'DESCRIPCIÓN')
+            new_node.text = lxml.etree.CDATA(text)    
             datos_p = self.xmltree.find('./DatosPersonalizados')
 
             #if ./DatosPersonalizados doesn't exist, create it.
@@ -467,6 +469,7 @@ class XMLReport(object):
                 self.xmltree.find(".").append(datos_p)
 
             datos_p.append(new_node)
+            self.update_procedimiento()
             self.save_to_file(self._xml_strings[0][0])
 
     def has_annex_v(self):

@@ -39,7 +39,7 @@
       </div>
       <button class="btn btn-primary xml-select">
         {% if validated %}
-          {% trans "Subir otro fichero base XML o PDF+XMl" %}
+          {% trans "Subir otro fichero base XML o PDF+XML" %}
           {% else %}
           {% trans "Añadir Informe base de evaluación energética en formato XML o PDF+XML" %}
         {% endif %}
@@ -1284,6 +1284,14 @@
       {% endfor %}
     </table>
 
+  <br>
+  <a class="hidden-print green-button" href="{% url 'new_visit' %}">
+    <img src="{% static "img/add-button.png"%}" />
+    {% trans "Nueva Visita" %}
+  </a>
+  <br><br>
+  <br><br>
+
 
   {% if report.has_annex_v %}
 
@@ -1307,27 +1315,28 @@
       </tr>
     </table>
 
+  {% else %}
+      <div class="page-break" ></div>
+      <!-- ANEXO V -->
+      <h3 class="text-center" id="anexo-v">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
+      <table>
+        <tr>
+          <td class="title">
+            {% trans "Descripción" %}
+          </td>
+        </tr>
+        <tr>
+          <td class="editor-html5">
+            <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
+          </td>
+        </tr>
+      </table>
   {% endif %}
 
   </div>
   <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   </form>
-
-  <br>
-  <a class="hidden-print green-button" href="{% url 'new_visit' %}">
-    <img src="{% static "img/add-button.png"%}" />
-    {% trans "Nueva Visita" %}
-  </a>
-  <br><br>
-  <br><br>
-
-  {% if not report.has_annex_v %}
-    <a class="hidden-print green-button" href="{% url 'add_singular_solutions' %}">
-      <img src="{% static "img/add-button.png"%}" />
-      {% trans "Añadir Anexo de Justificación de Soluciones Singulares" %}
-    </a>
-  {% endif %}
 
   <br><br>
   <script>
