@@ -1316,21 +1316,23 @@
     </table>
 
   {% else %}
-      <div class="page-break" ></div>
       <!-- ANEXO V -->
-      <h3 class="text-center" id="anexo-v">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
-      <table>
-        <tr>
-          <td class="title">
-            {% trans "Descripción" %}
-          </td>
-        </tr>
-        <tr>
-          <td class="editor-html5">
-            <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
-          </td>
-        </tr>
-      </table>
+      <div class="anex-v hidden-print">
+        <div class="page-break" ></div>
+        <h3 class="text-center" id="anexo-v">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
+        <table>
+          <tr>
+            <td class="title">
+              {% trans "Descripción" %}
+            </td>
+          </tr>
+          <tr>
+            <td class="editor-html5">
+              <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
+            </td>
+          </tr>
+        </table>
+      </div>
   {% endif %}
 
   </div>
