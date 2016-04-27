@@ -1485,7 +1485,6 @@
     $('.editable-html5').on('save', function(e, params) {
      var node = $(this).closest("td");
      setTimeout(function(){
-      debugger;
        node.height(node.find("a").height()* 2.01);
      }, 200);
     });
