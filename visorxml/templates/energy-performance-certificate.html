@@ -1288,7 +1288,7 @@
       </tr>
       <tr>
         <td colspan="2" class="editor-html5">
-          <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{{ visita.Datos|safe }}</a>
+          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{{ visita.Datos|safe }}</a>
         </td>
       </tr>
       {% endfor %}
@@ -1389,7 +1389,7 @@
     $(".solo-terciario td.report-alert").removeClass("report-alert");// remove alert in "solo-terciario" sections
     {% endif %}
 
-
+/*
     $("body").on("click", ".editable-submit", function(){
       $(this).closest("td").removeClass("report-warning");
       $(this).closest("td").addClass("edited");
@@ -1397,8 +1397,8 @@
       if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
         $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
       }
-
     })
+*/
 
     $(".delete-element").on("click", function(e){
       e.preventDefault();
@@ -1458,8 +1458,46 @@
       url: '{% url "update-xml" %}',
       pk: 1,
       emptytext: 'Pulse para editar...',
+      onblur: "submit",
+      success: function(response, newValue) {
+        debugger
+            if(!response.success){
+              $(this).closest("td").removeClass("report-warning");
+              $(this).closest("td").addClass("edited");
+              $(".procedimiento").addClass("edited");
+              if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
+                $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+              }
+            }
+      },
+      error: function(response, newValue) {
+        alert("Ha occurrido un error inesperado!");
+      },
     });
 
+    $('.editable-html5').editable({
+      url: '{% url "update-xml" %}',
+      pk: 1,
+      emptytext: 'Pulse para editar...',
+      onblur: "submit",
+    });
+
+
+    {% if not pdf %}
+    $('.editable-html5').on('save', function(e, params) {
+     var node = $(this).closest("td");
+     setTimeout(function(){
+      debugger;
+       node.height(node.find("a").height()* 2.01);
+     }, 200);
+    });
+      
+    $("td.editor-html5").each(function(){
+      var height = $(this).height() * 2.01;
+      $(this).height(height);
+    });
+
+    {% endif %}
 
     $('.upload-image').click(function(event) {
       event.preventDefault();
@@ -1495,11 +1533,11 @@
 
     });
 
+
     $(".editor-html5 > a").on("click", function(e){
       setTimeout(function(){
         $(".wysihtml5-toolbar li:nth-child(5) a.btn").on("click", function(event){
           event.preventDefault();
-
           var editor = $(this).closest(".editable-input").find("textarea").data("wysihtml5").editor;
           var fileSelector = $('<input type="file" />')
             .change(function() {
@@ -1526,6 +1564,10 @@
     });
   });
   </script>
+
+  <style>
+  
+  <style>
 {% endblock %}
 
 
