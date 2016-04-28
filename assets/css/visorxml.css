@@ -491,6 +491,7 @@ a.add-singular-solutions{
 }
 
 .delete-element{
+    font-size: 14px;
     font-weight: normal;
     text-decoration: none;
     display: inline-block;
