@@ -137,6 +137,8 @@ ALERT_SPAN = mark_safe("<span class='alert'>-</span>")
 @register.filter(is_safe=True)
 def asnum(value):
     "Devuelve un valor numérico con dos decimales"
+    if ((not value) and (value != 0)):
+        return '-'
     try:
         val = float(value)
         res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
@@ -147,6 +149,8 @@ def asnum(value):
 @register.filter(is_safe=True)
 def asint(value):
     "Devuelve un valor entero"
+    if (not value) and (value != 0):
+        return '-'
     try:
         val = int(value)
         res = '{0:d}'.format(int(val)) if val <= ALERT else ALERT_SPAN
@@ -157,6 +161,8 @@ def asint(value):
 @register.filter(is_safe=True)
 def aspct(value):
     "Devuelve un porcentaje a partir del tanto por uno"
+    if ((not value) and (value != 0)):
+        return '-'
     try:
         val = 100.0 * float(value)
         res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
@@ -166,6 +172,8 @@ def aspct(value):
 
 @register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
+    if (not valuedest) and (not valueorig):
+        return '-'
     try:
         res1 = float(valueorig) - float(valuedest)
         res2 = 100.0 * res1 / float(valueorig)
