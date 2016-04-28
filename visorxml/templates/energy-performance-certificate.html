@@ -1404,17 +1404,6 @@
     $("td.solo-terciario").removeClass("report-alert"); // remove alert in "solo-terciario" cells
     {% endif %}
 
-/*
-    $("body").on("click", ".editable-submit", function(){
-      $(this).closest("td").removeClass("report-warning");
-      $(this).closest("td").addClass("edited");
-      $(".procedimiento").addClass("edited");
-      if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-        $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-      }
-    })
-*/
-
     $(".delete-element").on("click", function(e){
       e.preventDefault();
       var data = {
@@ -1504,7 +1493,7 @@
        node.height(node.find("a").height()* 2.01);
      }, 200);
     });
-      
+
     $("td.editor-html5").each(function(){
       var height = $(this).height() * 2.01;
       $(this).height(height);
@@ -1537,7 +1526,7 @@
               window.location.reload();
             else
               window.location.href = "{% url 'certificate'%}#anexo-I";
-            
+
           }).fail(function(){
             console.log("An error occurred, the files couldn't be sent!");
           });
