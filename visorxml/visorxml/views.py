@@ -143,23 +143,22 @@ def measures_xml_upload(request):
 def validate(request):
     """ processes a XML of Energy Certificate. If it's valid, it's saved in the FS and the old is removed.
     """
+    validated = False
+    validation_data = {}
     try:
         xml_file = request.FILES.get("certificate-file", None)
-        xml_strings = get_xml_strings(xml_file)
-        report = XMLReport(xml_strings)
-        report_file = report.save_to_file()
-        if request.session.get('report_xml_name', False):
-            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
-        request.session['report_xml_name'] = report_file
-        if len(report.errors.get('validation_errors', None)) == 0:
+        if xml_file is not None:
+            xml_strings = get_xml_strings(xml_file)
+            report = XMLReport(xml_strings)
+            report_file = report.save_to_file()
+            if request.session.get('report_xml_name', False):
+                os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
+            request.session['report_xml_name'] = report_file
+            if len(report.errors.get('validation_errors', None)) == 0:
                 validated = True
-        else:
-            validated = False
-        validation_data = report.errors
+            validation_data = report.errors
     except:
-        validated = False
         error = (None, 'El archivo "<strong>%s</strong>" no está bien formado' % xml_file.name)
-        validation_data = {}
         validation_data['validation_errors'] = [error,]
         if request.session.get('report_xml_name', False):
             os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
@@ -171,7 +170,7 @@ def validate(request):
 def view_certificate(request):
     """ View the current energy certificate in a web page
     """
-    try:   
+    try:
         if request.session.get('report_xml_name', False):
             report = load_report(request.session)
             validation_data = report.errors
