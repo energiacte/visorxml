@@ -36,6 +36,26 @@
             {% if validated %}
               <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
             {% endif %}
+            <li>
+              {% load i18n %}
+              <form action="{% url 'set_language' %}" method="post" id="language-form">{% csrf_token %}
+                  <input name="next" type="hidden" value="{{ redirect_to }}" />
+                  <select name="language" class="form-control">
+                      {% get_current_language as LANGUAGE_CODE %}
+                      {% get_available_languages as LANGUAGES %}
+                      {% get_language_info_list for LANGUAGES as languages %}
+                      {% for language in languages %}
+                          <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                              {% if language.code == "eu" %}
+                                euskera
+                              {% else %}
+                              {{ language.name_local }}
+                              {% endif %}
+                          </option>
+                      {% endfor %}
+                  </select>
+              </form>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if validated %}
@@ -53,5 +73,12 @@
 
     <script src="{%  static "js/visorxml.js" %}"></script>
     {% block extra_js %}{% endblock %}
+
+    <script>
+    $("#language-form select").on("change", function(){
+      $(this).parent().submit();
+    });
+    </script>
+
   </body>
 </html>
