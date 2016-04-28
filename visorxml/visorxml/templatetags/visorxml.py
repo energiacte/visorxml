@@ -177,7 +177,7 @@ def difwith(valuedest, valueorig):
     try:
         res1 = float(valueorig) - float(valuedest)
         res2 = 100.0 * res1 / float(valueorig)
-        return '{:0.2f}<br />({:0.2f}%)'.format(res1, res2).replace('.', ',')
+        return '{:0.2f}<br />({:+0.2f}%)'.format(res1, res2).replace('.', ',')
     except:
         return ALERT_SPAN
 
