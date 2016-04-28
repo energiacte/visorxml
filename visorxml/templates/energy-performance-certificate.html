@@ -1243,7 +1243,7 @@
       <a href="#" class="green-button add-measures">
         <img src="{% static "img/add-button.png"%}" />
         <span>
-          {% trans "Subir XML con medidas de mejora" %}
+          {% trans "Subir XML (o XML+PDF) con medidas de mejora aplicadas" %}
         </span>
         <input type="file" class="measures-xml hidden" name="measures-xml"/>
       </a>
@@ -1271,11 +1271,9 @@
           <a href="#" class="editable" data-type="date" data-format="dd/mm/yy" data-mode="popup" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
             {{ visita.FechaVisita }}
           </a>
-
-
           <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">
             <img src="{% static "img/remove-button.png"%}" />
-            {% trans "Eliminar" %}
+            {% trans "Eliminar visita" %}
           </a>
         </td>
       </tr>
@@ -1285,7 +1283,7 @@
         </td>
       </tr>
       {% endfor %}
-      {% if not  report.data.PruebasComprobacionesInspecciones and not pdf %}
+      {% if not report.data.PruebasComprobacionesInspecciones %}
       <tr>
         <td width="80%" class="title">{% trans "Fecha de realización de la visita del técnico certificador" %}</td>
         <td>
@@ -1300,14 +1298,11 @@
       {% endif %}
     </table>
 
-  <br>
   <a class="hidden-print green-button" href="{% url 'new_visit' %}">
     <img src="{% static "img/add-button.png"%}" />
-    {% trans "Nueva Visita" %}
+    {% trans "Añadir visita" %}
   </a>
   <br><br>
-  <br><br>
-
 
   {% if report.has_annex_v %}
 
@@ -1320,7 +1315,7 @@
           {% trans "Descripción" %}
           <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">
             <img src="{% static "img/remove-button.png"%}" />
-            {% trans "Eliminar" %}
+            {% trans "Eliminar anexo" %}
           </a>
         </td>
       </tr>
