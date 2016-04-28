@@ -9,8 +9,8 @@
 {% block content %}
 {% get_uso %} {#  es_vivienda <= [True o False] #}
 
-
-<div class="page hidden-print">
+{% if not pdf %}
+<div class="page">
   
   {% if not validated %}
   <hr>
@@ -50,8 +50,8 @@
     </form>
   </div></div>
 <hr>
-
-<div class="row">
+{% endif %}
+<div class="row hidden-print">
   <div class="col-md-12">
         {% if validation_data %}
           {% if validation_data.extra_files_errors %}
@@ -1236,9 +1236,11 @@
     </table>
     {% endfor %}
     {% endif %}
+
+    {% if not pdf %}
     <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
       {% csrf_token %}
-      <a href="#" class="hidden-print green-button add-measures">
+      <a href="#" class="green-button add-measures">
         <img src="{% static "img/add-button.png"%}" />
         <span>
           {% trans "Subir XML con medidas de mejora" %}
@@ -1246,6 +1248,7 @@
         <input type="file" class="measures-xml hidden" name="measures-xml"/>
       </a>
     </form>
+    {% endif %}
     <br><br>
 
     <div class="page-break" ></div>
@@ -1336,9 +1339,11 @@
   {% endif %}
 
   </div>
+  {% if not pdf %}
   <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   </form>
+  {% endif %}
 
   <br><br>
   <script>
