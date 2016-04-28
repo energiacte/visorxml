@@ -1461,7 +1461,7 @@
     $('.editable').editable({
       url: '{% url "update-xml" %}',
       pk: 1,
-      emptytext: 'Pulse para editar...',
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
         if(!response.success){
@@ -1481,7 +1481,7 @@
     $('.editable-html5').editable({
       url: '{% url "update-xml" %}',
       pk: 1,
-      emptytext: 'Pulse para editar...',
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
     });
 
