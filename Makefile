@@ -5,8 +5,8 @@ collectstatic:
 	grunt
 	DJANGO_SETTINGS_MODULE=visorxml.settings.development venv/bin/python visorxml/manage.py collectstatic
 
-updatepo:
-	cd visorxml && ../venv/bin/django-admin makemessages -l es
+updatelang:
+	cd visorxml && ../venv/bin/django-admin makemessages -l es,gl,ca,eu
 
 install:
 	python3 -m pyvenv venv
