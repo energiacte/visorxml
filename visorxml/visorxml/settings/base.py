@@ -139,6 +139,10 @@ XSDPATH1 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEd
 
 from django.utils.translation import ugettext_lazy as _
 
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, '..', 'locale'),
+)
+
 LANGUAGES = [
     ('es', _('Castellano')),
     ('ca', _('Catalán')),
