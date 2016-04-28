@@ -158,7 +158,8 @@ def validate(request):
                 validated = True
             validation_data = report.errors
     except:
-        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado' % xml_file.name)
+        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado '
+                'o no incluye información energética del edificio en formato XML' % xml_file.name)
         validation_data['validation_errors'] = [error,]
         if request.session.get('report_xml_name', False):
             os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
