@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-07 16:38+0200\n"
+"POT-Creation-Date: 2016-04-28 13:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,14 +54,14 @@ msgstr ""
 msgid "Visor de informes"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:15
+#: templates/energy-performance-certificate.html:18
 msgid ""
 "\n"
-"    Seleccione un archivo de informe de eficiencia energética en XML\n"
+"    Seleccione un archivo de informe de eficiencia energética en XML \n"
 "    "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:22
+#: templates/energy-performance-certificate.html:26
 #, python-format
 msgid ""
 "\n"
@@ -72,28 +72,19 @@ msgid ""
 "    "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:30
-msgid ""
-"Selección de archivos de informe de evaluación de la eficiencia energética."
+#: templates/energy-performance-certificate.html:42
+msgid "Subir otro fichero base XML o PDF+XML"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:40
-msgid "Informe de evaluación de la eficiencia energética en formato XML."
+#: templates/energy-performance-certificate.html:44
+msgid "Añadir Informe base de evaluación energética en formato XML o PDF+XML"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:41
-msgid "Archivo base:"
-msgstr ""
-
-#: templates/energy-performance-certificate.html:52
-msgid "Validar"
-msgstr ""
-
-#: templates/energy-performance-certificate.html:63
+#: templates/energy-performance-certificate.html:59
 msgid "Archivos de mejora"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:65
+#: templates/energy-performance-certificate.html:61
 #, python-format
 msgid ""
 "\n"
@@ -103,11 +94,11 @@ msgid ""
 "                "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:88
+#: templates/energy-performance-certificate.html:84
 msgid "Errores de validación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:90
+#: templates/energy-performance-certificate.html:86
 #, python-format
 msgid ""
 "\n"
@@ -116,15 +107,15 @@ msgid ""
 "                "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:107
+#: templates/energy-performance-certificate.html:103
 msgid "El informe activo no contiene errores de validación."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:114
+#: templates/energy-performance-certificate.html:110
 msgid "Avisos de validación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:116
+#: templates/energy-performance-certificate.html:112
 #, python-format
 msgid ""
 "\n"
@@ -133,199 +124,199 @@ msgid ""
 "                "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:130
+#: templates/energy-performance-certificate.html:126
 msgid "No existe un informe activo."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:144
+#: templates/energy-performance-certificate.html:135
 msgid "CERTIFICADO DE EFICIENCIA ENERGÉTICA DE EDIFICIOS"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:147
+#: templates/energy-performance-certificate.html:138
 msgid "IDENTIFICACIÓN DEL EDIFICIO O DE LA PARTE QUE SE CERTIFICA:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:151
+#: templates/energy-performance-certificate.html:142
 msgid "Nombre del Edificio"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:159
+#: templates/energy-performance-certificate.html:150
 msgid "Dirección"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:167
-#: templates/energy-performance-certificate.html:361
+#: templates/energy-performance-certificate.html:158
+#: templates/energy-performance-certificate.html:352
 msgid "Municipio"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:173
-#: templates/energy-performance-certificate.html:367
+#: templates/energy-performance-certificate.html:164
+#: templates/energy-performance-certificate.html:358
 msgid "Código Postal"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:181
-#: templates/energy-performance-certificate.html:375
+#: templates/energy-performance-certificate.html:172
+#: templates/energy-performance-certificate.html:366
 msgid "Provincia"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:187
-#: templates/energy-performance-certificate.html:381
+#: templates/energy-performance-certificate.html:178
+#: templates/energy-performance-certificate.html:372
 msgid "Comunidad Autónoma"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:195
+#: templates/energy-performance-certificate.html:186
 #: templates/supplementary-report.html:78
 msgid "Zona climática"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:201
+#: templates/energy-performance-certificate.html:192
 msgid "Año construcción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:209
+#: templates/energy-performance-certificate.html:200
 msgid "Plantas sobre rasante"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:215
+#: templates/energy-performance-certificate.html:206
 msgid "Plantas bajo rasante"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:223
+#: templates/energy-performance-certificate.html:214
 msgid "Normativa vigente (construcción / rehabilitación)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:231
+#: templates/energy-performance-certificate.html:222
 msgid "Referencia/s catastral/es"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:243
+#: templates/energy-performance-certificate.html:234
 msgid "Tipo de edificio o parte del edificio que se certifica:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:251
+#: templates/energy-performance-certificate.html:242
 msgid "Edificio de nueva construcción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:258
+#: templates/energy-performance-certificate.html:249
 msgid "Edificio existente"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:268
+#: templates/energy-performance-certificate.html:259
 msgid "Vivienda"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:274
+#: templates/energy-performance-certificate.html:265
 msgid "Unifamiliar"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:280
+#: templates/energy-performance-certificate.html:271
 msgid "Bloque"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:286
+#: templates/energy-performance-certificate.html:277
 msgid "Bloque Completo"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:292
+#: templates/energy-performance-certificate.html:283
 msgid "Vivienda individual"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:300
+#: templates/energy-performance-certificate.html:291
 msgid "Terciario"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:306
+#: templates/energy-performance-certificate.html:297
 msgid "Edificio completo"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:312
+#: templates/energy-performance-certificate.html:303
 msgid "Local"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:321
+#: templates/energy-performance-certificate.html:312
 msgid "DATOS DEL TÉCNICO CERTIFICADOR:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:325
+#: templates/energy-performance-certificate.html:316
 msgid "Nombre y Apellidos"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:331
+#: templates/energy-performance-certificate.html:322
 msgid "NIF/NIE"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:339
+#: templates/energy-performance-certificate.html:330
 msgid "Razón Social"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:345
+#: templates/energy-performance-certificate.html:336
 msgid "NIF"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:353
+#: templates/energy-performance-certificate.html:344
 msgid "Domicilio"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:389
+#: templates/energy-performance-certificate.html:380
 msgid "e-mail"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:395
+#: templates/energy-performance-certificate.html:386
 msgid "Teléfono"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:403
+#: templates/energy-performance-certificate.html:394
 msgid "Titulación habilitante según normativa vigente"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:411
+#: templates/energy-performance-certificate.html:402
 msgid ""
 "Procedimiento reconocido de calificación energética utilizado y versión:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:424
+#: templates/energy-performance-certificate.html:415
 msgid "CALIFICACIÓN ENERGÉTICA OBTENIDA:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:429
-#: templates/energy-performance-certificate.html:1111
+#: templates/energy-performance-certificate.html:420
+#: templates/energy-performance-certificate.html:1097
 msgid "CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:429
-#: templates/energy-performance-certificate.html:1004
-#: templates/energy-performance-certificate.html:1010
-#: templates/energy-performance-certificate.html:1012
-#: templates/energy-performance-certificate.html:1024
-#: templates/energy-performance-certificate.html:1026
-#: templates/energy-performance-certificate.html:1059
-#: templates/energy-performance-certificate.html:1060
-#: templates/energy-performance-certificate.html:1128
-#: templates/energy-performance-certificate.html:1163
-#: templates/energy-performance-certificate.html:1176
-#: templates/energy-performance-certificate.html:1202
+#: templates/energy-performance-certificate.html:420
+#: templates/energy-performance-certificate.html:995
+#: templates/energy-performance-certificate.html:1001
+#: templates/energy-performance-certificate.html:1003
+#: templates/energy-performance-certificate.html:1015
+#: templates/energy-performance-certificate.html:1017
+#: templates/energy-performance-certificate.html:1050
+#: templates/energy-performance-certificate.html:1051
+#: templates/energy-performance-certificate.html:1114
+#: templates/energy-performance-certificate.html:1149
+#: templates/energy-performance-certificate.html:1162
+#: templates/energy-performance-certificate.html:1188
 msgid "kWh/m<sup>2</sup>·año"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:430
-#: templates/energy-performance-certificate.html:1112
+#: templates/energy-performance-certificate.html:421
+#: templates/energy-performance-certificate.html:1098
 msgid "EMISIONES DE DIÓXIDO DE CARBONO"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:430
-#: templates/energy-performance-certificate.html:930
-#: templates/energy-performance-certificate.html:936
-#: templates/energy-performance-certificate.html:938
-#: templates/energy-performance-certificate.html:950
-#: templates/energy-performance-certificate.html:952
-#: templates/energy-performance-certificate.html:971
-#: templates/energy-performance-certificate.html:1112
-#: templates/energy-performance-certificate.html:1129
-#: templates/energy-performance-certificate.html:1189
+#: templates/energy-performance-certificate.html:421
+#: templates/energy-performance-certificate.html:921
+#: templates/energy-performance-certificate.html:927
+#: templates/energy-performance-certificate.html:929
+#: templates/energy-performance-certificate.html:941
+#: templates/energy-performance-certificate.html:943
+#: templates/energy-performance-certificate.html:962
+#: templates/energy-performance-certificate.html:1098
+#: templates/energy-performance-certificate.html:1115
+#: templates/energy-performance-certificate.html:1175
 msgid "kgCO<sub>2e</sub>/m<sup>2</sup>·año"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:440
+#: templates/energy-performance-certificate.html:431
 msgid ""
 "\n"
 "        El técnico certificador abajo firmante certifica que ha realizado la "
@@ -336,61 +327,61 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:447
+#: templates/energy-performance-certificate.html:438
 msgid "Fecha:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:449
+#: templates/energy-performance-certificate.html:440
 msgid "Firma del técnico certificador:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:452
+#: templates/energy-performance-certificate.html:443
 msgid "Anexo I."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:452
+#: templates/energy-performance-certificate.html:443
 msgid "Descripción de las características energéticas del edificio."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:453
+#: templates/energy-performance-certificate.html:444
 msgid "Anexo II."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:453
+#: templates/energy-performance-certificate.html:444
 msgid "Calificación energética del edificio."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:454
+#: templates/energy-performance-certificate.html:445
 msgid "Anexo III."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:454
+#: templates/energy-performance-certificate.html:445
 msgid "Recomendaciones para la mejora de la eficiencia energética."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:455
+#: templates/energy-performance-certificate.html:446
 msgid "Anexo IV."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:455
+#: templates/energy-performance-certificate.html:446
 msgid ""
 "Pruebas, comprobaciones e inspecciones realizadas por el técnico "
 "certificador."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:458
+#: templates/energy-performance-certificate.html:449
 msgid "Registro del Órgano Territorial Competente:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:464
+#: templates/energy-performance-certificate.html:455
 msgid "ANEXO I"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:464
+#: templates/energy-performance-certificate.html:455
 msgid "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:467
+#: templates/energy-performance-certificate.html:458
 msgid ""
 "\n"
 "      En este apartado se describen las características energéticas del "
@@ -400,386 +391,390 @@ msgid ""
 "      "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:473
+#: templates/energy-performance-certificate.html:464
 msgid "1. SUPERFICIE, IMAGEN Y SITUACIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:477
+#: templates/energy-performance-certificate.html:468
 msgid "Superficie habitable"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:477
-#: templates/energy-performance-certificate.html:533
-#: templates/energy-performance-certificate.html:556
-#: templates/energy-performance-certificate.html:836
+#: templates/energy-performance-certificate.html:468
+#: templates/energy-performance-certificate.html:524
+#: templates/energy-performance-certificate.html:547
+#: templates/energy-performance-certificate.html:827
 msgid "m<sup>2</sup>"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:486
+#: templates/energy-performance-certificate.html:477
 msgid "Imagen del Edificio"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:487
+#: templates/energy-performance-certificate.html:478
 msgid "Plano de situación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:525
+#: templates/energy-performance-certificate.html:516
 msgid "2. ENVOLVENTE TÉRMICA"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:527
+#: templates/energy-performance-certificate.html:518
 msgid "Cerramientos opacos"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:531
-#: templates/energy-performance-certificate.html:554
-#: templates/energy-performance-certificate.html:585
-#: templates/energy-performance-certificate.html:618
-#: templates/energy-performance-certificate.html:660
-#: templates/energy-performance-certificate.html:695
-#: templates/energy-performance-certificate.html:740
-#: templates/energy-performance-certificate.html:777
-#: templates/energy-performance-certificate.html:855
-#: templates/energy-performance-certificate.html:890
+#: templates/energy-performance-certificate.html:522
+#: templates/energy-performance-certificate.html:545
+#: templates/energy-performance-certificate.html:576
+#: templates/energy-performance-certificate.html:609
+#: templates/energy-performance-certificate.html:651
+#: templates/energy-performance-certificate.html:686
+#: templates/energy-performance-certificate.html:731
+#: templates/energy-performance-certificate.html:768
+#: templates/energy-performance-certificate.html:846
+#: templates/energy-performance-certificate.html:881
 msgid "Nombre"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:532
-#: templates/energy-performance-certificate.html:555
-#: templates/energy-performance-certificate.html:586
-#: templates/energy-performance-certificate.html:619
-#: templates/energy-performance-certificate.html:661
-#: templates/energy-performance-certificate.html:699
-#: templates/energy-performance-certificate.html:741
-#: templates/energy-performance-certificate.html:778
-#: templates/supplementary-report.html:329
-#: templates/supplementary-report.html:378
-#: templates/supplementary-report.html:401
+#: templates/energy-performance-certificate.html:523
+#: templates/energy-performance-certificate.html:546
+#: templates/energy-performance-certificate.html:577
+#: templates/energy-performance-certificate.html:610
+#: templates/energy-performance-certificate.html:652
+#: templates/energy-performance-certificate.html:690
+#: templates/energy-performance-certificate.html:732
+#: templates/energy-performance-certificate.html:769
+#: templates/supplementary-report.html:331
+#: templates/supplementary-report.html:380
+#: templates/supplementary-report.html:403
 msgid "Tipo"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:533
-#: templates/energy-performance-certificate.html:556
-#: templates/energy-performance-certificate.html:836
+#: templates/energy-performance-certificate.html:524
+#: templates/energy-performance-certificate.html:547
+#: templates/energy-performance-certificate.html:827
 msgid "Superficie"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:534
-#: templates/energy-performance-certificate.html:557
-#: templates/energy-performance-certificate.html:559
+#: templates/energy-performance-certificate.html:525
+#: templates/energy-performance-certificate.html:548
+#: templates/energy-performance-certificate.html:550
 msgid "Transmitancia"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:534
-#: templates/energy-performance-certificate.html:557
+#: templates/energy-performance-certificate.html:525
+#: templates/energy-performance-certificate.html:548
 msgid "W/m<sup>2</sup>·K"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:535
-#: templates/energy-performance-certificate.html:590
-#: templates/energy-performance-certificate.html:623
-#: templates/energy-performance-certificate.html:665
-#: templates/energy-performance-certificate.html:809
+#: templates/energy-performance-certificate.html:526
+#: templates/energy-performance-certificate.html:581
+#: templates/energy-performance-certificate.html:614
+#: templates/energy-performance-certificate.html:656
+#: templates/energy-performance-certificate.html:800
 msgid "Modo de obtención"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:550
+#: templates/energy-performance-certificate.html:541
 msgid "Huecos y lucernarios"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:558
-#: templates/energy-performance-certificate.html:560
-#: templates/supplementary-report.html:382
+#: templates/energy-performance-certificate.html:549
+#: templates/energy-performance-certificate.html:551
+#: templates/supplementary-report.html:384
 msgid "Factor solar"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:559
-#: templates/energy-performance-certificate.html:560
+#: templates/energy-performance-certificate.html:550
+#: templates/energy-performance-certificate.html:551
 msgid "Modo de obtención."
 msgstr ""
 
-#: templates/energy-performance-certificate.html:579
+#: templates/energy-performance-certificate.html:570
 msgid "3. INSTALACIONES TÉRMICAS"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:581
+#: templates/energy-performance-certificate.html:572
 msgid "Generadores de calefacción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:587
-#: templates/energy-performance-certificate.html:620
-#: templates/energy-performance-certificate.html:662
+#: templates/energy-performance-certificate.html:578
+#: templates/energy-performance-certificate.html:611
+#: templates/energy-performance-certificate.html:653
 msgid "Potencia nominal"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:588
-#: templates/energy-performance-certificate.html:621
-#: templates/energy-performance-certificate.html:663
+#: templates/energy-performance-certificate.html:579
+#: templates/energy-performance-certificate.html:612
+#: templates/energy-performance-certificate.html:654
 msgid "Rendimiento estacional"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:589
-#: templates/energy-performance-certificate.html:622
-#: templates/energy-performance-certificate.html:664
+#: templates/energy-performance-certificate.html:580
+#: templates/energy-performance-certificate.html:613
+#: templates/energy-performance-certificate.html:655
 msgid "Tipo de energía"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:603
-#: templates/energy-performance-certificate.html:636
-#: templates/energy-performance-certificate.html:754
-#: templates/energy-performance-certificate.html:791
-#: templates/energy-performance-certificate.html:821
+#: templates/energy-performance-certificate.html:594
+#: templates/energy-performance-certificate.html:627
+#: templates/energy-performance-certificate.html:745
+#: templates/energy-performance-certificate.html:782
+#: templates/energy-performance-certificate.html:812
 msgid "TOTALES"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:614
+#: templates/energy-performance-certificate.html:605
 msgid "Generadores de refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:647
+#: templates/energy-performance-certificate.html:638
 msgid "Instalaciones de Agua Caliente Sanitaria"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:651
+#: templates/energy-performance-certificate.html:642
 msgid "Demanda diaria de ACS a 60ºC (litros/dia)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:681
+#: templates/energy-performance-certificate.html:672
 msgid ""
 "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios "
 "terciarios)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:686
+#: templates/energy-performance-certificate.html:677
 msgid ""
 "No se han definido sistemas secundarios de calefacción y/o refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:703
+#: templates/energy-performance-certificate.html:694
 msgid "Zona asociada"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:707
+#: templates/energy-performance-certificate.html:698
 msgid "Potencia calor"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:708
+#: templates/energy-performance-certificate.html:699
 msgid "Potencia frío"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:709
+#: templates/energy-performance-certificate.html:700
 msgid "Rendimiento estacional calor"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:710
+#: templates/energy-performance-certificate.html:701
 msgid "Rendimiento estacional frío"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:719
+#: templates/energy-performance-certificate.html:710
 msgid "Enfriamiento gratuito"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:720
+#: templates/energy-performance-certificate.html:711
 msgid "Enfriamiento evaporativo"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:721
+#: templates/energy-performance-certificate.html:712
 msgid "Recuperación de energía"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:722
+#: templates/energy-performance-certificate.html:713
 msgid "Control"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:736
+#: templates/energy-performance-certificate.html:727
 msgid "Torres de refrigeración (sólo edificios terciarios)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:742
-#: templates/energy-performance-certificate.html:779
+#: templates/energy-performance-certificate.html:733
+#: templates/energy-performance-certificate.html:770
 msgid "Servicio asociado"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:743
-#: templates/energy-performance-certificate.html:780
+#: templates/energy-performance-certificate.html:734
+#: templates/energy-performance-certificate.html:771
 msgid "Consumo de energía"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:743
-#: templates/energy-performance-certificate.html:780
-#: templates/energy-performance-certificate.html:891
+#: templates/energy-performance-certificate.html:734
+#: templates/energy-performance-certificate.html:771
+#: templates/energy-performance-certificate.html:882
 msgid "kWh/año"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:763
+#: templates/energy-performance-certificate.html:754
 msgid "Ventilación y bombeo (sólo edificios terciarios)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:801
+#: templates/energy-performance-certificate.html:761
+msgid "No se han definido sistemas de ventilación y bombeo"
+msgstr ""
+
+#: templates/energy-performance-certificate.html:792
 msgid "4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:805
-#: templates/energy-performance-certificate.html:835
-#: templates/supplementary-report.html:305
+#: templates/energy-performance-certificate.html:796
+#: templates/energy-performance-certificate.html:826
+#: templates/supplementary-report.html:307
 msgid "Espacio"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:806
+#: templates/energy-performance-certificate.html:797
 msgid "Potencia instalada"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:806
+#: templates/energy-performance-certificate.html:797
 msgid "W/m<sup>2</sup>"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:807
+#: templates/energy-performance-certificate.html:798
 msgid "VEEI"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:807
+#: templates/energy-performance-certificate.html:798
 msgid "W/m<sup>2</sup>·100lux"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:808
+#: templates/energy-performance-certificate.html:799
 msgid "Iluminancia media"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:808
+#: templates/energy-performance-certificate.html:799
 msgid "lux"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:831
+#: templates/energy-performance-certificate.html:822
 msgid ""
 "5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:837
+#: templates/energy-performance-certificate.html:828
 msgid "Perfil de uso"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:850
+#: templates/energy-performance-certificate.html:841
 msgid "6. ENERGÍAS RENOVABLES"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:852
+#: templates/energy-performance-certificate.html:843
 msgid "Térmica"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:856
+#: templates/energy-performance-certificate.html:847
 #, python-format
 msgid ""
 "Consumo de Energía Final cubierto, en función del servicio asociado [%%]"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:857
+#: templates/energy-performance-certificate.html:848
 #, python-format
 msgid "Demanda de ACS cubierta [%%]"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:860
-#: templates/energy-performance-certificate.html:1144
-#: templates/supplementary-report.html:474
-#: templates/supplementary-report.html:481
+#: templates/energy-performance-certificate.html:851
+#: templates/energy-performance-certificate.html:1130
+#: templates/supplementary-report.html:476
+#: templates/supplementary-report.html:483
 msgid "Calefacción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:861
-#: templates/energy-performance-certificate.html:1145
-#: templates/supplementary-report.html:475
-#: templates/supplementary-report.html:482
+#: templates/energy-performance-certificate.html:852
+#: templates/energy-performance-certificate.html:1131
+#: templates/supplementary-report.html:477
+#: templates/supplementary-report.html:484
 msgid "Refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:862
-#: templates/energy-performance-certificate.html:933
-#: templates/energy-performance-certificate.html:1007
-#: templates/energy-performance-certificate.html:1146
+#: templates/energy-performance-certificate.html:853
+#: templates/energy-performance-certificate.html:924
+#: templates/energy-performance-certificate.html:998
+#: templates/energy-performance-certificate.html:1132
 #: templates/supplementary-report.html:113
-#: templates/supplementary-report.html:476
-#: templates/supplementary-report.html:483
+#: templates/supplementary-report.html:478
+#: templates/supplementary-report.html:485
 msgid "ACS"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:875
-#: templates/energy-performance-certificate.html:900
+#: templates/energy-performance-certificate.html:866
+#: templates/energy-performance-certificate.html:891
 msgid "TOTAL"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:886
+#: templates/energy-performance-certificate.html:877
 msgid "Eléctrica"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:891
+#: templates/energy-performance-certificate.html:882
 msgid "Energía eléctrica generada y autoconsumida"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:908
+#: templates/energy-performance-certificate.html:899
 msgid "ANEXO II"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:908
+#: templates/energy-performance-certificate.html:899
 msgid "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:912
+#: templates/energy-performance-certificate.html:903
 msgid "Zona Climática"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:914
+#: templates/energy-performance-certificate.html:905
 msgid "Uso"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:920
+#: templates/energy-performance-certificate.html:911
 msgid "1. CALIFICACIÓN ENERGÉTICA DEL EDIFICIO EN EMISIONES"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:924
-#: templates/energy-performance-certificate.html:998
+#: templates/energy-performance-certificate.html:915
+#: templates/energy-performance-certificate.html:989
 msgid "INDICADOR GLOBAL"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:925
-#: templates/energy-performance-certificate.html:999
+#: templates/energy-performance-certificate.html:916
+#: templates/energy-performance-certificate.html:990
 msgid "INDICADORES PARCIALES"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:930
+#: templates/energy-performance-certificate.html:921
 msgid "Emisiones globales"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:932
-#: templates/energy-performance-certificate.html:1006
+#: templates/energy-performance-certificate.html:923
+#: templates/energy-performance-certificate.html:997
 msgid "CALEFACCIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:936
+#: templates/energy-performance-certificate.html:927
 msgid "Emisiones calefacción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:938
+#: templates/energy-performance-certificate.html:929
 msgid "Emisiones ACS"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:946
-#: templates/energy-performance-certificate.html:1020
+#: templates/energy-performance-certificate.html:937
+#: templates/energy-performance-certificate.html:1011
 msgid "REFRIGERACIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:947
-#: templates/energy-performance-certificate.html:1021
+#: templates/energy-performance-certificate.html:938
+#: templates/energy-performance-certificate.html:1012
 msgid "ILUMINACIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:950
+#: templates/energy-performance-certificate.html:941
 msgid "Emisiones refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:952
+#: templates/energy-performance-certificate.html:943
 msgid "Emisiones iluminación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:962
+#: templates/energy-performance-certificate.html:953
 msgid ""
 "\n"
 "        La calificación global del edificio se expresa en términos de "
@@ -788,25 +783,25 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:972
+#: templates/energy-performance-certificate.html:963
 msgid "kgCO<sub>2e</sub>/año"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:975
+#: templates/energy-performance-certificate.html:966
 msgid "Emisiones CO<sub>2</sub> por consumo eléctrico"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:979
+#: templates/energy-performance-certificate.html:970
 msgid "Emisiones CO<sub>2</sub> por otros combustibles"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:987
+#: templates/energy-performance-certificate.html:978
 msgid ""
 "2. CALIFICACIÓN ENERGÉTICA DEL EDIFICIO EN CONSUMO DE ENERGÍA PRIMARIA NO "
 "RENOVABLE"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:990
+#: templates/energy-performance-certificate.html:981
 msgid ""
 "\n"
 "          Por energía primara no renovable se entiende la energía consumida "
@@ -816,33 +811,33 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1004
+#: templates/energy-performance-certificate.html:995
 msgid "Consumo global de energía primaria no renovable"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1010
+#: templates/energy-performance-certificate.html:1001
 msgid "Energía primaria calefacción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1012
+#: templates/energy-performance-certificate.html:1003
 msgid "Energía primaria ACS"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1024
+#: templates/energy-performance-certificate.html:1015
 msgid "Energía primaria refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1026
+#: templates/energy-performance-certificate.html:1017
 msgid "Energía primaria iluminación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1037
+#: templates/energy-performance-certificate.html:1028
 msgid ""
 "3. CALIFICACIÓN PARCIAL DE LA DEMANDA ENERGÉTICA DE CALEFACCIÓN Y "
 "REFRIGERACIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1040
+#: templates/energy-performance-certificate.html:1031
 msgid ""
 "\n"
 "        La demanda energética de calefacción y refrigeración es la energía "
@@ -851,125 +846,121 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1050
-#: templates/energy-performance-certificate.html:1128
+#: templates/energy-performance-certificate.html:1041
+#: templates/energy-performance-certificate.html:1114
 msgid "DEMANDA DE CALEFACCIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1051
-#: templates/energy-performance-certificate.html:1129
+#: templates/energy-performance-certificate.html:1042
+#: templates/energy-performance-certificate.html:1115
 msgid "DEMANDA DE REFRIGERACIÓN"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1059
+#: templates/energy-performance-certificate.html:1050
 msgid "Demanda de calefacción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1060
+#: templates/energy-performance-certificate.html:1051
 msgid "Demanda de refrigeración"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1069
+#: templates/energy-performance-certificate.html:1060
 msgid "ANEXO III"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1069
+#: templates/energy-performance-certificate.html:1060
 msgid "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1074
-msgid "Subir XML con medidas de mejora"
-msgstr ""
-
-#: templates/energy-performance-certificate.html:1084
+#: templates/energy-performance-certificate.html:1066
 msgid "No se han definido medidas de mejora de la eficiencia energética"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1090
+#: templates/energy-performance-certificate.html:1072
 msgid "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1090
-msgid "(Eliminar medida de mejora)"
+#: templates/energy-performance-certificate.html:1074
+msgid "Eliminar medida"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1093
+#: templates/energy-performance-certificate.html:1079
 msgid "Denominación:"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1106
+#: templates/energy-performance-certificate.html:1092
 msgid "CALIFICACIÓN ENERGÉTICA GLOBAL"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1111
+#: templates/energy-performance-certificate.html:1097
 msgid "kWg/m<sup>2</sup>·año"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1123
+#: templates/energy-performance-certificate.html:1109
 msgid "CALIFICACIONES ENERGÉTICAS PARCIALES"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1139
+#: templates/energy-performance-certificate.html:1125
 msgid "ANÁLISIS TÉCNICO"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1143
+#: templates/energy-performance-certificate.html:1129
 #: templates/supplementary-report.html:109
 msgid "Indicador"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1147
+#: templates/energy-performance-certificate.html:1133
 msgid "Iluminación"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1148
+#: templates/energy-performance-certificate.html:1134
 msgid "Total"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1151
-#: templates/energy-performance-certificate.html:1153
-#: templates/energy-performance-certificate.html:1155
-#: templates/energy-performance-certificate.html:1157
-#: templates/energy-performance-certificate.html:1159
-#: templates/supplementary-report.html:225
-#: templates/supplementary-report.html:422
+#: templates/energy-performance-certificate.html:1137
+#: templates/energy-performance-certificate.html:1139
+#: templates/energy-performance-certificate.html:1141
+#: templates/energy-performance-certificate.html:1143
+#: templates/energy-performance-certificate.html:1145
+#: templates/supplementary-report.html:227
+#: templates/supplementary-report.html:424
 msgid "Valor"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1152
-#: templates/energy-performance-certificate.html:1154
-#: templates/energy-performance-certificate.html:1156
-#: templates/energy-performance-certificate.html:1158
-#: templates/energy-performance-certificate.html:1160
+#: templates/energy-performance-certificate.html:1138
+#: templates/energy-performance-certificate.html:1140
+#: templates/energy-performance-certificate.html:1142
+#: templates/energy-performance-certificate.html:1144
+#: templates/energy-performance-certificate.html:1146
 msgid "Ahorro"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1152
-#: templates/energy-performance-certificate.html:1154
-#: templates/energy-performance-certificate.html:1156
-#: templates/energy-performance-certificate.html:1158
-#: templates/energy-performance-certificate.html:1160
+#: templates/energy-performance-certificate.html:1138
+#: templates/energy-performance-certificate.html:1140
+#: templates/energy-performance-certificate.html:1142
+#: templates/energy-performance-certificate.html:1144
+#: templates/energy-performance-certificate.html:1146
 msgid "respecto a la situación original"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1163
+#: templates/energy-performance-certificate.html:1149
 msgid "Consumo Energía final"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1176
+#: templates/energy-performance-certificate.html:1162
 msgid "Consumo Energía primaria no renovable"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1189
+#: templates/energy-performance-certificate.html:1175
 msgid "Emisiones de CO<sub>2</sub>"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1202
-#: templates/supplementary-report.html:258
+#: templates/energy-performance-certificate.html:1188
+#: templates/supplementary-report.html:260
 msgid "Demanda"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1214
+#: templates/energy-performance-certificate.html:1200
 msgid ""
 "\n"
 "      Nota: Los indicadores energéticos anteriores están calculados en base "
@@ -982,22 +973,26 @@ msgid ""
 "    "
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1225
+#: templates/energy-performance-certificate.html:1211
 msgid "DESCRIPCIÓN DE LA MEDIDA DE MEJORA"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1228
+#: templates/energy-performance-certificate.html:1214
 msgid ""
 "Características técnicas de la medida (modelo de equipos, materiales, "
 "parámetros característicos)"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1236
+#: templates/energy-performance-certificate.html:1222
 msgid "Coste estimado de la medida"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1244
+#: templates/energy-performance-certificate.html:1230
 msgid "Otros datos de interés"
+msgstr ""
+
+#: templates/energy-performance-certificate.html:1246
+msgid "Añadir medida de mejora desde archivo XML (o XML+PDF)"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1256
@@ -1022,35 +1017,38 @@ msgid ""
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1269
+#: templates/energy-performance-certificate.html:1288
 msgid "Fecha de realización de la visita del técnico certificador"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1276
-#: templates/energy-performance-certificate.html:1297
-msgid "Eliminar"
+msgid "Eliminar visita"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1292
+#: templates/energy-performance-certificate.html:1303
+msgid "Añadir visita"
+msgstr ""
+
+#: templates/energy-performance-certificate.html:1311
+#: templates/energy-performance-certificate.html:1333
 msgid "ANEXO V"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1292
+#: templates/energy-performance-certificate.html:1311
+#: templates/energy-performance-certificate.html:1333
 msgid "Justificación de Soluciones Singulares"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1296
+#: templates/energy-performance-certificate.html:1315
+#: templates/energy-performance-certificate.html:1337
 msgid "Descripción"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1315
-msgid "Nueva Visita"
-msgstr ""
-
 #: templates/energy-performance-certificate.html:1318
-msgid "Añadir Anexo de Justificación de Soluciones Singulares"
+msgid "Eliminar anexo"
 msgstr ""
 
-#: templates/energy-performance-certificate.html:1370
+#: templates/energy-performance-certificate.html:1415
 msgid "¿Está seguro de que desea eliminar este elemento?"
 msgstr ""
 
@@ -1242,202 +1240,218 @@ msgstr ""
 msgid "Demanda (0,8 ren/h) [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:191
+#: templates/supplementary-report.html:193
 msgid "Demanda [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:217
+#: templates/supplementary-report.html:219
 msgid "Los valores entre corchetes corresponden a los valores límite del DB-HE"
 msgstr ""
 
-#: templates/supplementary-report.html:218
+#: templates/supplementary-report.html:220
 msgid "Ahorro porcentual respecto al edificio de referencia"
 msgstr ""
 
-#: templates/supplementary-report.html:224
+#: templates/supplementary-report.html:226
 msgid "Uso de energías renovables"
 msgstr ""
 
-#: templates/supplementary-report.html:228
+#: templates/supplementary-report.html:230
 #, python-format
 msgid "Consumo de energía final para calefacción cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:232
+#: templates/supplementary-report.html:234
 #, python-format
 msgid ""
 "Consumo de energía final para refrigeración cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:236
+#: templates/supplementary-report.html:238
 #, python-format
 msgid "Consumo de energía final para ACS cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:240
+#: templates/supplementary-report.html:242
 #, python-format
 msgid "Demanda de ACS cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:244
+#: templates/supplementary-report.html:246
 msgid "Energía eléctrica generada y autoconsumida [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:259
-#: templates/supplementary-report.html:268
+#: templates/supplementary-report.html:261
+#: templates/supplementary-report.html:270
 msgid "por servicio, kWh/m<sup>2</sup>·año"
 msgstr ""
 
-#: templates/supplementary-report.html:267
+#: templates/supplementary-report.html:269
 msgid "Consumo de energía primaria no renovable"
 msgstr ""
 
-#: templates/supplementary-report.html:278
-#: templates/supplementary-report.html:287
+#: templates/supplementary-report.html:280
+#: templates/supplementary-report.html:289
 msgid "Consumo de energía final"
 msgstr ""
 
-#: templates/supplementary-report.html:279
+#: templates/supplementary-report.html:281
 msgid "por vector energético"
 msgstr ""
 
-#: templates/supplementary-report.html:288
+#: templates/supplementary-report.html:290
 msgid "por servicio"
 msgstr ""
 
-#: templates/supplementary-report.html:301
+#: templates/supplementary-report.html:303
 msgid "ZONIFICACIÓN"
 msgstr ""
 
-#: templates/supplementary-report.html:306
-#: templates/supplementary-report.html:331
-#: templates/supplementary-report.html:380
+#: templates/supplementary-report.html:308
+#: templates/supplementary-report.html:333
+#: templates/supplementary-report.html:382
 msgid "Superficie [m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:307
+#: templates/supplementary-report.html:309
 msgid "Potencia instalada de iluminación [W/m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:308
+#: templates/supplementary-report.html:310
 msgid "Iluminancia media [lux]"
 msgstr ""
 
-#: templates/supplementary-report.html:309
+#: templates/supplementary-report.html:311
 msgid "Perfile de uso"
 msgstr ""
 
-#: templates/supplementary-report.html:324
+#: templates/supplementary-report.html:326
 msgid "ENVOLVENTE TÉRMICA"
 msgstr ""
 
-#: templates/supplementary-report.html:328
-msgid "Cerramiento opaco"
-msgstr ""
-
 #: templates/supplementary-report.html:330
-#: templates/supplementary-report.html:379
-msgid "Orientación"
+msgid "Cerramiento opaco"
 msgstr ""
 
 #: templates/supplementary-report.html:332
 #: templates/supplementary-report.html:381
+msgid "Orientación"
+msgstr ""
+
+#: templates/supplementary-report.html:334
+#: templates/supplementary-report.html:383
 msgid "Transmitancia [W/m<sup>2</sup>·K]"
 msgstr ""
 
-#: templates/supplementary-report.html:349
+#: templates/supplementary-report.html:351
 #, python-format
 msgid "Fracción de superficie acristalada por orientación (%%)"
 msgstr ""
 
-#: templates/supplementary-report.html:352
+#: templates/supplementary-report.html:354
 msgid "N"
 msgstr ""
 
-#: templates/supplementary-report.html:353
+#: templates/supplementary-report.html:355
 msgid "NE"
 msgstr ""
 
-#: templates/supplementary-report.html:354
+#: templates/supplementary-report.html:356
 msgid "E"
 msgstr ""
 
-#: templates/supplementary-report.html:355
+#: templates/supplementary-report.html:357
 msgid "SE"
 msgstr ""
 
-#: templates/supplementary-report.html:356
+#: templates/supplementary-report.html:358
 msgid "S"
 msgstr ""
 
-#: templates/supplementary-report.html:357
+#: templates/supplementary-report.html:359
 msgid "SO"
 msgstr ""
 
-#: templates/supplementary-report.html:358
+#: templates/supplementary-report.html:360
 msgid "O"
 msgstr ""
 
-#: templates/supplementary-report.html:359
+#: templates/supplementary-report.html:361
 msgid "NO"
 msgstr ""
 
-#: templates/supplementary-report.html:377
+#: templates/supplementary-report.html:379
 msgid "Hueco o lucernario"
 msgstr ""
 
-#: templates/supplementary-report.html:400
+#: templates/supplementary-report.html:402
 msgid "Puente térmico"
 msgstr ""
 
-#: templates/supplementary-report.html:402
+#: templates/supplementary-report.html:404
 msgid "Longitud [m]"
 msgstr ""
 
-#: templates/supplementary-report.html:403
+#: templates/supplementary-report.html:405
 msgid "Transmitancia [W/m·K]"
 msgstr ""
 
-#: templates/supplementary-report.html:417
+#: templates/supplementary-report.html:419
 msgid "SISTEMAS"
 msgstr ""
 
-#: templates/supplementary-report.html:421
+#: templates/supplementary-report.html:423
 msgid "Subsistema"
 msgstr ""
 
-#: templates/supplementary-report.html:425
+#: templates/supplementary-report.html:427
 msgid "Generadores de calefacción, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:429
+#: templates/supplementary-report.html:431
 msgid "Generadores de refrigeración, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:433
+#: templates/supplementary-report.html:435
 msgid "Generadores de ACS, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:437
+#: templates/supplementary-report.html:439
 msgid "Sistemas secundarios, potencia nominal total calor [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:441
+#: templates/supplementary-report.html:443
 msgid "Sistemas secundarios, potencia nominal total frío [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:445
+#: templates/supplementary-report.html:447
 msgid "Torres de refrigeración, consumo total de energía [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:449
+#: templates/supplementary-report.html:451
 msgid "Ventilación y bombeo, consumo total de energía [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:453
+#: templates/supplementary-report.html:455
 msgid "Iluminación, potencia instalada [W/m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:484
+#: templates/supplementary-report.html:486
 msgid "Iluminacion"
+msgstr ""
+
+#: visorxml/settings/base.py:143
+msgid "Castellano"
+msgstr ""
+
+#: visorxml/settings/base.py:144
+msgid "Catalán"
+msgstr ""
+
+#: visorxml/settings/base.py:145
+msgid "Euskera"
+msgstr ""
+
+#: visorxml/settings/base.py:146
+msgid "Gallego"
 msgstr ""
