@@ -684,7 +684,7 @@
       <table>
         <tr>
           <td class="title" width="25%">{% trans "Nombre" %}</td>
-          <td colspan="3">{{ e.Nombre }}</td>
+          <td colspan="3">{{ e.Nombre|default:'-' }}</td>
         </tr>
         <tr>
           <td class="title" width="25%">{% trans "Tipo" %}</td>
@@ -735,7 +735,7 @@
         </tr>
         {% for e in report.data.InstalacionesTermicas.TorresyRefrigeracion|default:' ' %}
         <tr>
-          <td>{{ e.Nombre }}</td>
+          <td>{{ e.Nombre|default:'-' }}</td>
           <td>{{ e.Tipo }}</td>
           <td>{{ e.ServicioAsociado }}</td>
           <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
@@ -772,7 +772,7 @@
         </tr>
         {% for e in report.data.InstalacionesTermicas.VentilacionyBombeo|default:' ' %}
         <tr>
-          <td>{{ e.Nombre }}</td>
+          <td>{{ e.Nombre|default:'-' }}</td>
           <td>{{ e.Tipo }}</td>
           <td>{{ e.ServicioAsociado }}</td>
           <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
