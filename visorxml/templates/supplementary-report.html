@@ -473,30 +473,30 @@
     function drawChart() {
       var demand_data = google.visualization.arrayToDataTable([
           ['', ''],
-          ['{% trans "Calefacción" %}', {{ report.data.Demanda.EdificioObjeto.Calefaccion }}],
-          ['{% trans "Refrigeración" %}', {{ report.data.Demanda.EdificioObjeto.Refrigeracion }}],
-          ['{% trans "ACS" %}', {{ report.data.Demanda.EdificioObjeto.ACS }}]
+          ['{% trans "Calefacción" %}', {{ report.data.Demanda.EdificioObjeto.Calefaccion|asjsfloat }}],
+          ['{% trans "Refrigeración" %}', {{ report.data.Demanda.EdificioObjeto.Refrigeracion|asjsfloat }}],
+          ['{% trans "ACS" %}', {{ report.data.Demanda.EdificioObjeto.ACS|asjsfloat }}]
         ]);
 
       var primary_energy_data = google.visualization.arrayToDataTable([
           ['', ''],
-          ['{% trans "Calefacción" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion }}],
-          ['{% trans "Refrigeración" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion }}],
-          ['{% trans "ACS" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS }}],
-          ['{% trans "Iluminacion" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default:0 }}],
+          ['{% trans "Calefacción" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|asjsfloat }}],
+          ['{% trans "Refrigeración" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|asjsfloat }}],
+          ['{% trans "ACS" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|asjsfloat }}],
+          ['{% trans "Iluminacion" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|asjsfloat }}],
       ]);
 
       var consumption_per_vector_data = google.visualization.arrayToDataTable([
           ['', ''],
           {% for vector, value in report.data.Consumo.EnergiaFinalPorVector.items  %}
-            ['{{ vector }}', {{ value }}],
+            ['{{ vector }}', {{ value|asjsfloat }}],
           {% endfor %}
       ]);
 
       var consumption_per_service_data = google.visualization.arrayToDataTable([
           ['', ''],
           {% for servicio, value in report.data.Consumo.EnergiaFinalPorServicio.items  %}
-            ['{{ servicio }}', {{ value }}],
+            ['{{ servicio }}', {{ value|asjsfloat }}],
           {% endfor %}
       ]);
 
