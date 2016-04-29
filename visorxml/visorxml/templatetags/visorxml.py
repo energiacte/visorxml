@@ -181,17 +181,6 @@ def difwith(valuedest, valueorig):
     except:
         return ALERT_SPAN
 
-@register.filter(is_safe=True)
-def asjsfloat(value):
-    """Devuelve un valor numérico con el punto como separador decimal
-    Lo usamos para convertir de vuelta los valores con coma con separador decimal"""
-    try:
-        val = float(("%s" % value).replace(",", "."))
-    except:
-        val = 0.0
-    res = '{:0.2f}'.format(val)
-    return res
-
 
 TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
 @register.simple_tag(takes_context=True)
