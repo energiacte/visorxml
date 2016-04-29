@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 13:46+0200\n"
+"POT-Creation-Date: 2016-04-29 15:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1121,11 +1121,9 @@ msgid ""
 msgstr ""
 
 #: templates/home.html:83
-msgid "Aplicación en fase de pruebas"
-msgstr ""
-
-#: templates/home.html:84
-msgid "El uso de esta aplicación no tiene valor reglamentario."
+msgid ""
+"Para notificar incidencias o errores en el uso de esta aplicación puede usar "
+"la dirección: arquitectura@fomento.es"
 msgstr ""
 
 #: templates/supplementary-report.html:6
@@ -1440,18 +1438,18 @@ msgstr ""
 msgid "Iluminacion"
 msgstr ""
 
-#: visorxml/settings/base.py:143
+#: visorxml/settings/base.py:147
 msgid "Castellano"
 msgstr ""
 
-#: visorxml/settings/base.py:144
+#: visorxml/settings/base.py:148
 msgid "Catalán"
 msgstr ""
 
-#: visorxml/settings/base.py:145
+#: visorxml/settings/base.py:149
 msgid "Euskera"
 msgstr ""
 
-#: visorxml/settings/base.py:146
+#: visorxml/settings/base.py:150
 msgid "Gallego"
 msgstr ""
