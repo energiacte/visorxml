@@ -128,6 +128,10 @@ class XMLReport(object):
         except AttributeError:
             if path == './DatosPersonalizados/SolucionesSingulares':
                 self.add_singular_solutions(value)
+            elif path == "./PruebasComprobacionesInspecciones/Visita[1]/FechaVisita":
+                self.new_visit(date = value)
+            elif path == "./PruebasComprobacionesInspecciones/Visita[1]/Datos":
+                self.new_visit(text=value)
 
     def update_image(self, section, value):
         path = './DatosGeneralesyGeometria/%s' % section
@@ -479,15 +483,15 @@ class XMLReport(object):
         return self.xmltree.find('./DatosPersonalizados/SolucionesSingulares').text
 
 
-    def new_visit(self):
+    def new_visit(self, date = datetime.date.today().strftime("%d/%m/%y"), text = ""):
         visits = self.xmltree.find('./PruebasComprobacionesInspecciones')
         if visits == None:
            visits = lxml.etree.Element("PruebasComprobacionesInspecciones")
            self.xmltree.find(".").append(visits)
 
         new_visit = lxml.etree.Element("Visita")
-        lxml.etree.SubElement(new_visit, 'FechaVisita').text = datetime.date.today().strftime("%d/%m/%y")
-        lxml.etree.SubElement(new_visit, 'Datos').text = lxml.etree.CDATA(u'DESCRIPCIÓN')
+        lxml.etree.SubElement(new_visit, 'FechaVisita').text = date
+        lxml.etree.SubElement(new_visit, 'Datos').text = lxml.etree.CDATA(text)
         visits.append(new_visit)
         self.save_to_file(self._xml_strings[0][0])
 

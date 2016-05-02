@@ -9,8 +9,8 @@
 {% block content %}
 {% get_uso %} {#  es_vivienda <= [True o False] #}
 
-
-<div class="page hidden-print">
+{% if not pdf %}
+<div class="page">
   
   {% if not validated %}
   <hr>
@@ -50,8 +50,8 @@
     </form>
   </div></div>
 <hr>
-
-<div class="row">
+{% endif %}
+<div class="row hidden-print">
   <div class="col-md-12">
         {% if validation_data %}
           {% if validation_data.extra_files_errors %}
@@ -670,7 +670,7 @@
 
     <div class="section solo-terciario">
       <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
-      {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion  and not es_vivienda %}
+      {% if not  report.data.InstalacionesTermicas.SistemasSecundariosCalefaccionRefrigeracion and not es_vivienda %}
         <table>
           <tr>
             <td class="report-warning">
@@ -684,7 +684,7 @@
       <table>
         <tr>
           <td class="title" width="25%">{% trans "Nombre" %}</td>
-          <td colspan="3">{{ e.Nombre }}</td>
+          <td colspan="3">{{ e.Nombre|default:'-' }}</td>
         </tr>
         <tr>
           <td class="title" width="25%">{% trans "Tipo" %}</td>
@@ -735,7 +735,7 @@
         </tr>
         {% for e in report.data.InstalacionesTermicas.TorresyRefrigeracion|default:' ' %}
         <tr>
-          <td>{{ e.Nombre }}</td>
+          <td>{{ e.Nombre|default:'-' }}</td>
           <td>{{ e.Tipo }}</td>
           <td>{{ e.ServicioAsociado }}</td>
           <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
@@ -772,7 +772,7 @@
         </tr>
         {% for e in report.data.InstalacionesTermicas.VentilacionyBombeo|default:' ' %}
         <tr>
-          <td>{{ e.Nombre }}</td>
+          <td>{{ e.Nombre|default:'-' }}</td>
           <td>{{ e.Tipo }}</td>
           <td>{{ e.ServicioAsociado }}</td>
           <td class="num">{{ e.ConsumoDeEnergia|asnum }}</td>
@@ -941,11 +941,11 @@
           <td class="info">{% trans "Emisiones refrigeración" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.Refrigeracion|default:'-' }}</td>
           <td class="info">{% trans "Emisiones iluminación" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
-          <td rowspan="2">{{ report.data.Calificacion.EmisionesCO2.Iluminacion|default:'-' }}</td>
+          <td rowspan="2" class="solo-terciario">{{ report.data.Calificacion.EmisionesCO2.Iluminacion|default:'-' }}</td>
         </tr>
         <tr>
           <td class="info">{{ report.data.EmisionesCO2.Refrigeracion|asnum }}</td>
-          <td class="info">{{ report.data.EmisionesCO2.Iluminacion|asnum }}</td>
+          <td class="info solo-terciario">{{ report.data.EmisionesCO2.Iluminacion|asnum }}</td>
         </tr>
       </table>
 
@@ -1015,11 +1015,11 @@
           <td class="info">{% trans "Energía primaria refrigeración" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion|default:'-' }}</td>
           <td class="info">{% trans "Energía primaria iluminación" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
-          <td rowspan="2">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
+          <td rowspan="2" class="solo-terciario">{{ report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
         </tr>
         <tr>
           <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|asnum }}</td>
-          <td class="info">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}</td>
+          <td class="info solo-terciario">{{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}</td>
         </tr>
       </table>
     </div>
@@ -1071,7 +1071,7 @@
     {% for medida in report.data.MedidasDeMejora %}
     <h4>{% trans "MEDIDA DE MEJORA DE LA EFICIENCIA ENERGÉTICA" %}
       <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">
-        <img src="{% static "img/remove-button.png"%}" /> {% trans "(Eliminar medida de mejora)" %}
+        <img src="{% static "img/remove-button.png"%}" /> {% trans "Eliminar medida" %}
       </a>
   </h4>
     <table>
@@ -1153,8 +1153,8 @@
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
-        <td class="num">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
+        <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
+        <td class="num calc small dif solo-terciario">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:report.data.Consumo.EnergiaFinal.Global|safe }}</td>
       </tr>
@@ -1166,8 +1166,8 @@
         <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Refrigeracion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.ACS|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.ACS|default:'-' }}</td>
         <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.ACS|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|safe }}</td>
-        <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|safe }}</td>
+        <td class="num solo-terciario">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Iluminacion|default:'-' }}</td>
+        <td class="num calc small dif solo-terciario">{{ medida.EnergiaPrimariaNoRenovable.Iluminacion|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EnergiaPrimariaNoRenovable.Global|asnum }}<br />{{ medida.CalificacionEnergiaPrimariaNoRenovable.Global|default:'-' }}</td>
         <td class="num calc small dif">{{ medida.EnergiaPrimariaNoRenovable.Global|difwith:report.data.Consumo.EnergiaPrimariaNoRenovable.Global|safe }}</td>
       </tr>
@@ -1179,8 +1179,8 @@
         <td class="num calc small dif">{{ medida.EmisionesCO2.Refrigeracion|difwith:report.data.EmisionesCO2.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.ACS|asnum }}<br />{{ medida.CalificacionEmisionesCO2.ACS|default:'-' }}</td>
         <td class="num calc small dif">{{ medida.EmisionesCO2.ACS|difwith:report.data.EmisionesCO2.ACS|safe }}</td>
-        <td class="num">{{ medida.EmisionesCO2.Iluminacion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Iluminacion|default:'-' }}</td>
-        <td class="num calc small dif">{{ medida.EmisionesCO2.Iluminacion|difwith:report.data.EmisionesCO2.Iluminacion|safe }}</td>
+        <td class="num solo-terciario">{{ medida.EmisionesCO2.Iluminacion|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Iluminacion|default:'-' }}</td>
+        <td class="num calc small dif solo-terciario">{{ medida.EmisionesCO2.Iluminacion|difwith:report.data.EmisionesCO2.Iluminacion|safe }}</td>
         <td class="num">{{ medida.EmisionesCO2.Global|asnum }}<br />{{ medida.CalificacionEmisionesCO2.Global|default:'-' }}</td>
         <td class="num calc small dif">{{ medida.EmisionesCO2.Global|difwith:report.data.EmisionesCO2.Global|safe }}</td>
       </tr>
@@ -1236,16 +1236,19 @@
     </table>
     {% endfor %}
     {% endif %}
+
+    {% if not pdf %}
     <form action="{% url 'measures_xml_upload'%}" method="POST" enctype="multipart/form-data" class="measures-form">
       {% csrf_token %}
-      <a href="#" class="hidden-print green-button add-measures">
+      <a href="#" class="green-button add-measures">
         <img src="{% static "img/add-button.png"%}" />
         <span>
-          {% trans "Subir XML con medidas de mejora" %}
+          {% trans "Añadir medida de mejora desde archivo XML (o XML+PDF)" %}
         </span>
         <input type="file" class="measures-xml hidden" name="measures-xml"/>
       </a>
     </form>
+    {% endif %}
     <br><br>
 
     <div class="page-break" ></div>
@@ -1268,30 +1271,38 @@
           <a href="#" class="editable" data-type="date" data-format="dd/mm/yy" data-mode="popup" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].FechaVisita">
             {{ visita.FechaVisita }}
           </a>
-
-
           <a href="#" class="pull-right hidden-print delete-element delete-visit" data-index="{{forloop.counter}}" data-type="visit">
             <img src="{% static "img/remove-button.png"%}" />
-            {% trans "Eliminar" %}
+            {% trans "Eliminar visita" %}
           </a>
         </td>
       </tr>
       <tr>
         <td colspan="2" class="editor-html5">
-          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{{ visita.Datos|safe }}</a>
+          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[{{ forloop.counter }}].Datos">{% if visita.Datos != "-" %}{{ visita.Datos|safe }}{% endif %}</a>
         </td>
       </tr>
       {% endfor %}
+      {% if not report.data.PruebasComprobacionesInspecciones %}
+      <tr>
+        <td width="80%" class="title">{% trans "Fecha de realización de la visita del técnico certificador" %}</td>
+        <td>
+          <a href="#" class="editable" data-type="date" data-format="dd/mm/yy" data-mode="popup" id="PruebasComprobacionesInspecciones.Visita[1].FechaVisita">-</a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="editor-html5">
+          <a href="#" class="editable-html5" data-type="wysihtml5"  data-showbuttons="bottom" id="PruebasComprobacionesInspecciones.Visita[1].Datos"></a>
+        </td>
+      </tr>
+      {% endif %}
     </table>
 
-  <br>
   <a class="hidden-print green-button" href="{% url 'new_visit' %}">
     <img src="{% static "img/add-button.png"%}" />
-    {% trans "Nueva Visita" %}
+    {% trans "Añadir visita" %}
   </a>
   <br><br>
-  <br><br>
-
 
   {% if report.has_annex_v %}
 
@@ -1304,39 +1315,43 @@
           {% trans "Descripción" %}
           <a class="pull-right hidden-print delete-element" data-index="0" data-type="solutions" href="#">
             <img src="{% static "img/remove-button.png"%}" />
-            {% trans "Eliminar" %}
+            {% trans "Eliminar anexo" %}
           </a>
         </td>
       </tr>
       <tr>
         <td class="editor-html5">
-          <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{{ report.get_annex_v|safe }}</a>
+          <a href="#" class="editable-html5" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares">{% if report.get_annex_v %}{{ report.get_annex_v|safe }}{% endif %}</a>
         </td>
       </tr>
     </table>
 
   {% else %}
-      <div class="page-break" ></div>
       <!-- ANEXO V -->
-      <h3 class="text-center" id="anexo-v">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
-      <table>
-        <tr>
-          <td class="title">
-            {% trans "Descripción" %}
-          </td>
-        </tr>
-        <tr>
-          <td class="editor-html5">
-            <a href="#" class="editable" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
-          </td>
-        </tr>
-      </table>
+      <div class="anex-v hidden-print">
+        <div class="page-break" ></div>
+        <h3 class="text-center" id="anexo-v">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
+        <table>
+          <tr>
+            <td class="title">
+              {% trans "Descripción" %}
+            </td>
+          </tr>
+          <tr>
+            <td class="editor-html5">
+              <a href="#" class="editable-html5" data-type="wysihtml5" data-showbuttons="bottom" id="DatosPersonalizados.SolucionesSingulares"></a>
+            </td>
+          </tr>
+        </table>
+      </div>
   {% endif %}
 
   </div>
+  {% if not pdf %}
   <form id="secret-form" action="{% url 'measures_xml_upload' %}" class="hidden" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   </form>
+  {% endif %}
 
   <br><br>
   <script>
@@ -1384,20 +1399,10 @@
     });
     {% get_uso %}
     {% if es_vivienda %}
-    $(".solo-terciario td.report-alert").html(""); // Empty content in alerts 
+    $(".solo-terciario td.report-alert").html(""); // Empty content in alerts
     $(".solo-terciario td.report-alert").removeClass("report-alert");// remove alert in "solo-terciario" sections
+    $("td.solo-terciario").removeClass("report-alert"); // remove alert in "solo-terciario" cells
     {% endif %}
-
-/*
-    $("body").on("click", ".editable-submit", function(){
-      $(this).closest("td").removeClass("report-warning");
-      $(this).closest("td").addClass("edited");
-      $(".procedimiento").addClass("edited");
-      if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-        $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-      }
-    })
-*/
 
     $(".delete-element").on("click", function(e){
       e.preventDefault();
@@ -1456,18 +1461,17 @@
     $('.editable').editable({
       url: '{% url "update-xml" %}',
       pk: 1,
-      emptytext: 'Pulse para editar...',
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
-        debugger
-            if(!response.success){
-              $(this).closest("td").removeClass("report-warning");
-              $(this).closest("td").addClass("edited");
-              $(".procedimiento").addClass("edited");
-              if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-                $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-              }
-            }
+        if(!response.success){
+          $(this).closest("td").removeClass("report-warning");
+          $(this).closest("td").addClass("edited");
+          $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
+            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+          }
+        }
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
@@ -1477,7 +1481,7 @@
     $('.editable-html5').editable({
       url: '{% url "update-xml" %}',
       pk: 1,
-      emptytext: 'Pulse para editar...',
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
     });
 
@@ -1486,11 +1490,10 @@
     $('.editable-html5').on('save', function(e, params) {
      var node = $(this).closest("td");
      setTimeout(function(){
-      debugger;
        node.height(node.find("a").height()* 2.01);
      }, 200);
     });
-      
+
     $("td.editor-html5").each(function(){
       var height = $(this).height() * 2.01;
       $(this).height(height);
@@ -1523,7 +1526,7 @@
               window.location.reload();
             else
               window.location.href = "{% url 'certificate'%}#anexo-I";
-            
+
           }).fail(function(){
             console.log("An error occurred, the files couldn't be sent!");
           });
@@ -1571,10 +1574,6 @@
     });
   });
   </script>
-
-  <style>
-  
-  <style>
 {% endblock %}
 
 

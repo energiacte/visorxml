@@ -42,6 +42,26 @@
               <li class="get-file-li"><a href="{% url 'certificate-pdf' %}"><img class="get-file-header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
               <li class="get-file-li"><a href="{% url 'get-xml' %}"><img class="get-file-header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
             {% endif %}
+            <li class="dropdown">
+              {% load i18n %}
+              <form class="navbar-form form-inline" action="{% url 'set_language' %}" method="post" id="language-form">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}" />
+                <select name="language" class="form-control">
+                  {% get_current_language as LANGUAGE_CODE %}
+                  {% get_available_languages as LANGUAGES %}
+                  {% get_language_info_list for LANGUAGES as languages %}
+                  {% for language in languages %}
+                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                      {% if language.code == "eu" %}
+                        euskera
+                      {% else %}
+                        {{ language.name_local }}
+                      {% endif %}
+                    </option>
+                  {% endfor %}
+                </select>
+              </form>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -51,7 +71,18 @@
       {% block content %}{% endblock %}
     </div>
 
+    <div class="navbar navbar-bottom hidden-print text-center">
+      <p class="text-muted small center">VisorXML - 2016 - <a href="http://www.fomento.gob.es">Ministerio de Fomento</a>, <a href="http://www.ietcc.csic.es">Instituto Eduardo Torroja de Ciencias de la Construcción (IETcc-CSIC)</a>.</p>
+    </div>
+
     <script src="{%  static "js/visorxml.js" %}"></script>
     {% block extra_js %}{% endblock %}
+
+    <script>
+    $("#language-form select").on("change", function(){
+      $(this).parent().submit();
+    });
+    </script>
+
   </body>
 </html>

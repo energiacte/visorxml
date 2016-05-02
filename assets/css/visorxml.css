@@ -431,11 +431,9 @@
 }
 
 .green-button{
-  font-size: 16px;
-  font-weight: 600;
-      display: inline-block;
-    background: #8d9;
-    color: white;
+    font-weight: normal;
+    font-size: 14px;
+    display: inline-block;
     padding: 5px 7px;
     border-radius: 4px;
     margin: 5px 0px;
@@ -444,12 +442,11 @@
 
 .green-button:hover{
   text-decoration: none;
-  color: white;
-  background: #9ea;
+  color: black;
 }
 .green-button:active, .green-button:focus{
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
 .green-button span{
@@ -457,10 +454,12 @@
   top: 2px;
 }
 
+.green-button img { width: 20px; height: 20px; }
+
 .upload-image {
   background-size: contain;
   background-position: center;
-  background-repeat: no-repeat;"
+  background-repeat: no-repeat;
 }
 
 .wysihtml5-toolbar li:nth-child(4){
@@ -492,10 +491,10 @@ a.add-singular-solutions{
 }
 
 .delete-element{
-      text-decoration: none;
-    color: white;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
     display: inline-block;
-    background: #f99;
     padding: 3px 6px;
     border-radius: 4px;
     float: right;
@@ -504,10 +503,11 @@ a.add-singular-solutions{
 }
 
 .delete-element:hover{
-  color: white;
-  background: #faa;
   text-decoration: none;
+  color: black;
 }
+
+.delete-element img { width: 20px; height: 20px; }
 
 .report-alert{
   background-color: #F77B32!important;
@@ -523,3 +523,4 @@ a.add-singular-solutions{
   padding: 6px;
 
 }
+
