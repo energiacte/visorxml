@@ -119,12 +119,16 @@ def get_xml_strings(new_file):
 def measures_xml_upload(request):
     """ processes a XML with improvement features ("MedidasdeMejora/Medida/"). Inserts it in the current XML file.
     """
-    xml = request.FILES["measures-xml"]
-    xml_str = xml.read()
+    #Load base XML
     base_xml = request.session['report_xml_name']
     with open(os.path.join(settings.MEDIA_ROOT, base_xml), "rb") as base_file:
         base_str = base_file.read()
-    xml_strings = [(base_xml, base_str), (xml.name, xml_str)]
+        
+    xml = request.FILES["measures-xml"]
+
+    xml_strings = [(base_xml, base_str),] + get_xml_strings(xml)
+    
+
     report = XMLReport(xml_strings)
     if len(report.errors.get('validation_errors', None)) == 0:
         report_file = report.save_to_file()
