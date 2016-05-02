@@ -24,19 +24,19 @@ msgstr ""
 
 #: templates/404.html:8 templates/home.html:9
 msgid "Informe energético del edificio en formato XML"
-msgstr ""
+msgstr "Informe enerxético do edificio en formato XML"
 
 #: templates/404.html:11
 msgid "Sorry, but the requested page could not be found."
-msgstr ""
+msgstr "Sentímolo, mais a páxina solicitado no se puido atopar."
 
 #: templates/base.html:10
 msgid "Informes de eficiencia energética en XML"
-msgstr ""
+msgstr "Informes de eficiencia enerxética en XML"
 
 #: templates/base.html:26
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Cambiar navegación"
 
 #: templates/base.html:31
 msgid "Visor CTE_XML"
@@ -44,15 +44,15 @@ msgstr ""
 
 #: templates/base.html:35
 msgid "Certificado de Eficiencia Energética"
-msgstr ""
+msgstr "Certificado de Eficiencia Enerxética"
 
 #: templates/base.html:37
 msgid "Informe Complementario"
-msgstr ""
+msgstr "Informe Complementario"
 
 #: templates/energy-performance-certificate.html:7
 msgid "Visor de informes"
-msgstr ""
+msgstr "Visor de informes"
 
 #: templates/energy-performance-certificate.html:18
 msgid ""
@@ -60,6 +60,9 @@ msgid ""
 "    Seleccione un archivo de informe de eficiencia energética en XML \n"
 "    "
 msgstr ""
+"\n"
+"    Escolla un arquivo de informe de eficiencia enerxética en XML \n"
+"    "
 
 #: templates/energy-performance-certificate.html:26
 #, python-format
@@ -71,18 +74,25 @@ msgid ""
 "ejemplo de edificio con uso residencial</a>.\n"
 "    "
 msgstr ""
+"\n"
+"    Pode probar a validación cun <a href=\"%(xml_example_1_url)s\">informe "
+"de exemplo de edificio con uso\n"
+"    terciario</a> ou cun <a href=\"%(xml_example_2_url)s\">informe de "
+"exemplo de edificio con uso residencial</a>.\n"
+"    "
 
 #: templates/energy-performance-certificate.html:42
 msgid "Subir otro fichero base XML o PDF+XML"
-msgstr ""
+msgstr "Subir outro arquivo base XML ou PDF+XML"
 
 #: templates/energy-performance-certificate.html:44
 msgid "Añadir Informe base de evaluación energética en formato XML o PDF+XML"
 msgstr ""
+"Engadir Informe base de avaliación enerxética en formato XML ou PDF+XML"
 
 #: templates/energy-performance-certificate.html:59
 msgid "Archivos de mejora"
-msgstr ""
+msgstr "Arquivos de mellora"
 
 #: templates/energy-performance-certificate.html:61
 #, python-format
@@ -93,10 +103,15 @@ msgid ""
 "                archivos de mejora:\n"
 "                "
 msgstr ""
+"\n"
+"                Atopáronse <strong>%(extra_files_errors_count)s</strong> "
+"erros ao tratar os\n"
+"                arquivos de mellora:\n"
+"                "
 
 #: templates/energy-performance-certificate.html:84
 msgid "Errores de validación"
-msgstr ""
+msgstr "Erros de validación"
 
 #: templates/energy-performance-certificate.html:86
 #, python-format
@@ -106,10 +121,14 @@ msgid ""
 "strong> errores de validación:\n"
 "                "
 msgstr ""
+"\n"
+"                Atopáronse <strong>%(validation_errors_count)s</strong> "
+"erros de validación:\n"
+"                "
 
 #: templates/energy-performance-certificate.html:103
 msgid "El informe activo no contiene errores de validación."
-msgstr ""
+msgstr "O informe activo non ten erros de validación."
 
 #: templates/energy-performance-certificate.html:110
 msgid "Avisos de validación"
@@ -123,10 +142,14 @@ msgid ""
 "strong> avisos de validación:\n"
 "                "
 msgstr ""
+"\n"
+"                Atoparonse <strong>%(validation_warnings_count)s</strong> "
+"avisos de validación:\n"
+"                "
 
 #: templates/energy-performance-certificate.html:126
 msgid "No existe un informe activo."
-msgstr ""
+msgstr "Non existe un informe activo."
 
 #: templates/energy-performance-certificate.html:135
 msgid "CERTIFICADO DE EFICIENCIA ENERGÉTICA DE EDIFICIOS"
@@ -1060,6 +1083,11 @@ msgid ""
 "        para su comprobación, visualización y edición.\n"
 "        "
 msgstr ""
+"\n"
+"        Esta aplicación facilita o aproveitamento dos informes de avaliación "
+"enerxética en formato electrónico,\n"
+"        para a súa comprobación, visualización e edición.\n"
+"        "
 
 #: templates/home.html:22
 #, python-format
@@ -1075,6 +1103,16 @@ msgid ""
 "        energética del edificio en formato electrónico (XML)</a>.\n"
 "        "
 msgstr ""
+"\n"
+"        Este formato está orientado ao intercambio electrónico e ao "
+"procesamento de datos orixinados en procedemientos de\n"
+"        avaliación da demanda e do consumo enerxético para a certificación "
+"enerxética de edificios e a\n"
+"        verificación do DB-HE do Código Técnico da Edificación (CTE). A "
+"definición do formato descríbese no\n"
+"        documento <a href=\"%(xml_format_url)s\">Informe de evaluación\n"
+"        energética del edificio en formato electrónico (XML)</a>.\n"
+"        "
 
 #: templates/home.html:35
 msgid ""
@@ -1083,6 +1121,10 @@ msgid ""
 "\"http://www.w3.org/XML/Schema\">XML Schema 1.1</a>)</small>:\n"
 "              "
 msgstr ""
+"\n"
+"              Definición do esquema de datos <small>(sintaxe <a href="
+"\"http://www.w3.org/XML/Schema\">XML Schema 1.1</a>)</small>:\n"
+"              "
 
 #: templates/home.html:40
 msgid "versión 2.0"
@@ -1094,11 +1136,11 @@ msgstr ""
 
 #: templates/home.html:45
 msgid "Registro de cambios entre versiones del esquema."
-msgstr ""
+msgstr "Rexistro de cambios entre versións do esquema."
 
 #: templates/home.html:47
 msgid "Archivos de ejemplo:"
-msgstr ""
+msgstr "Arquivos de exemplo:"
 
 #: templates/home.html:50
 msgid "Informe de edificio con uso terciario (v2.0):"
@@ -1119,20 +1161,30 @@ msgid ""
 "a></b>.\n"
 "          "
 msgstr ""
+"\n"
+"          Este programa está desenrolado polo <b><a href=\"http://www.ietcc."
+"csic.es\">Instituto Eduardo Torroja de\n"
+"          Ciencias de la Construcción (IETcc-CSIC)</a></b> no marco do "
+"convenio subscrito co\n"
+"          <b><a href=\"http://www.fomento.gob.es\">Ministerio de Fomento</"
+"a></b>.\n"
+"          "
 
 #: templates/home.html:83
 msgid ""
 "Para notificar incidencias o errores en el uso de esta aplicación puede usar "
 "la dirección: arquitectura@fomento.es"
 msgstr ""
+"Para notificar incidencias ou erros no uso desta aplicación pode empregar o "
+"enderezo: arquitectura@fomento.es"
 
 #: templates/supplementary-report.html:6
 msgid "Informe complementario de eficiencia energética"
-msgstr ""
+msgstr "Informe complementario de eficiencia enerxética"
 
 #: templates/supplementary-report.html:14
 msgid "Obtener PDF"
-msgstr ""
+msgstr "Obter PDF"
 
 #: templates/supplementary-report.html:18
 msgid "INFORME COMPLEMENTARIO DE EFICIENCIA ENERGÉTICA"
@@ -1440,16 +1492,16 @@ msgstr ""
 
 #: visorxml/settings/base.py:147
 msgid "Castellano"
-msgstr ""
+msgstr "Castelán"
 
 #: visorxml/settings/base.py:148
 msgid "Catalán"
-msgstr ""
+msgstr "Catalán"
 
 #: visorxml/settings/base.py:149
 msgid "Euskera"
-msgstr ""
+msgstr "Éuscaro"
 
 #: visorxml/settings/base.py:150
 msgid "Gallego"
-msgstr ""
+msgstr "Galego"
