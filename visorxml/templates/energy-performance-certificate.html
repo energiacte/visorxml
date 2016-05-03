@@ -1073,7 +1073,7 @@
       <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">
         <img src="{% static "img/remove-button.png"%}" /> {% trans "Eliminar medida" %}
       </a>
-  </h4>
+    </h4>
     <table>
       <tr>
         <td width="20%" class="title">{% trans "Denominación:" %}</td>
@@ -1153,8 +1153,12 @@
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
-        <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
+        <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}{{ report.data.Consumo.EnergiaFinal.Iluminacion }}</td>
+        {% if report.esvivienda %}
+        <td class="num calc small dif solo-terciario">-</td>
+        {% else %}
         <td class="num calc small dif solo-terciario">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
+        {% endif %}
         <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:report.data.Consumo.EnergiaFinal.Global|safe }}</td>
       </tr>
