@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-29 15:17+0200\n"
+"POT-Creation-Date: 2016-05-03 11:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid "Comunidad Autónoma"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:186
-#: templates/supplementary-report.html:78
+#: templates/supplementary-report.html:79
 msgid "Zona climática"
 msgstr ""
 
@@ -443,9 +443,9 @@ msgstr ""
 #: templates/energy-performance-certificate.html:690
 #: templates/energy-performance-certificate.html:732
 #: templates/energy-performance-certificate.html:769
-#: templates/supplementary-report.html:331
-#: templates/supplementary-report.html:380
-#: templates/supplementary-report.html:403
+#: templates/supplementary-report.html:332
+#: templates/supplementary-report.html:381
+#: templates/supplementary-report.html:404
 msgid "Tipo"
 msgstr ""
 
@@ -480,7 +480,7 @@ msgstr ""
 
 #: templates/energy-performance-certificate.html:549
 #: templates/energy-performance-certificate.html:551
-#: templates/supplementary-report.html:384
+#: templates/supplementary-report.html:385
 msgid "Factor solar"
 msgstr ""
 
@@ -616,7 +616,7 @@ msgstr ""
 
 #: templates/energy-performance-certificate.html:796
 #: templates/energy-performance-certificate.html:826
-#: templates/supplementary-report.html:307
+#: templates/supplementary-report.html:308
 msgid "Espacio"
 msgstr ""
 
@@ -674,15 +674,15 @@ msgstr ""
 
 #: templates/energy-performance-certificate.html:851
 #: templates/energy-performance-certificate.html:1130
-#: templates/supplementary-report.html:476
-#: templates/supplementary-report.html:483
+#: templates/supplementary-report.html:477
+#: templates/supplementary-report.html:484
 msgid "Calefacción"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:852
 #: templates/energy-performance-certificate.html:1131
-#: templates/supplementary-report.html:477
-#: templates/supplementary-report.html:484
+#: templates/supplementary-report.html:478
+#: templates/supplementary-report.html:485
 msgid "Refrigeración"
 msgstr ""
 
@@ -690,9 +690,9 @@ msgstr ""
 #: templates/energy-performance-certificate.html:924
 #: templates/energy-performance-certificate.html:998
 #: templates/energy-performance-certificate.html:1132
-#: templates/supplementary-report.html:113
-#: templates/supplementary-report.html:478
-#: templates/supplementary-report.html:485
+#: templates/supplementary-report.html:114
+#: templates/supplementary-report.html:479
+#: templates/supplementary-report.html:486
 msgid "ACS"
 msgstr ""
 
@@ -905,7 +905,7 @@ msgid "ANÁLISIS TÉCNICO"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1129
-#: templates/supplementary-report.html:109
+#: templates/supplementary-report.html:110
 msgid "Indicador"
 msgstr ""
 
@@ -922,8 +922,8 @@ msgstr ""
 #: templates/energy-performance-certificate.html:1141
 #: templates/energy-performance-certificate.html:1143
 #: templates/energy-performance-certificate.html:1145
-#: templates/supplementary-report.html:227
-#: templates/supplementary-report.html:424
+#: templates/supplementary-report.html:228
+#: templates/supplementary-report.html:425
 msgid "Valor"
 msgstr ""
 
@@ -956,7 +956,7 @@ msgid "Emisiones de CO<sub>2</sub>"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1188
-#: templates/supplementary-report.html:260
+#: templates/supplementary-report.html:261
 msgid "Demanda"
 msgstr ""
 
@@ -992,7 +992,7 @@ msgid "Otros datos de interés"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1246
-msgid "Añadir medida de mejora desde archivo XML (o XML+PDF)"
+msgid "Añadir medida de mejora desde archivo XML (o PDF+XML)"
 msgstr ""
 
 #: templates/energy-performance-certificate.html:1256
@@ -1126,315 +1126,315 @@ msgid ""
 "la dirección: arquitectura@fomento.es"
 msgstr ""
 
-#: templates/supplementary-report.html:6
+#: templates/supplementary-report.html:7
 msgid "Informe complementario de eficiencia energética"
 msgstr ""
 
-#: templates/supplementary-report.html:14
+#: templates/supplementary-report.html:15
 msgid "Obtener PDF"
 msgstr ""
 
-#: templates/supplementary-report.html:18
+#: templates/supplementary-report.html:19
 msgid "INFORME COMPLEMENTARIO DE EFICIENCIA ENERGÉTICA"
 msgstr ""
 
-#: templates/supplementary-report.html:21
+#: templates/supplementary-report.html:22
 msgid "DATOS GENERALES DEL EDIFICIO"
 msgstr ""
 
-#: templates/supplementary-report.html:29
+#: templates/supplementary-report.html:30
 msgid "Año de construcción:"
 msgstr ""
 
-#: templates/supplementary-report.html:38
+#: templates/supplementary-report.html:39
 msgid "Características geométricas"
 msgstr ""
 
-#: templates/supplementary-report.html:48
+#: templates/supplementary-report.html:49
 msgid "Superficie habitable [m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:55
+#: templates/supplementary-report.html:56
 msgid "Número de plantas"
 msgstr ""
 
-#: templates/supplementary-report.html:57
+#: templates/supplementary-report.html:58
 msgid "Sobre rasante:"
 msgstr ""
 
-#: templates/supplementary-report.html:58
+#: templates/supplementary-report.html:59
 msgid "bajo rasante:"
 msgstr ""
 
-#: templates/supplementary-report.html:62
+#: templates/supplementary-report.html:63
 msgid "Volumen habitable [m<sup>3</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:66
+#: templates/supplementary-report.html:67
 msgid "Compacidad [m<sup>3</sup>/m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:75
+#: templates/supplementary-report.html:76
 msgid "Características de uso"
 msgstr ""
 
-#: templates/supplementary-report.html:82
+#: templates/supplementary-report.html:83
 msgid "Demanda de ACS a 60ºC [litros/día]"
 msgstr ""
 
-#: templates/supplementary-report.html:86
+#: templates/supplementary-report.html:87
 msgid "Ventilación [ren/h]"
 msgstr ""
 
-#: templates/supplementary-report.html:90
+#: templates/supplementary-report.html:91
 msgid "Ventilación + infiltraciones [ren/h]"
 msgstr ""
 
-#: templates/supplementary-report.html:94
+#: templates/supplementary-report.html:95
 msgid "Densidad de fuentes internas [W/m<sup>2</sup>h]"
 msgstr ""
 
-#: templates/supplementary-report.html:103
+#: templates/supplementary-report.html:104
 msgid "EFICIENCIA ENERGÉTICA"
 msgstr ""
 
-#: templates/supplementary-report.html:105
+#: templates/supplementary-report.html:106
 msgid "Procedimiento usado para la evaluación:"
 msgstr ""
 
-#: templates/supplementary-report.html:110
+#: templates/supplementary-report.html:111
 msgid "Cal."
 msgstr ""
 
-#: templates/supplementary-report.html:111
+#: templates/supplementary-report.html:112
 msgid "Ref."
 msgstr ""
 
-#: templates/supplementary-report.html:112
+#: templates/supplementary-report.html:113
 msgid "Conjunta"
 msgstr ""
 
-#: templates/supplementary-report.html:114
+#: templates/supplementary-report.html:115
 msgid "Ilum."
 msgstr ""
 
-#: templates/supplementary-report.html:115
+#: templates/supplementary-report.html:116
 msgid "Global"
 msgstr ""
 
-#: templates/supplementary-report.html:118
+#: templates/supplementary-report.html:119
 msgid "Consumo Energía final [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:127
+#: templates/supplementary-report.html:128
 msgid "Consumo Energía primaria no renovable [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:152
+#: templates/supplementary-report.html:153
 msgid "Emisiones de CO<sub>2</sub> [kgCO<sub>2</sub>/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:177
+#: templates/supplementary-report.html:178
 msgid "Demanda (0,8 ren/h) [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:193
+#: templates/supplementary-report.html:194
 msgid "Demanda [kWh/m<sup>2</sup>·año]"
 msgstr ""
 
-#: templates/supplementary-report.html:219
+#: templates/supplementary-report.html:220
 msgid "Los valores entre corchetes corresponden a los valores límite del DB-HE"
 msgstr ""
 
-#: templates/supplementary-report.html:220
+#: templates/supplementary-report.html:221
 msgid "Ahorro porcentual respecto al edificio de referencia"
 msgstr ""
 
-#: templates/supplementary-report.html:226
+#: templates/supplementary-report.html:227
 msgid "Uso de energías renovables"
 msgstr ""
 
-#: templates/supplementary-report.html:230
+#: templates/supplementary-report.html:231
 #, python-format
 msgid "Consumo de energía final para calefacción cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:234
+#: templates/supplementary-report.html:235
 #, python-format
 msgid ""
 "Consumo de energía final para refrigeración cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:238
+#: templates/supplementary-report.html:239
 #, python-format
 msgid "Consumo de energía final para ACS cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:242
+#: templates/supplementary-report.html:243
 #, python-format
 msgid "Demanda de ACS cubierto por renovables [%%]"
 msgstr ""
 
-#: templates/supplementary-report.html:246
+#: templates/supplementary-report.html:247
 msgid "Energía eléctrica generada y autoconsumida [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:261
-#: templates/supplementary-report.html:270
+#: templates/supplementary-report.html:262
+#: templates/supplementary-report.html:271
 msgid "por servicio, kWh/m<sup>2</sup>·año"
 msgstr ""
 
-#: templates/supplementary-report.html:269
+#: templates/supplementary-report.html:270
 msgid "Consumo de energía primaria no renovable"
 msgstr ""
 
-#: templates/supplementary-report.html:280
-#: templates/supplementary-report.html:289
+#: templates/supplementary-report.html:281
+#: templates/supplementary-report.html:290
 msgid "Consumo de energía final"
 msgstr ""
 
-#: templates/supplementary-report.html:281
+#: templates/supplementary-report.html:282
 msgid "por vector energético"
 msgstr ""
 
-#: templates/supplementary-report.html:290
+#: templates/supplementary-report.html:291
 msgid "por servicio"
 msgstr ""
 
-#: templates/supplementary-report.html:303
+#: templates/supplementary-report.html:304
 msgid "ZONIFICACIÓN"
 msgstr ""
 
-#: templates/supplementary-report.html:308
-#: templates/supplementary-report.html:333
-#: templates/supplementary-report.html:382
+#: templates/supplementary-report.html:309
+#: templates/supplementary-report.html:334
+#: templates/supplementary-report.html:383
 msgid "Superficie [m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:309
+#: templates/supplementary-report.html:310
 msgid "Potencia instalada de iluminación [W/m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:310
+#: templates/supplementary-report.html:311
 msgid "Iluminancia media [lux]"
 msgstr ""
 
-#: templates/supplementary-report.html:311
+#: templates/supplementary-report.html:312
 msgid "Perfile de uso"
 msgstr ""
 
-#: templates/supplementary-report.html:326
+#: templates/supplementary-report.html:327
 msgid "ENVOLVENTE TÉRMICA"
 msgstr ""
 
-#: templates/supplementary-report.html:330
+#: templates/supplementary-report.html:331
 msgid "Cerramiento opaco"
 msgstr ""
 
-#: templates/supplementary-report.html:332
-#: templates/supplementary-report.html:381
+#: templates/supplementary-report.html:333
+#: templates/supplementary-report.html:382
 msgid "Orientación"
 msgstr ""
 
-#: templates/supplementary-report.html:334
-#: templates/supplementary-report.html:383
+#: templates/supplementary-report.html:335
+#: templates/supplementary-report.html:384
 msgid "Transmitancia [W/m<sup>2</sup>·K]"
 msgstr ""
 
-#: templates/supplementary-report.html:351
+#: templates/supplementary-report.html:352
 #, python-format
 msgid "Fracción de superficie acristalada por orientación (%%)"
 msgstr ""
 
-#: templates/supplementary-report.html:354
+#: templates/supplementary-report.html:355
 msgid "N"
 msgstr ""
 
-#: templates/supplementary-report.html:355
+#: templates/supplementary-report.html:356
 msgid "NE"
 msgstr ""
 
-#: templates/supplementary-report.html:356
+#: templates/supplementary-report.html:357
 msgid "E"
 msgstr ""
 
-#: templates/supplementary-report.html:357
+#: templates/supplementary-report.html:358
 msgid "SE"
 msgstr ""
 
-#: templates/supplementary-report.html:358
+#: templates/supplementary-report.html:359
 msgid "S"
 msgstr ""
 
-#: templates/supplementary-report.html:359
+#: templates/supplementary-report.html:360
 msgid "SO"
 msgstr ""
 
-#: templates/supplementary-report.html:360
+#: templates/supplementary-report.html:361
 msgid "O"
 msgstr ""
 
-#: templates/supplementary-report.html:361
+#: templates/supplementary-report.html:362
 msgid "NO"
 msgstr ""
 
-#: templates/supplementary-report.html:379
+#: templates/supplementary-report.html:380
 msgid "Hueco o lucernario"
 msgstr ""
 
-#: templates/supplementary-report.html:402
+#: templates/supplementary-report.html:403
 msgid "Puente térmico"
 msgstr ""
 
-#: templates/supplementary-report.html:404
+#: templates/supplementary-report.html:405
 msgid "Longitud [m]"
 msgstr ""
 
-#: templates/supplementary-report.html:405
+#: templates/supplementary-report.html:406
 msgid "Transmitancia [W/m·K]"
 msgstr ""
 
-#: templates/supplementary-report.html:419
+#: templates/supplementary-report.html:420
 msgid "SISTEMAS"
 msgstr ""
 
-#: templates/supplementary-report.html:423
+#: templates/supplementary-report.html:424
 msgid "Subsistema"
 msgstr ""
 
-#: templates/supplementary-report.html:427
+#: templates/supplementary-report.html:428
 msgid "Generadores de calefacción, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:431
+#: templates/supplementary-report.html:432
 msgid "Generadores de refrigeración, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:435
+#: templates/supplementary-report.html:436
 msgid "Generadores de ACS, potencia nominal total [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:439
+#: templates/supplementary-report.html:440
 msgid "Sistemas secundarios, potencia nominal total calor [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:443
+#: templates/supplementary-report.html:444
 msgid "Sistemas secundarios, potencia nominal total frío [kW]"
 msgstr ""
 
-#: templates/supplementary-report.html:447
+#: templates/supplementary-report.html:448
 msgid "Torres de refrigeración, consumo total de energía [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:451
+#: templates/supplementary-report.html:452
 msgid "Ventilación y bombeo, consumo total de energía [kWh/año]"
 msgstr ""
 
-#: templates/supplementary-report.html:455
+#: templates/supplementary-report.html:456
 msgid "Iluminación, potencia instalada [W/m<sup>2</sup>]"
 msgstr ""
 
-#: templates/supplementary-report.html:486
+#: templates/supplementary-report.html:487
 msgid "Iluminacion"
 msgstr ""
 
