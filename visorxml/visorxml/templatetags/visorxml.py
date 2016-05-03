@@ -172,7 +172,7 @@ def aspct(value):
 
 @register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
-    if (not valuedest) and (not valueorig):
+    if (not valuedest) or (not valueorig):
         return '-'
     try:
         res1 = float(valueorig) - float(valuedest)
