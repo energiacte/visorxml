@@ -323,6 +323,7 @@ class XMLReport(object):
         energia_refrigeracion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Refrigeracion'))
         energia_acs = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/ACS'))
         energia_iluminacion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Iluminacion'))
+
         diff = energia_global - energia_global_base
 
         lxml.etree.SubElement(element, 'Global').text = '%s' % energia_global
@@ -410,6 +411,14 @@ class XMLReport(object):
         if self._data is None:
             self._data = self._parsetree()
         return self._data
+
+    @property
+    def esvivienda(self):
+        """Es un edificio de uso Vivienda?"""
+        try:
+            return 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
+        except:
+            return False
 
     def _parsetree(self):
         data = Bunch()
@@ -1131,7 +1140,7 @@ class XMLReport(object):
 
         zci = self.data.IdentificacionEdificio.ZonaClimatica[:-1]
         zcv = self.data.IdentificacionEdificio.ZonaClimatica[-1]
-        esvivienda = 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
+        esvivienda = self.esvivienda
 
         info = self.errors['info']
         if self.data.IdentificacionEdificio.AnoConstruccion == '-':
