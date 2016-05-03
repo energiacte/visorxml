@@ -308,6 +308,10 @@ class XMLReport(object):
                 servicios[servicio] += Decimal(self.get_XML_value(improvement_xml_tree,
                                                                   './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio)))
 
+        # Si no hay Global definido (vivienda) sumamos resto de servicios
+        if not servicios.get('Global', None):
+            servicios['Global'] = sum(servicios.get(servicio, 0) for servicio in servicios if servicio is not 'Global')
+
         element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaFinal')
         for servicio, valor in servicios.items():
             lxml.etree.SubElement(element, servicio).text = '%s' % valor
@@ -954,6 +958,10 @@ class XMLReport(object):
                 cval = getattr(energia_final_por_servicios, servicio, 0.0)
                 cval = 0.0 if cval is None else cval
                 setattr(energia_final_por_servicios, servicio, cval + veccval)
+        if not getattr(energia_final_por_servicios, 'Global', None):
+            globalservicios = sum(getattr(energia_final_por_servicios, servicio, 0.0)
+                                  for servicio in SERVICIOS if servicio != 'Global')
+            setattr(energia_final_por_servicios, 'Global', globalservicios)
 
         return energia_final_por_servicios
 
