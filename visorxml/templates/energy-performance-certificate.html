@@ -1460,11 +1460,64 @@
 
     $("input.file-input").fileinput(fileInputOptions);
 
+    /**
+     * Spanish translation for bootstrap-datepicker
+     * Bruno Bonamin <bruno.bonamin@gmail.com>
+     */
+    ;(function($){
+      $.fn.datepicker.dates['es'] = {
+        days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+        daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+        daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+        months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+        today: "Hoy",
+        monthsTitle: "Meses",
+        clear: "Borrar",
+        weekStart: 1,
+        format: "dd/mm/yyyy"
+      };
+      $.fn.datepicker.dates['ca'] = {
+        days: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+        daysShort: ["Diu",  "Dil", "Dmt", "Dmc", "Dij", "Div", "Dis"],
+        daysMin: ["dg", "dl", "dt", "dc", "dj", "dv", "ds"],
+        months: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+        monthsShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+        today: "Avui",
+        monthsTitle: "Mesos",
+        clear: "Esborrar",
+        weekStart: 1,
+        format: "dd/mm/yyyy"
+      };
+      $.fn.datepicker.dates['eu'] = {
+        days: ['Igandea', 'Astelehena', 'Asteartea', 'Asteazkena', 'Osteguna', 'Ostirala', 'Larunbata'],
+        daysShort: ['Ig', 'Al', 'Ar', 'Az', 'Og', 'Ol', 'Lr'],
+        daysMin: ['Ig', 'Al', 'Ar', 'Az', 'Og', 'Ol', 'Lr'],
+        months: ['Urtarrila', 'Otsaila', 'Martxoa', 'Apirila', 'Maiatza', 'Ekaina', 'Uztaila', 'Abuztua', 'Iraila', 'Urria', 'Azaroa', 'Abendua'],
+        monthsShort: ['Urt', 'Ots', 'Mar', 'Api', 'Mai', 'Eka', 'Uzt', 'Abu', 'Ira', 'Urr', 'Aza', 'Abe'],
+        today: "Gaur"
+      };
+      $.fn.datepicker.dates['gl'] = {
+        days: ["Domingo", "Luns", "Martes", "Mércores", "Xoves", "Venres", "Sábado"],
+        daysShort: ["Dom", "Lun", "Mar", "Mér", "Xov", "Ven", "Sáb"],
+        daysMin: ["Do", "Lu", "Ma", "Me", "Xo", "Ve", "Sa"],
+        months: ["Xaneiro", "Febreiro", "Marzo", "Abril", "Maio", "Xuño", "Xullo", "Agosto", "Setembro", "Outubro", "Novembro", "Decembro"],
+        monthsShort: ["Xan", "Feb", "Mar", "Abr", "Mai", "Xun", "Xul", "Ago", "Sep", "Out", "Nov", "Dec"],
+        today: "Hoxe",
+        clear: "Limpar",
+        weekStart: 1,
+        format: "dd/mm/yyyy"
+      };
+    }(jQuery));
+
 
     $.fn.editable.defaults.mode = 'inline';
     $('.editable').editable({
       url: '{% url "update-xml" %}',
       pk: 1,
+      datepicker: {
+        language: '{% get_current_language as LANGUAGE_CODE %}{{LANGUAGE_CODE}}'
+      },
       emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
