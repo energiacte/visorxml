@@ -1154,6 +1154,8 @@ class XMLReport(object):
             info.append(('AVISO', 'No se ha definido el año de construcción', "IdentificacionEdificio.AnoConstruccion"))
         if self.data.IdentificacionEdificio.ReferenciaCatastral == '-':
             info.append(('AVISO', 'No se ha definido la referencia catastral',"IdentificacionEdificio.ReferenciaCatastral"))
+        if self.data.DatosGeneralesyGeometria.DemandaDiariaACS <= 0.0:
+            info.append(('AVISO', 'Demanda diaria de ACS nula',"DatosGeneralesyGeometria.DemandaDiariaACS"))
 
         if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
             info.append(('ERROR', 'Superficie habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
