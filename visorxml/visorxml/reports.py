@@ -46,7 +46,6 @@ VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros '
 SERVICIOS = 'Global Calefaccion Refrigeracion ACS Iluminacion'.split()
 NIVELESESCALA = 'A B C D E F'.split()
 ALERTINT = 9999999999
-ALERTFLOAT = ALERTINT + 0.99
 ALERT = ALERTINT / 100
 
 
@@ -660,7 +659,7 @@ class XMLReport(object):
             generadores_de_calefaccion.append(obj)
 
         total_potencia_generadores_de_calefaccion = sum(
-            e.PotenciaNominal for e in generadores_de_calefaccion if e.PotenciaNominal <= ALERT)
+            e.PotenciaNominal for e in generadores_de_calefaccion if e.PotenciaNominal < ALERT)
 
         return generadores_de_calefaccion, total_potencia_generadores_de_calefaccion
 
@@ -679,7 +678,7 @@ class XMLReport(object):
             generadores_de_refrigeracion.append(obj)
 
         total_potencia_generadores_de_refrigeracion = sum(
-            e.PotenciaNominal for e in generadores_de_refrigeracion if e.PotenciaNominal <= ALERT)
+            e.PotenciaNominal for e in generadores_de_refrigeracion if e.PotenciaNominal < ALERT)
 
         return generadores_de_refrigeracion, total_potencia_generadores_de_refrigeracion
 
