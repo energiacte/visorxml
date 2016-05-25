@@ -141,7 +141,7 @@ def asnum(value):
         return '-'
     try:
         val = float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
@@ -153,7 +153,7 @@ def asint(value):
         return '-'
     try:
         val = int(value)
-        res = '{0:d}'.format(int(val)) if val <= ALERT else ALERT_SPAN
+        res = '{0:d}'.format(int(val)) if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
@@ -165,7 +165,7 @@ def aspct(value):
         return '-'
     try:
         val = 100.0 * float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
