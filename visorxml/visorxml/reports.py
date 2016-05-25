@@ -1156,7 +1156,7 @@ class XMLReport(object):
             info.append(('AVISO', 'No se ha definido la referencia catastral',"IdentificacionEdificio.ReferenciaCatastral"))
 
         if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
-            info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
+            info.append(('ERROR', 'Superficie habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
         if zcv not in '1234':
             info.append(('ERROR', 'Zona climática de verano incorrecta', "IdentificacionEdificio.ZonaClimatica"))
         if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:
