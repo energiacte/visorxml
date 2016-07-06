@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'jquery',
     'djangoformsetjs',
-    'visorxml'
+    'visorxml',
+    'generadorxml'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -135,6 +136,7 @@ VERSION = '1.0'
 
 XSDPATH2 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema20.xsd')
 XSDPATH1 = os.path.join(BASE_DIR, '..', 'static', 'docs', 'DatosEnergeticosDelEdificioSchema10.xsd')
+XSDPATH_MINI  = os.path.join(BASE_DIR,'..', 'generadorxml', 'doc', 'DatosEnergeticosDelEdificioMini10.xsd')
 
 
 from django.utils.translation import ugettext_lazy as _

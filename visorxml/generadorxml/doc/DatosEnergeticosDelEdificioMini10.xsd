@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!-- Esquema de datos del edificio orientados a la certificación energética y verificación del DB-HE -->
+
+<!-- Definición de tipos de datos simples -->
+<xs:simpleType name="dectype2digits"><xs:restriction base="xs:decimal"><xs:pattern value="[+-]?\d*(\.\d{1,2})?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeCalificacion"><xs:restriction base="xs:string"><xs:pattern value="([A-G])"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeTipoDeEdificio"><xs:restriction base="xs:string"><xs:pattern value="ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque|EdificioUsoTerciario|LocalUsoTerciario"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="stringtypeAlcanceInformacionXML"><xs:restriction base="xs:string"><xs:pattern value="CertificacionExistente|VerificacionExistente|CertificacionVerificacionExistente|CertificacionNuevo|VerificacionNuevo|CertificacionVerificacionNuevo"/></xs:restriction></xs:simpleType>
+
+<!--Estructura general -->
+<xs:element name="DatosEnergeticosDelEdificioMini">
+  <xs:complexType>
+    <xs:all>
+      <xs:element name="DatosDelCertificador" type="DatosDelCertificadorType"/>
+      <xs:element name="IdentificacionEdificio" type="IdentificacionEdificioType"/>
+      <xs:element name="DatosGeneralesyGeometria" type="DatosGeneralesyGeometriaType"/>
+      <xs:element name="Demanda" type="DemandaType" minOccurs="0"/>
+      <xs:element name="Consumo" type="ConsumoType" minOccurs="0"/>
+      <xs:element name="EmisionesCO2" type="EmisionesType" minOccurs="0"/>
+      <xs:element name="Calificacion" type="CalificacionType" minOccurs="0"/>
+      <xs:element name="DatosPersonalizados" minOccurs="0"><xs:complexType><xs:sequence><xs:any processContents="skip" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+    </xs:all>
+    <xs:attribute name="version" type="xs:string" use="required" fixed="1.0" />
+  </xs:complexType>
+</xs:element>
+
+<!-- Definición de datos complejos -->
+
+<!-- DatosDelCertificador-->
+<xs:complexType name="DatosDelCertificadorType">
+  <xs:all>
+    <xs:element type="xs:string" name="NombreyApellidos"/><!-- Nombre y apellidos del técnico certificador -->
+    <xs:element type="xs:string" name="NIF"/><!-- NIF o NIE del técnico certificador -->
+    <xs:element type="xs:string" name="RazonSocial" minOccurs="0"/><!--Razón social de la entidad certificadora-->
+    <xs:element type="xs:string" name="NIFEntidad" minOccurs="0"/><!--NIF de la entidad certificadora-->
+    <xs:element type="xs:string" name="Domicilio"/><!-- Dirección postal correspondiente al domicilio del certificador o entidad certificadora  -->
+    <xs:element type="xs:string" name="Municipio"/><!-- Municipio del domicilio -->
+    <xs:element type="xs:string" name="CodigoPostal"/><!-- Código postal del domicilio -->
+    <xs:element type="xs:string" name="Provincia"/><!-- Provincia del domicilio -->
+    <xs:element type="xs:string" name="ComunidadAutonoma"/><!-- Comunidad autónoma del domicilio -->
+    <xs:element type="xs:string" name="Email"/><!-- Correo electrónico de contacto -->
+    <xs:element type="xs:string" name="Telefono"/><!-- Teléfono de contacto (v2) -->
+    <xs:element type="xs:string" name="Titulacion"/><!-- Titulación del certificador -->
+    <xs:element type="xs:string" name="Fecha"/><!-- Fecha de emisión del certificado -->
+  </xs:all>
+</xs:complexType>
+
+<!-- IdentificacionDelEdificio-->
+<xs:complexType name="IdentificacionEdificioType">
+  <xs:all>
+    <xs:element name="NombreDelEdificio" type="xs:string" /><!-- Identificación del edificio -->
+    <xs:element name="Direccion" type="xs:string" /><!-- Dirección postal del edificio -->
+    <xs:element name="Municipio" type="xs:string" /><!-- Municipio correspondiente al edificio -->
+    <xs:element name="CodigoPostal" type="xs:string" /><!-- Código postal correspondiente al edificio -->
+    <xs:element name="Provincia" type="xs:string" /><!-- Provincia de localización del edificio -->
+    <xs:element name="ComunidadAutonoma" type="xs:string" /><!-- Comunidad autónoma de localización del edificio -->
+    <xs:element name="ZonaClimatica" type="xs:string" /><!-- Zona climática en la que se sitúa el edificio -->
+    <xs:element name="AnoConstruccion" type="xs:string" /><!-- Año de construcción del edificio -->
+    <xs:element name="ReferenciaCatastral" type="xs:string" /><!-- Referencia o referencias catastrales, separadas por comas -->
+    <xs:element name="TipoDeEdificio" type="stringtypeTipoDeEdificio"/><!-- Tipo de edificio o parte del edificio certificado -->
+    <xs:element name="NormativaVigente" type="xs:string" /><!-- Normativa vigente en el momento de construcción o rehabilitación del edificio o local -->
+    <xs:element name="Procedimiento" type="xs:string" /><!-- Procedimiento aplicado para la calificación energética y verificación del DB-HE -->
+    <xs:element name="AlcanceInformacionXML" type="stringtypeAlcanceInformacionXML"/><!-- Alcance de la información incluida en el XML: verificación del DB-HE y/o certificación energética -->
+  </xs:all>
+</xs:complexType>
+
+<!-- DatosGeneralesyGeometria-->
+<xs:complexType name="DatosGeneralesyGeometriaType">
+  <xs:all>
+    <xs:element name="SuperficieHabitable" type="dectype2digits"/>
+  </xs:all>
+</xs:complexType>
+
+<!-- Demanda: edificio objeto, edificio de referencia, exigencias -->
+<xs:complexType name="DemandaType">
+  <xs:all>
+    <!-- Demanda: edificio objeto -->
+    <xs:element name="EdificioObjeto">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!-- Consumo: factores de paso, energía final por vectores, energía primaria no renovable por servicios, exigencias -->
+<xs:complexType name="ConsumoType">
+  <xs:all>
+    <!-- Consumo: energía primaria no renovable por servicios -->
+    <xs:element name="EnergiaPrimariaNoRenovable">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Global" type="dectype2digits"/>
+            <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+            <xs:element name="Iluminacion" type="dectype2digits" minOccurs="0"/> <!--Solo terciario-->
+          </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+<!-- Emisiones: por servicios y por tipo de vector energético -->
+<xs:complexType name="EmisionesType">
+  <xs:all>
+    <xs:element name="Global" type="dectype2digits"/>
+    <xs:element name="Calefaccion" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="Refrigeracion" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="ACS" type="dectype2digits" minOccurs="0"/>
+    <xs:element name="Iluminacion" type="dectype2digits" minOccurs="0"/><!--Solo terciario-->
+  </xs:all>
+</xs:complexType>
+
+<!-- Calificacion: demanda, energía primaria no renovable, emisiones de CO2 -->
+<xs:complexType name="CalificacionType">
+  <xs:all>
+    <xs:element name="Demanda">
+        <xs:complexType>
+            <xs:all>
+              <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+              <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EnergiaPrimariaNoRenovable">
+        <xs:complexType>
+        <xs:all>
+            <xs:element name="Global" type="stringtypeCalificacion"/>
+            <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+            <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EmisionesCO2">
+        <xs:complexType>
+        <xs:all>
+          <xs:element name="Global" type="stringtypeCalificacion"/>
+          <xs:element name="Calefaccion" type="stringtypeCalificacion" minOccurs="0"/>
+          <xs:element name="Refrigeracion" type="stringtypeCalificacion" minOccurs="0"/>
+          <xs:element name="ACS" type="stringtypeCalificacion" minOccurs="0"/>
+          <xs:element name="Iluminacion" type="stringtypeCalificacion" minOccurs="0"/><!--Solo terciario-->
+        </xs:all>
+        </xs:complexType>
+    </xs:element>
+  </xs:all>
+</xs:complexType>
+
+</xs:schema>

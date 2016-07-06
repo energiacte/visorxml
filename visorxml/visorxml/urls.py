@@ -45,5 +45,6 @@ urlpatterns = [
     url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml'),
     url(r'^upload-image$', UploadImageView.as_view(), name='upload-image'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^generator/', include('generadorxml.urls')),
 ]
 
