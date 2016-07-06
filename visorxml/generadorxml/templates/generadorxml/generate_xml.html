@@ -588,9 +588,13 @@
           $(this).closest("td").removeClass("report-warning");
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
+            $(".procedimiento a").html("GeneradorXML ");
+          }
           if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
             $(".procedimiento a").html($(".procedimiento a").html()+ " + [VisorXML[1.0]");
           }
+          validate_download();
         
       },
       error: function(response, newValue) {
@@ -618,6 +622,9 @@
           $(this).closest("td").removeClass("report-warning");
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
+            $(".procedimiento a").html("GeneradorXML ");
+          }
           if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
             $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
           }
@@ -626,6 +633,7 @@
           debugger;
           node.attr("src",response);
           $("a[data-svg=" + svg + "]").html(newValue);
+          validate_download();
         
       },
       error: function(response, newValue) {
@@ -651,9 +659,13 @@
           $(this).closest("td").removeClass("report-warning");
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
+            $(".procedimiento a").html("GeneradorXML ");
+          }
           if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
             $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
           }
+          validate_download();
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
@@ -679,9 +691,14 @@
           $(this).closest("td").removeClass("report-warning");
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
+            $(".procedimiento a").html("GeneradorXML ");
+          }
           if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
             $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
           }
+          $(".editable-tipo").html(newValue);
+          validate_download();
 
       },
       error: function(response, newValue) {
@@ -700,6 +717,9 @@
           $(this).closest("td").removeClass("report-warning");
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
+          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
+            $(".procedimiento a").html("GeneradorXML ");
+          }
           if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
             $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
           }
@@ -707,6 +727,7 @@
           if ($(this).data("refresh") != undefined){
             $("."+$(this).data("refresh")).html(newValue);
           }
+          validate_download();
         
       },
       error: function(response, newValue) {
@@ -714,7 +735,24 @@
       },
     });
 
+    
+    validate_download();
+    
+
   });
+
+  function validate_download(){
+    $.ajax({
+      url: "{% url 'validate-mini-xml' %}",
+      success: function(data){
+          if(data=="Yes")
+            $(".get-file-li").removeClass("hidden");
+          else
+            $(".get-file-li").addClass("hidden");
+      },
+    });
+  }
+
   </script>
 {% endblock %}
 
@@ -722,8 +760,8 @@
 
 
 {% block downloads %}
-    {% if download %}
-      <li class="get-file-li"><a href="{% url 'download-pdf-mini' %}"><img class="get-file-header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
-      <li class="get-file-li"><a href="{% url 'download-xml-mini' %}"><img class="get-file-header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
-    {% endif %}
+    
+      <li class="get-file-li hidden"><a href="{% url 'download-pdf-mini' %}"><img class="get-file-header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
+      <li class="get-file-li hidden"><a href="{% url 'download-xml-mini' %}"><img class="get-file-header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
+    
 {% endblock %}

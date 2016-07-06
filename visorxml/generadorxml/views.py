@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from datetime import datetime,date
 from .pdf_utils import render_to_pdf
 from django.template.loader import render_to_string
+from generadorxml.templatetags.generadorxml import escalasvg
 
 
 def load_report(session):
@@ -26,6 +27,8 @@ def load_report(session):
         return None
 
 def new_report(session):
+    """ Create new mini-xml
+    """
     name = random_name()
     report = XMLReport([(name, BASE_XML_MINI),])
     report.save_to_file(name)
@@ -33,27 +36,31 @@ def new_report(session):
     return report
 
 
+def validate(request):
+    report = load_report(request.session)
+    report = load_report(request.session)
+    if len(report.errors["validation_errors"]) == 0:
+        return HttpResponse("Yes")
+    else:
+        return HttpResponse("No")
 
 def generate_report(request):
-    """ View the current energy certificate in a web page
+    """ View for the mini xml form. If not exists, new mini-xml is created
     """
     if request.session.get('new_xml_name', False):
     	report = load_report(request.session)
-    	validation_data = report.errors
     	
     else:
     	report = new_report(request.session)
 
-    download = True
-
     return render(request, "generadorxml/generate_xml.html", locals())
-
-from generadorxml.templatetags.generadorxml import escalasvg
-
 
 
 @method_decorator(csrf_exempt)
 def update_xml_mini(request):
+    """ View for update elements of the XML.
+        If value is a uppercase letter (Calificacion) returns new svg for replace it
+    """
     element = request.POST['name']
     value = request.POST['value']
 
@@ -68,6 +75,8 @@ def update_xml_mini(request):
 
 
 def download_xml(request):
+        """ Download mini-XML
+        """
         session = request.session
         file_name = session['new_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
@@ -77,6 +86,7 @@ def download_xml(request):
             response = HttpResponse(xmlfile.read(), content_type='application/xml')
             response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
             return response
+
 
 def download_pdf(request):
     """ Download the current energy certificate as PDF
