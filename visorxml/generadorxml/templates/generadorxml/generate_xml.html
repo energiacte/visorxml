@@ -66,7 +66,7 @@
         <tr>
           <td class="title">{% trans "Zona climática" %}</td>
           <td>
-            <a href="#" class="editable" id="IdentificacionEdificio.ZonaClimatica">
+            <a href="#" data-type="select" class="editable-clima" id="IdentificacionEdificio.ZonaClimatica">
               {{ report.data.IdentificacionEdificio.ZonaClimatica }}
             </a>
           </td>
@@ -170,7 +170,7 @@
           </td>
           <td class="title">{% trans "Código Postal" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.CodigoPostal">
+            <a href="#" class="editable" data-type="number"  id="DatosDelCertificador.CodigoPostal">
               {{ report.data.DatosDelCertificador.CodigoPostal }}
             </a>
           </td>
@@ -192,13 +192,13 @@
         <tr>
           <td class="title">{% trans "e-mail" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.Email">
+            <a href="#" class="editable"  id="DatosDelCertificador.Email">
               {{ report.data.DatosDelCertificador.Email }}
             </a>
           </td>
           <td class="title">{% trans "Teléfono" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.Telefono">
+            <a href="#" class="editable" data-type="number" id="DatosDelCertificador.Telefono">
               {{ report.data.DatosDelCertificador.Telefono }}
             </a>
           </td>
@@ -308,7 +308,7 @@
     <table>
       <tr>
         <td class="title">{% trans "Zona Climática" %}</td>
-        <td><a href="#" class="editable" id="IdentificacionEdificio.ZonaClimatica">
+        <td><a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
               {{ report.data.IdentificacionEdificio.ZonaClimatica }}
             </a>
         </td>
@@ -434,12 +434,12 @@
         </tr>
 
         <tr>
-          <td class="info">Energía primaria calefacción [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria calefacción" %} [kWh/m<sup>2</sup>·año]</td>
           <td  rowspan="2">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Calefaccion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion}}" data-type="select">
             </a>
           </td>
-          <td class="info">Energía primaria ACS [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria ACS" %} [kWh/m<sup>2</sup>·año]</td>
           <td rowspan="2">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.ACS" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS}}" data-type="select">
             </a>
@@ -464,13 +464,13 @@
           <td class="title"  colspan="2">{% trans "ILUMINACIÓN" %}</td>
         </tr>
         <tr>
-          <td class="info">Energía primaria refrigeración [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria refrigeración" %} [kWh/m<sup>2</sup>·año]</td>
           <td rowspan="2">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion}}" data-type="select">
             </a>
 
           </td>
-          <td class="info">Energía primaria iluminación [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria iluminación" %} [kWh/m<sup>2</sup>·año]</td>
           <td rowspan="2">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Iluminacion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion}}" data-type="select">
             </a>
@@ -541,11 +541,8 @@
         </div>
       </div>
     </div>
-
-    <div class="page-break"></div>
-    
   </div>
-  <br><br>
+  <br>
   <script>
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
     var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
@@ -575,6 +572,7 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.AlcanceInformacionXML}}',
       source :[
+        {value: "", text: ''},
         {value: "CertificacionExistente", text: 'Certificacion Existente'},
         {value: "VerificacionExistente", text: 'Verificacion Existente'},
         {value: "CertificacionVerificacionExistente", text: 'Certificacion Verificacion Existente'},
@@ -607,6 +605,7 @@
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
+        {value: "", text: ''},
         {value: "A", text: 'A'},
         {value: "B", text: 'B'},
         {value: "C", text: 'C'},
@@ -641,10 +640,54 @@
       },
     });
 
+    $('.editable-clima').editable({
+      url: '{% url "update-xml-mini" %}',
+      pk: 1,
+      source :[
+        {value: "", text: ''},
+        {value: "alfa1", text: 'alfa1'},
+        {value: "alfa2", text: 'alfa2'},
+        {value: "alfa3", text: 'alfa3'},
+        {value: "alfa4", text: 'alfa4'},
+        {value: "A1", text: 'A1'},
+        {value: "A2", text: 'A2'},
+        {value: "A3", text: 'A3'},
+        {value: "A4", text: 'A4'},
+        {value: "B1", text: 'B1'},
+        {value: "B2", text: 'B2'},
+        {value: "B2", text: 'B3'},
+        {value: "B3", text: 'B4'},
+        {value: "C1", text: 'C1'},
+        {value: "C2", text: 'C2'},
+        {value: "C3", text: 'C3'},
+        {value: "C4", text: 'C4'},
+        {value: "D1", text: 'D1'},
+        {value: "D2", text: 'D2'},
+        {value: "D3", text: 'D3'},
+        {value: "D4", text: 'D4'},
+        {value: "E1", text: 'E1'},
+        {value: "E2", text: 'E2'},
+        {value: "E3", text: 'E3'},
+        {value: "E4", text: 'E4'},
+      ],
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
+      onblur: "submit",
+      success: function(response, newValue) {
+          $(this).closest("td").addClass("edited");
+          $(".procedimiento").addClass("edited");
+          validate_download();
+          $(".editable-clima").html(newValue);
+      },
+      error: function(response, newValue) {
+        alert("Ha occurrido un error inesperado!");
+      },
+    });
+
     $('.editable-calificacion2').editable({
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
+        {value: "", text: ''},
         {value: "A", text: 'A'},
         {value: "B", text: 'B'},
         {value: "C", text: 'C'},
@@ -679,6 +722,7 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.TipoDeEdificio}}',
       source :[
+        {value: "", text: ''},
         {value: "ViviendaUnifamiliar", text: 'Vivienda Unifamiliar'},
         {value: "BloqueDeViviendaCompleto", text: 'Bloque De Vivienda Completo'},
         {value: "ViviendaIndividualEnBloque", text: 'Vivienda Indvidual En Bloque'},
