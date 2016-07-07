@@ -36,12 +36,15 @@
             {% if validated %}
               <li><a href="{% url "supplementary-report" %}">{% trans "Informe Complementario" %}</a></li>
             {% endif %}
+            <li><a href="{% url "generate-report" %}">{% trans "Generar nuevo Certificado" %}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            {% block downloads %}
             {% if validated %}
               <li class="get-file-li"><a href="{% url 'certificate-pdf' %}"><img class="get-file-header" src="{% static "img/pdf.png" %}" alt="obtener pdf" /></a></li>
               <li class="get-file-li"><a href="{% url 'get-xml' %}"><img class="get-file-header" src="{% static "img/xml.png" %}" alt="obtener xml" /></a></li>
             {% endif %}
+            {% endblock %}
             <li class="dropdown">
               {% load i18n %}
               <form class="navbar-form form-inline" action="{% url 'set_language' %}" method="post" id="language-form">{% csrf_token %}
