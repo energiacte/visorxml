@@ -7,9 +7,10 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from datetime import datetime,date
-from .pdf_utils import render_to_pdf
+from visorxml.pdf_utils import render_to_pdf
 from django.template.loader import render_to_string
 from generadorxml.templatetags.generadorxml import escalasvg
+from django.core.urlresolvers import reverse
 
 
 def load_report(session):
@@ -25,6 +26,18 @@ def load_report(session):
     except FileNotFoundError:
         session.pop("new_xml_name")
         return None
+
+def clean_report(request):
+    if "new_xml_name" in request.session:
+        file_name = request.session['new_xml_name']
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        try:
+            os.remove(file_path)
+        except FileNotFoundError: # nothing to do
+            pass
+        request.session.pop("new_xml_name")
+
+    return HttpResponseRedirect(reverse("generate-report"))
 
 def new_report(session):
     """ Create new mini-xml
@@ -63,15 +76,9 @@ def update_xml_mini(request):
     """
     element = request.POST['name']
     value = request.POST['value']
-
     report = load_report(request.session)
     report.update_element(element, value)
-
-    if value in "A B C D E F G".split(" "): #IF value is a letter -> return new SVG
-        return HttpResponse(escalasvg(value))
- 
     return HttpResponse()
-
 
 
 def download_xml(request):
@@ -102,7 +109,7 @@ def download_pdf(request):
 
     env = os.environ.copy()
     env.update({
-        'generation_date': str(date.today()),
+        'generation_date': report.data.DatosDelCertificador.Fecha,
         'reference': report.data.IdentificacionEdificio.ReferenciaCatastral
     })
     xml_name = session['new_xml_name']
