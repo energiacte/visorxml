@@ -527,3 +527,9 @@ a.add-singular-solutions{
 .calificacion-cell{
   width: 112px!important;
 }
+
+
+td.gray{
+  background: #eee;
+  height: 16px;
+}
