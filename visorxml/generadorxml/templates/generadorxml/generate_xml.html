@@ -14,11 +14,10 @@
 
 <div class="page">
   <div class="well bg-info hidden-print" style="margin-top:5px; margin-bottom:5px">
-
-    {% trans "La generación manual del Certificado Energético en formato XML o PDF+XML está prevista únicamente cuando se empleen procedimientos reconocidos previos a la vigencia del Real Decreto 235/2013 que no permitan la generación del archivo XML." %}
+    {% trans "La generación manual del Certificado Energético en formato XML o PDF+XML está prevista únicamente para el caso que deba emplear procedimientos previos a la vigencia del Real Decreto 235/2013 que no permitan la generación del archivo XML." %}
     <br>
     <br>
-    <a class="btn btn-info" href="{% url 'clean-report' %}">Limpiar Documento</a>
+    <a class="btn btn-info" href="{% url 'clean-report' %}">Limpiar formulario</a>
   </div>
 
   <div class="informe" id="informe">

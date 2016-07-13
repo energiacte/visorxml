@@ -49,7 +49,10 @@
     </form>
     <br>
     <div class="well small">
-      {% trans "En el caso de que haya empleado procedimientos reconocidos previos a la entrada en vigor del Real Decreto 235/2013, que no permitan la generación del informe en formato XML, puede acceder a la" %} <a href="{% url 'generate-report' %}">{% trans "generación manual del Certificado Energético en formato XML o PDF+XML" %}</a>
+      {% url "generate-report" as the_generate_report_url %}
+      {% blocktrans %}
+      Si ha empleado procedimientos reconocidos previos a la entrada en vigor del Real Decreto 235/2013, que no permitan la generación del informe en formato XML, puede <a href="{{ the_generate_report_url }}">generar manualmente el Certificado Energético en formato XML o PDF+XML.</a>
+      {% endblocktrans %}
     </div>
   </div></div>
 <hr>
