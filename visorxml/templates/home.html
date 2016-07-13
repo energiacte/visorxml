@@ -11,12 +11,21 @@
 <div class="page">
   <div class="row">
     <div class="col-xs-8">
+      <h3>{% trans "Visualización y edición de informes" %}</h3>
       <p>
         {% blocktrans %}
         Esta aplicación facilita el aprovechamiento de los informes de evaluación energética en formato electrónico,
         para su comprobación, visualización y edición.
         {% endblocktrans %}
       </p>
+      {% url "certificate" as the_certificate %}
+      <p>
+        {% blocktrans %}
+        Puede empezar a trabajar accediendo al apartado <a href="{{ the_certificate }}">Certificado de Eficiencia Energética</a>.
+        {% endblocktrans %}
+      </p>
+
+      <h3>{% trans "Descripción del formato" %}</h3>
       <p>
         {% static "docs/20150625 - Informe de evaluación energética del edificio en formato electrónico (XML).pdf" as xml_format_url %}
         {% blocktrans %}
@@ -28,7 +37,7 @@
         {% endblocktrans %}
       </p>
 
-      <div class="well clear">
+      <div class="well clear small">
         <ul>
           <li>
             <p>
