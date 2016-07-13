@@ -48,7 +48,9 @@
       {% endif %}
     </form>
     <br>
-    <a href="{% url 'generate-report' %}" class="btn btn-info">Introducción manual de datos</a>
+    <div class="well small">
+      {% trans "En el caso de que haya empleado procedimientos reconocidos previos a la entrada en vigor del Real Decreto 235/2013, que no permitan la generación del informe en formato XML, puede acceder a la" %} <a href="{% url 'generate-report' %}">{% trans "generación manual del Certificado Energético en formato XML o PDF+XML" %}</a>
+    </div>
   </div></div>
 <hr>
 {% endif %}
