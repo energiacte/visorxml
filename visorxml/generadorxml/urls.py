@@ -6,6 +6,6 @@ urlpatterns = [
   url(r'^download-xml-mini$', "generadorxml.views.download_xml", name='download-xml-mini'),
   url(r'^download-pdf-mini$', "generadorxml.views.download_pdf", name='download-pdf-mini'),
   url(r'^validate$', "generadorxml.views.validate", name='validate-mini-xml'),
+  url(r'^clean$', "generadorxml.views.clean_report", name='clean-report'),
   url(r'', "generadorxml.views.generate_report", name="generate-report"),
-
 ]

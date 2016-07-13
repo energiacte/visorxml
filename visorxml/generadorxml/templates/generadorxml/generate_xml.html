@@ -8,10 +8,19 @@
 
 {% block content %}
 {% get_uso %} {#  es_vivienda <= [True o False] #}
+{% get_alcance %} {#  es_nuevo <= [True o False] #}
 
 <div class="page">
   
 <div class="page">
+  <div class="well bg-info hidden-print" style="margin-top:5px; margin-bottom:5px">
+
+    {% trans "La introducción manual del Certificado Energético está prevista para la generación de un informe reducido en XML para su registro, únicamente en el caso de que se usen procedimientos reconocidos con anterioridad a la vigencia del Real Decreto 235/2013. Para procedimientos de calificación energética reconocidos con posterioridad debe emplear la introducción de datos a partir de un archivo XML." %}
+    <br>
+    <br>
+    <a class="btn btn-info" href="{% url 'clean-report' %}">Limpiar Documento</a>
+  </div>
+
   <div class="informe" id="informe">
     <h2 class="text-center">{% trans "CERTIFICADO DE EFICIENCIA ENERGÉTICA DE EDIFICIOS" %}</h2>
 
@@ -44,7 +53,7 @@
           </td>
           <td class="title" width="15%">{% trans "Código Postal" %}</td>
           <td>
-            <a href="#" class="editable" id="IdentificacionEdificio.CodigoPostal">
+            <a href="#" class="editable"  data-type="number"  data-step="any" id="IdentificacionEdificio.CodigoPostal">
               {{ report.data.IdentificacionEdificio.CodigoPostal }}
             </a>
           </td>
@@ -66,7 +75,7 @@
         <tr>
           <td class="title">{% trans "Zona climática" %}</td>
           <td>
-            <a href="#" class="editable" id="IdentificacionEdificio.ZonaClimatica">
+            <a href="#" data-type="select" class="editable-clima" id="IdentificacionEdificio.ZonaClimatica">
               {{ report.data.IdentificacionEdificio.ZonaClimatica }}
             </a>
           </td>
@@ -97,10 +106,21 @@
 
       <br />
 
-      <table>
-        <tr><td class="title" colspan="4">{% trans "Tipo de edificio o parte del edificio que se certifica:" %}</td></tr>
+      <table class="top">
         <tr>
+          <td class="title" width="30%">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td colspan="3">
+            <a href="#" class="editable" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
+              {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|default:""  }}
+          </a>
+          </td>
+        </tr>
+      </table>
 
+
+      <br />
+
+      <table class="hidden-print">
         <tr>
           <td class="title">{% trans "Alcance" %}</td>
           <td >
@@ -119,7 +139,60 @@
 
     </div>
 
-    <br />
+    <table>
+        <tr><td class="title" colspan="2">{% trans "Tipo de edificio o parte del edificio que se certifica:" %}</td></tr>
+        <tr>
+          <td width="50%">
+            <span style="margin-left:20px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if not es_nuevo %}empty{% else %}remove{% endif%}" aria-hidden="true"></span>
+             {% trans "Edificio de nueva construcción" %}
+          </td>
+          <td><span style="margin-left:20px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_nuevo %}empty{% else %}remove{% endif%}" aria-hidden="true"></span>
+             {% trans "Edificio existente" %}</td>
+        </tr>
+        <tr><td class="title" colspan="2">&nbsp;</td></tr>
+        <tr>
+          <td>
+            <span style="margin-left:20px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_vivienda %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Vivienda" %}<br />
+            <span style="margin-left:40px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_vivienda and not es_bloque %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Unifamiliar" %}<br />
+            <span style="margin-left:40px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_bloque %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Bloque" %}<br />
+            <span style="margin-left:60px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_bloque  and es_bloque_cpl %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Bloque Completo" %}<br />
+            <span style="margin-left:60px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_bloque and not es_bloque_cpl %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Vivienda individual" %}
+          </td>
+          <td>
+            <span style="margin-left:20px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
+             {% trans "Terciario" %}<br />
+            <span style="margin-left:40px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if not es_vivienda and not es_local %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Edificio completo" %}<br />
+            <span style="margin-left:40px" />
+            
+              <span class="glyphicon glyphicon-bordered glyphicon-{% if es_local %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
+             {% trans "Local" %} {{es_local}}
+          </td>
+        </tr>
+      </table>
 
     <div class="section">
       <h4>{% trans "DATOS DEL TÉCNICO CERTIFICADOR:" %}</h4>
@@ -170,7 +243,7 @@
           </td>
           <td class="title">{% trans "Código Postal" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.CodigoPostal">
+            <a href="#" class="editable" data-type="number"  id="DatosDelCertificador.CodigoPostal">
               {{ report.data.DatosDelCertificador.CodigoPostal }}
             </a>
           </td>
@@ -192,13 +265,13 @@
         <tr>
           <td class="title">{% trans "e-mail" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.Email">
+            <a href="#" class="editable"  id="DatosDelCertificador.Email">
               {{ report.data.DatosDelCertificador.Email }}
             </a>
           </td>
           <td class="title">{% trans "Teléfono" %}</td>
           <td>
-            <a href="#" class="editable" id="DatosDelCertificador.Telefono">
+            <a href="#" class="editable" data-type="number" id="DatosDelCertificador.Telefono">
               {{ report.data.DatosDelCertificador.Telefono }}
             </a>
           </td>
@@ -214,7 +287,7 @@
         <tr>
           <td class="title" colspan="2">{% trans "Procedimiento reconocido de calificación energética utilizado y versión:" %}</td>
           <td colspan="2" class="procedimiento">
-            <a href="#" class="editable" id="DatosDelCertificador.Procedimiento">
+            <a href="#" class="editable" id="IdentificacionEdificio.Procedimiento">
               {{ report.data.IdentificacionEdificio.Procedimiento }}
             </a>
           </td>
@@ -230,36 +303,38 @@
         <table>
           <tr>
             <td class="title">{% trans "CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE" %}</td>
-            <td>
-              <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" data-svg="EnergiaPrimariaNoRenovable-svg">
+            <td class="calificacion-cell">
+              <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
               </a>
             </td>
             <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br /></td>
-            <td>
-              <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" data-svg="EmisionesCO2-svg">
+            <td class="calificacion-cell">
+              <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
               </a>
             </td>
           </tr>
           <tr>
-            <td colspan="2"><img class="EnergiaPrimariaNoRenovable-svg escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global %}" /></td>
+            <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global  report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" /></td>
             
-            <td colspan="2"><img class="EmisionesCO2-svg escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global  %}" /></td>
+            <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" /></td>
           </tr>
           <tr>
             <td colspan="2">
-              <a href="#" class="editable consumoco2" data-type="number" data-step="any" data-refresh="consumoco2" id="Consumo.EnergiaPrimariaNoRenovable.Global">
+              <a href="#" class="editable3" data-type="number" data-step="any"  id="Consumo.EnergiaPrimariaNoRenovable.Global">
                 {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|default:'' }}
               </a>
-              [kWh/m2·año]</td>
+              [kWh/m<sup>2</sup>·año]
+            </td>
             <td colspan="2">
-              <a href="#" class="editable emisionesco2" data-type="number" data-step="any" data-refresh="emisionesco2" id="EmisionesCO2.Global">
+              <a href="#" class="editable3" data-type="number" data-step="any"  id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
-              [kgCO2e/m2·año]</td>
+              [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
+            </td>
           </tr>
         </table>
       </div>
-
+      <br>
       <p>
         {% blocktrans %}
         El técnico certificador abajo firmante certifica que ha realizado la calificación energética del edificio o de la parte que se certifica
@@ -275,7 +350,8 @@
       <ol>
         <li><strong>{% trans "Anexo I." %}</strong> {% trans "Descripción de las características energéticas del edificio." %}</li>
         <li><strong>{% trans "Anexo II." %}</strong> {% trans "Calificación energética del edificio." %}</li>
-        
+        <li><strong>{% trans "Anexo III." %}</strong> {% trans "Recomendaciones para la mejora de la eficiencia energética." %}</li>
+        <li><strong>{% trans "Anexo IV." %}</strong> {% trans "Pruebas, comprobaciones e inspecciones realizadas por el técnico certificador." %}</li>
       </ol>
 
       <p>{% trans "Registro del Órgano Territorial Competente:" %}</p>
@@ -283,32 +359,302 @@
     <!-- Falta tabla de pie de página (ver modelo )-->
   <div class="page-break"></div>
     
-    <!-- ANEXO I - Descripción del edificio -->
-    <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
 
 
-    <h4>{% trans "1. SUPERFICIE" %}</h4>
+     <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
+
+    <p>
+      {% blocktrans %}
+      En este apartado se describen las características energéticas del edificio, envolvente térmica, instalaciones,
+      condiciones de funcionamiento y ocupación y demás datos utilizados para obtener la calificación energética del edificio.
+      {% endblocktrans %}
+    </p>
+
+    <h4>{% trans "1. SUPERFICIE, IMAGEN Y SITUACIÓN" %}</h4>
 
     <table>
       <tr>
         <td class="title col-md-5">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
-        <td class="col-md-7">
-          <a href="#" class="editable" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
-              {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|default:""  }}
-          </a>
-        </td>
+        <td class="col-md-7">{{ report.data.DatosGeneralesyGeometria.SuperficieHabitable}}</td>
       </tr>
     </table>
 
     <br />
 
+    <table class="fotos">
+      <tr>
+        <td class="title col-md-6">{% trans "Imagen del Edificio" %}</td>
+        <td class="title col-md-6">{% trans "Plano de situación" %}</td>
+      </tr>
+      <tr>
+          <td class="gray" colspan="2"></td>
+      </tr>
+    </table>
+
+    <div class="section">
+      <h4>{% trans "2. ENVOLVENTE TÉRMICA" %}</h4>
+
+      <h5>{% trans "Cerramientos opacos" %}</h5>
+
+      <table class="table-hover">
+        <tr>
+          <td width="30%" class="title">{% trans "Nombre" %}</td>
+          <td width="10%" class="title">{% trans "Tipo" %}</td>
+          <td width="17%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
+          <td width="20%" class="title">{% trans "Modo de obtención" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="5"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h5>{% trans "Huecos y lucernarios" %}</h5>
+
+      <table>
+        <tr>
+          <td width="30%" class="title">{% trans "Nombre" %}</td>
+          <td width="8%" class="title">{% trans "Tipo" %}</td>
+          <td width="12%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
+          <td width="8%" class="title">{% trans "Factor solar" %}</td>
+          <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Transmitancia" %}</td>
+          <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Factor solar" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="7"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>{% trans "3. INSTALACIONES TÉRMICAS" %}</h4>
+
+      <h5>{% trans "Generadores de calefacción" %}</h5>
+
+      <table>
+        <tr>
+          <td width="23%" class="title">{% trans "Nombre" %}</td>
+          <td width="20%" class="title">{% trans "Tipo" %}</td>
+          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="6"></td>
+        </tr>
+        <tr>
+          <td class="total text-center">{% trans "TOTALES" %}</td>
+          <td class="shade"></td>
+          <td class="total num calc"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h5>{% trans "Generadores de refrigeración" %}</h5>
+
+      <table>
+        <tr>
+          <td width="23%" class="title">{% trans "Nombre" %}</td>
+          <td width="20%" class="title">{% trans "Tipo" %}</td>
+          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="6"></td>
+        </tr>
+        <tr>
+          <td class="total text-center">{% trans "TOTALES" %}</td>
+          <td class="shade"></td>
+          <td class="total num calc"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h5>{% trans "Instalaciones de Agua Caliente Sanitaria" %}</h5>
+
+      <table style="width:65%">
+        <tr>
+          <td width="45%" class="title">{% trans "Demanda diaria de ACS a 60ºC (litros/dia)" %}</td>
+          <td width="20%" class="num"></td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="2"></td>
+        </tr>
+      </table>
+
+      <br />
+
+      <table>
+        <tr>
+          <td width="23%" class="title">{% trans "Nombre" %}</td>
+          <td width="20%" class="title">{% trans "Tipo" %}</td>
+          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="6"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section solo-terciario">
+      <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
+
+    </div>
+
+    <div class="section solo-terciario">
+      <h5>{% trans "Torres de refrigeración (sólo edificios terciarios)" %}</h5>
+
+      <table>
+        <tr>
+          <td class="title" width="25%">{% trans "Nombre" %}</td>
+          <td class="title" width="25%">{% trans "Tipo" %}</td>
+          <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
+          <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="4"></td>
+        </tr>
+        
+        <tr>
+          <td class="total text-center">{% trans "TOTALES" %}</td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+          <td class="total num calc"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section solo-terciario">
+      <h5>{% trans "Ventilación y bombeo (sólo edificios terciarios)" %}</h5>
+
+      <table>
+        <tr>
+          <td class="title" width="25%">{% trans "Nombre" %}</td>
+          <td class="title" width="25%">{% trans "Tipo" %}</td>
+          <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
+          <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="4"></td>
+        </tr>
+        <tr>
+          <td class="total text-center">{% trans "TOTALES" %}</td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+          <td class="total num calc"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section solo-terciario">
+      <h4>{% trans "4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)" %}</h4>
+
+      <table>
+        <tr>
+          <td class="title" width="30%">{% trans "Espacio" %}</td>
+          <td class="title">{% trans "Potencia instalada" %} [{% trans "W/m<sup>2</sup>" %}]</td>
+          <td class="title">{% trans "VEEI" %} [{% trans "W/m<sup>2</sup>·100lux" %}]</td>
+          <td class="title">{% trans "Iluminancia media" %} [{% trans "lux" %}]</td>
+          <td class="title">{% trans "Modo de obtención" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="total text-center">{% trans "TOTALES" %}</td>
+          <td class="total num"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+          <td class="shade"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section solo-terciario">
+      <h4>{% trans "5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)" %}</h4>
+
+      <table>
+        <tr>
+          <td class="title" width="33%">{% trans "Espacio" %}</td>
+          <td class="title" width="33%">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td class="title" width="33%">{% trans "Perfil de uso" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="3"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>{% trans "6. ENERGÍAS RENOVABLES" %}</h4>
+
+      <h5>{% trans "Térmica" %}</h5>
+      <table>
+        <tr>
+          <td class="title" width="20%" rowspan="2">{% trans "Nombre" %}</td>
+          <td class="title" colspan="3">{% trans "Consumo de Energía Final cubierto, en función del servicio asociado [%]" %}</td>
+          <td class="title" width="20%" align="center" rowspan="2">{% trans "Demanda de ACS cubierta [%]" %}</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="3"></td>
+        </tr>
+        <tr>
+          <td class="title" width="20%">{% trans "Calefacción" %}</td>
+          <td class="title" width="20%">{% trans "Refrigeración" %}</td>
+          <td class="title" width="20%">{% trans "ACS" %}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h5>{% trans "Eléctrica" %}</h5>
+
+      <table style="width:75%" align="center">
+        <tr>
+          <td class="title">{% trans "Nombre" %}</td>
+          <td class="title">{% trans "Energía eléctrica generada y autoconsumida" %} [{% trans "kWh/año" %}]</td>
+        </tr>
+        <tr>
+          <td class="gray" colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="total text-center">{% trans "TOTAL" %}</td>
+          <td class="total num"></td>
+        </tr>
+      </table>
+    </div>
+
+
+
+
+
     <!-- ANEXO II - Calificación energética -->
-    <h3 class="text-center">{% trans "ANEXO II" %}<br />{% trans "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO" %}</h3>
+    <h3 class="text-center">
+      {% trans "ANEXO II" %} <br>
+      {% trans "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO" %}
+    </h3>
 
     <table>
       <tr>
         <td class="title">{% trans "Zona Climática" %}</td>
-        <td><a href="#" class="editable" id="IdentificacionEdificio.ZonaClimatica">
+        <td><a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
               {{ report.data.IdentificacionEdificio.ZonaClimatica }}
             </a>
         </td>
@@ -327,31 +673,31 @@
         <tr>
           <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
           <td>
-            <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" data-svg="EmisionesCO2-svg">
+            <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
             </a>
           </td>
           <td class="title" width="50%"colspan="4">{% trans "INDICADORES PARCIALES" %}</td>
         </tr>
         <tr>
           <td rowspan="6" colspan="2" align="center" class="info">
-            <img class="EmisionesCO2-svg escala" src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global  %}" />
+            <img class="escala" src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" />
             <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Emisiones globales" %}:   
-              <a href="#" class="editable emisionesco2" data-type="number" data-step="any" data-refresh="emisionesco2" id="EmisionesCO2.Global">
+              <a href="#" class="editable3 " data-type="number" data-step="any" id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
-              [kgCO2e/m2·año] </p></div>
+              [kgCO<sub>2</sub>e/m<sup>2</sup>·año] </p></div>
           </td>
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
         </tr>
         <tr>
-          <td class="info">{% trans "Emisiones calefacción" %} [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">
+          <td class="info">{% trans "Emisiones calefacción" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Calefaccion" data-value="{{report.data.Calificacion.EmisionesCO2.Calefaccion}}" data-type="select">
             </a>
           </td>
-          <td class="info">{% trans "Emisiones ACS" %} [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">  
+          <td class="info">{% trans "Emisiones ACS" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td rowspan="2" class="calificacion-cell">  
             <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.ACS" data-value="{{report.data.Calificacion.EmisionesCO2.ACS}}" data-type="select">
             </a>
           </td>
@@ -374,15 +720,21 @@
           <td class="title"  colspan="2">{% trans "ILUMINACIÓN" %}</td>
         </tr>
         <tr>
-          <td class="info">{% trans "Emisiones Refrigeración" %} [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td rowspan="2">
+          <td class="info">{% trans "Emisiones Refrigeración" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Refrigeracion" data-value="{{report.data.Calificacion.EmisionesCO2.Refrigeracion}}" data-type="select">
             </a>
           </td>
-          <td class="info">{% trans "Emisiones Iluminación" %} [kgCO<sub>2e</sub>/m<sup>2</sup>·año]</td>
-          <td class="solo-terciario" rowspan="2">
+          <td class="info">
+            {% if not es_vivienda %}
+            {% trans "Emisiones Iluminación" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
+            {% endif %}
+          </td>
+          <td class="solo-terciario" rowspan="2" class="calificacion-cell">
+            {% if not es_vivienda %}   
             <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Iluminacion" data-value="{{report.data.Calificacion.EmisionesCO2.Iluminacion}}" data-type="select">
             </a>
+            {% endif %}
           </td>
         </tr>
         <tr>
@@ -392,9 +744,11 @@
             </a>
           </td>
           <td class="info">
+            {% if not es_vivienda %}  
             <a href="#" class="editable" data-type="number" data-step="any"  id="EmisionesCO2.Iluminacion">
                 {{ report.data.EmisionesCO2.Iluminacion|default:'' }}
             </a>
+            {% endif %}
           </td>
         </tr>
       </table>
@@ -415,16 +769,16 @@
         <tr>
           <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
           <td>
-            <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" data-svg="EnergiaPrimariaNoRenovable-svg">
+            <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
             </a>
           </td>
           <td class="title" width="50%" colspan="4">{% trans "INDICADORES PARCIALES" %}</td>
         </tr>
         <tr>
           <td rowspan="6" colspan="2"  align="center" class="info">
-            <img  class="EnergiaPrimariaNoRenovable-svg escala" id="Calificacion.Demanda.Refrigeracion" src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global %}" />
+            <img  class="escala" id="Calificacion.EnergiaPrimariaNoRenovable.Global" src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" />
             <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Consumo global de energía primaria no renovable" %}: 
-              <a href="#" class="editable consumoco2" data-refresh="consumoco2" id="Consumo.EnergiaPrimariaNoRenovable.Global">
+              <a href="#" class="editable3" data-type="number" data-step="any" id="Consumo.EnergiaPrimariaNoRenovable.Global">
                 {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|default:'' }}
               </a>
               [{% trans "kWh/m<sup>2</sup>·año" %}]</div>
@@ -434,13 +788,13 @@
         </tr>
 
         <tr>
-          <td class="info">Energía primaria calefacción [kWh/m<sup>2</sup>·año]</td>
-          <td  rowspan="2">
+          <td class="info">{% trans "Energía primaria calefacción" %} [kWh/m<sup>2</sup>·año]</td>
+          <td  rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Calefaccion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion}}" data-type="select">
             </a>
           </td>
-          <td class="info">Energía primaria ACS [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">
+          <td class="info">{% trans "Energía primaria ACS" %} [kWh/m<sup>2</sup>·año]</td>
+          <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.ACS" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS}}" data-type="select">
             </a>
           </td>
@@ -464,16 +818,22 @@
           <td class="title"  colspan="2">{% trans "ILUMINACIÓN" %}</td>
         </tr>
         <tr>
-          <td class="info">Energía primaria refrigeración [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">
+          <td class="info">{% trans "Energía primaria refrigeración" %} [kWh/m<sup>2</sup>·año]</td>
+          <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion}}" data-type="select">
             </a>
 
           </td>
-          <td class="info">Energía primaria iluminación [kWh/m<sup>2</sup>·año]</td>
-          <td rowspan="2">
+          <td class="info">
+            {% if not es_vivienda %}
+            {% trans "Energía primaria iluminación" %} [kWh/m<sup>2</sup>·año]
+            {% endif %}
+          </td>
+          <td rowspan="2" class="calificacion-cell">
+            {% if not es_vivienda %}
             <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Iluminacion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion}}" data-type="select">
             </a>
+            {% endif %}
           </td>
         </tr>
 
@@ -484,9 +844,11 @@
             </a>
           </td>
           <td class="info solo-terciario">
+            {% if not es_vivienda %}
             <a href="#"  data-type="number" data-step="any" class="editable"  id="Consumo.EnergiaPrimariaNoRenovable.Iluminacion">
                 {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default:'' }}
             </a>
+            {% endif %}
           </td>
         </tr>
         
@@ -508,33 +870,33 @@
           <table>
             <tr>
               <td class="title">{% trans "DEMANDA DE CALEFACCIÓN" %}</td>
-              <td>
-                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Calefaccion" data-value="{{report.data.Calificacion.Demanda.Calefaccion}}" data-type="select" data-svg="calefaccion-svg">
+              <td class="calificacion-cell">
+                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Calefaccion" data-value="{{report.data.Calificacion.Demanda.Calefaccion}}" data-type="select">
                 </a>
               </td>
               <td class="title">{% trans "DEMANDA DE REFRIGERACIÓN" %}</td>
-              <td>
-                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Refrigeracion" data-value="{{report.data.Calificacion.Demanda.Refrigeracion}}" data-type="select" data-svg="refrigeracion-svg">
+              <td class="calificacion-cell">
+                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Refrigeracion" data-value="{{report.data.Calificacion.Demanda.Refrigeracion}}" data-type="select" >
                 </a>
               </td>
             </tr>
             <tr>
               <!-- XXX: ver aquí los casos de terciario con 08 ren/h -->
-              <td colspan="2"><img class="calefaccion-svg escala"  src="{% escalasvg report.data.Calificacion.Demanda.Calefaccion  %}" /></td>
-              <td colspan="2"><img class="refrigeracion-svg escala" src="{% escalasvg report.data.Calificacion.Demanda.Refrigeracion  %}" /></td>
+              <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.Demanda.Calefaccion report.data.Demanda.EdificioObjeto.Calefaccion %}" /></td>
+              <td colspan="2"><img class="escala" src="{% escalasvg report.data.Calificacion.Demanda.Refrigeracion report.data.Demanda.EdificioObjeto.Refrigeracion %}" /></td>
             </tr>
             <tr>
               <td class="info"  colspan="2">{% trans "Demanda de calefacción" %}:  
-              <a href="#" data-type="number" data-step="any" class="editable" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
+              <a href="#" data-type="number" data-step="any" class="editable3" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
                 {{ report.data.Demanda.EdificioObjeto.Calefaccion|default:'' }}
               </a>
-              [kWh/m2·año]
+              [kWh/m<sup>2</sup>·año]
               </td>
               <td class="info"  colspan="2">{% trans "Demanda de refrigeración" %}: 
-              <a href="#" data-type="number" data-step="any" class="editable"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
+              <a href="#" data-type="number" data-step="any" class="editable3"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
                 {{ report.data.Demanda.EdificioObjeto.Refrigeracion|default:'' }}
               </a>
-              [kWh/m2·año]
+              [kWh/m<sup>2</sup>·año]
               </td>
             </tr>
           </table>
@@ -542,10 +904,46 @@
       </div>
     </div>
 
-    <div class="page-break"></div>
+    <h3 class="text-center">{% trans "ANEXO III" %}<br />{% trans "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA" %}</h3>
+
     
+    <table>
+      <tr>
+        <td>
+          {% trans "Sin medidas de mejora de la eficiencia energética" %}
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="text-center">ANEXO IV<br />{% trans "PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR" %}</h3>
+
+    
+    <table>
+      <tr>
+        <td>
+          {% trans "Sin pruebas, comprobaciones o inspecciones." %}
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="text-center">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
+
+    
+    <table>
+      <tr>
+        <td>
+          {% trans "Sin medidas soluciones singulares." %}
+        </td>
+      </tr>
+    </table>
+
+
   </div>
-  <br><br>
+  <br>
+
+
+
+
   <script>
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
     var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
@@ -560,14 +958,7 @@
 
 
   $(function() {
-    
-    /**
-     * Spanish translation for bootstrap-datepicker
-     * Bruno Bonamin <bruno.bonamin@gmail.com>
-     */
-    ;
-
-
+  
     $.fn.editable.defaults.mode = 'inline';
 
     $('.editable-alcance').editable({
@@ -575,6 +966,7 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.AlcanceInformacionXML}}',
       source :[
+        {value: "", text: ''},
         {value: "CertificacionExistente", text: 'Certificacion Existente'},
         {value: "VerificacionExistente", text: 'Verificacion Existente'},
         {value: "CertificacionVerificacionExistente", text: 'Certificacion Verificacion Existente'},
@@ -585,17 +977,7 @@
       emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
-          $(this).closest("td").removeClass("report-warning");
-          $(this).closest("td").addClass("edited");
-          $(".procedimiento").addClass("edited");
-          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
-            $(".procedimiento a").html("GeneradorXML ");
-          }
-          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-            $(".procedimiento a").html($(".procedimiento a").html()+ " + [VisorXML[1.0]");
-          }
-          validate_download();
-        
+          document.location.reload(true);
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
@@ -607,6 +989,7 @@
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
+        {value: "", text: ''},
         {value: "A", text: 'A'},
         {value: "B", text: 'B'},
         {value: "C", text: 'C'},
@@ -619,22 +1002,51 @@
       emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
-          $(this).closest("td").removeClass("report-warning");
+          document.location.reload(true)
+      },
+      error: function(response, newValue) {
+        alert("Ha occurrido un error inesperado!");
+      },
+    });
+
+
+    $('.editable-clima').editable({
+      url: '{% url "update-xml-mini" %}',
+      pk: 1,
+      source :[
+        {value: "", text: ''},
+        {value: "alfa1", text: 'alfa1'},
+        {value: "alfa2", text: 'alfa2'},
+        {value: "alfa3", text: 'alfa3'},
+        {value: "alfa4", text: 'alfa4'},
+        {value: "A1", text: 'A1'},
+        {value: "A2", text: 'A2'},
+        {value: "A3", text: 'A3'},
+        {value: "A4", text: 'A4'},
+        {value: "B1", text: 'B1'},
+        {value: "B2", text: 'B2'},
+        {value: "B2", text: 'B3'},
+        {value: "B3", text: 'B4'},
+        {value: "C1", text: 'C1'},
+        {value: "C2", text: 'C2'},
+        {value: "C3", text: 'C3'},
+        {value: "C4", text: 'C4'},
+        {value: "D1", text: 'D1'},
+        {value: "D2", text: 'D2'},
+        {value: "D3", text: 'D3'},
+        {value: "D4", text: 'D4'},
+        {value: "E1", text: 'E1'},
+        {value: "E2", text: 'E2'},
+        {value: "E3", text: 'E3'},
+        {value: "E4", text: 'E4'},
+      ],
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
+      onblur: "submit",
+      success: function(response, newValue) {
           $(this).closest("td").addClass("edited");
           $(".procedimiento").addClass("edited");
-          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
-            $(".procedimiento a").html("GeneradorXML ");
-          }
-          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-          }
-          var svg = $(this).data("svg");
-          var node = $("."+svg);
-          debugger;
-          node.attr("src",response);
-          $("a[data-svg=" + svg + "]").html(newValue);
           validate_download();
-        
+          $(".editable-clima").html(newValue);
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
@@ -645,6 +1057,7 @@
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
+        {value: "", text: ''},
         {value: "A", text: 'A'},
         {value: "B", text: 'B'},
         {value: "C", text: 'C'},
@@ -653,7 +1066,7 @@
         {value: "F", text: 'F'},
         {value: "G", text: 'G'},
       ],
-      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
+      emptytext: '<span class="hidden-print">Editar</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
           $(this).closest("td").removeClass("report-warning");
@@ -662,8 +1075,8 @@
           if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
             $(".procedimiento a").html("GeneradorXML ");
           }
-          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+          if( $(".procedimiento a").html().indexOf("+ [Generador VisorXML 1.0]") == -1 ){
+            $(".procedimiento a").html($(".procedimiento a").html()+ " + [Generador VisorXML 1.0]");
           }
           validate_download();
       },
@@ -679,6 +1092,7 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.TipoDeEdificio}}',
       source :[
+        {value: "", text: ''},
         {value: "ViviendaUnifamiliar", text: 'Vivienda Unifamiliar'},
         {value: "BloqueDeViviendaCompleto", text: 'Bloque De Vivienda Completo'},
         {value: "ViviendaIndividualEnBloque", text: 'Vivienda Indvidual En Bloque'},
@@ -688,18 +1102,22 @@
       emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
-          $(this).closest("td").removeClass("report-warning");
-          $(this).closest("td").addClass("edited");
-          $(".procedimiento").addClass("edited");
-          if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
-            $(".procedimiento a").html("GeneradorXML ");
-          }
-          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
-          }
-          $(".editable-tipo").html(newValue);
-          validate_download();
+          document.location.reload(true)
 
+      },
+      error: function(response, newValue) {
+        alert("Ha occurrido un error inesperado!");
+      },
+    });
+
+    $('.editable3').editable({
+      url: '{% url "update-xml-mini" %}',
+      pk: 1,
+      csrfmiddlewaretoken:"{{ csrf_token }}" ,
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
+      onblur: "submit",
+      success: function(response, newValue) {
+          document.location.reload(true)
       },
       error: function(response, newValue) {
         alert("Ha occurrido un error inesperado!");
@@ -720,13 +1138,24 @@
           if( $(".procedimiento a").html().indexOf("Pulse para") != -1 ){
             $(".procedimiento a").html("GeneradorXML ");
           }
-          if( $(".procedimiento a").html().indexOf("+ [VisorXML") == -1 ){
-            $(".procedimiento a").html($(".procedimiento a").html()+ " + VisorXML[1.0]");
+
+          if( $(".procedimiento a").html().indexOf("+ [Generador VisorXML 1.0]") == -1 ){
+            $(".procedimiento a").html($(".procedimiento a").html()+ " + [Generador VisorXML 1.0]");
           }
 
           if ($(this).data("refresh") != undefined){
             $("."+$(this).data("refresh")).html(newValue);
           }
+
+          if( $(this).attr("id") == "IdentificacionEdificio.Procedimiento"){
+            _this = $(this);
+            value = newValue;
+            setTimeout(function(){ 
+              if(value.indexOf("+ [Generador VisorXML 1.0]") == -1 )
+                _this.html(newValue + " + [Generador VisorXML 1.0]");
+            }, 400);
+          }
+
           validate_download();
         
       },
@@ -734,7 +1163,6 @@
         alert("Ha occurrido un error inesperado!");
       },
     });
-
     
     validate_download();
     

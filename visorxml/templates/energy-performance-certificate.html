@@ -11,7 +11,6 @@
 
 {% if not pdf %}
 <div class="page">
-  
   {% if not validated %}
   <hr>
   <p class="lead">
@@ -48,6 +47,8 @@
         <a href="/certificate" class="btn btn-warning">Volver a validar</a>
       {% endif %}
     </form>
+    <br>
+    <a href="{% url 'generate-report' %}" class="btn btn-info">Introducción manual de datos</a>
   </div></div>
 <hr>
 {% endif %}

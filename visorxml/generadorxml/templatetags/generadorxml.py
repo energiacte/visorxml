@@ -8,14 +8,15 @@ register = template.Library()
 
 
 @register.simple_tag
-def escalasvg(letra, report=None):
+def escalasvg(letra, value = None):
     """Devuelve imagen de la escala y su calificación como SVG inline"""
 
     SVGTEXT = """<svg xmlns='http://www.w3.org/2000/svg' width="185" height="120">
 <g id="layer1" stroke="none">
-<path d="m 184,{ypos:d} -53,0 -11,7 11,7 53,0 z" fill="#black" />
-<text x="180" y="{ypostxt:d}" id="calif" style="font-size:12px;font-weight:bold;text-align:end;text-anchor:end;fill:white;font-family:Arial">
-{calif}</text>
+<path d="m 184,{ypos:d} -57,0 -11,7 11,7 57,0 z" fill="#black" />
+<text x="180" y="{ypostxt:d}" id="calif" style="font-size:11px;font-weight:bold;text-align:end;text-anchor:end;fill:white;font-family:Arial">
+{value}{calif}</text>
+
 <path d="m 0,0 67,0 7,7 -7,7 -67,0 z" fill="#00a651" />
 <path d="m 0,17 74,0 7,7 -7,7 -74,0 z" fill="#4cb847" />
 <path d="m 0,34 81,0 7,7 -7,7 -81,0 z" fill="#bfd630" />
@@ -42,7 +43,6 @@ def escalasvg(letra, report=None):
 </g>
 </svg>
 """
-
     try:
 
         ypos = 17 * {
@@ -56,7 +56,9 @@ def escalasvg(letra, report=None):
         }[letra]
         svgdata = SVGTEXT.format(ypos=ypos,
                                  ypostxt=ypos + 11,
-                                 calif=letra,)
+                                 calif=letra,
+                                 value=value or ""
+                                 )
     except:
         svgdata = SVGERROR
 
@@ -64,7 +66,6 @@ def escalasvg(letra, report=None):
     return "data:image/svg+xml;charset=utf-8;base64,{}".format(encoded_string.decode())
 
 
-
 TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
 @register.simple_tag(takes_context=True)
 def get_uso(context):
@@ -72,70 +73,22 @@ def get_uso(context):
         report = context['report']
         tipo = report.data.IdentificacionEdificio.TipoDeEdificio
         context["es_vivienda"] = tipo in TIPOS_RESIDENCIALES
+        context["es_local"] = tipo == "LocalUsoTerciario"
+        context["es_bloque"] = "Bloque" in tipo
+        context["es_bloque_cpl"] =  "BloqueDeViviendaCompleto" == tipo
+
     except:
         pass
 
     return ""
 
-
-ALERT_SPAN = mark_safe("<span class='alert'>-</span>")
-
-@register.filter(is_safe=True)
-def asnum(value):
-    "Devuelve un valor numérico con dos decimales"
-    if ((not value) and (value != 0)):
-        return '-'
-    try:
-        val = float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
-    except:
-        res = ALERT_SPAN
-    return res
-
-@register.filter(is_safe=True)
-def asint(value):
-    "Devuelve un valor entero"
-    if (not value) and (value != 0):
-        return '-'
-    try:
-        val = int(value)
-        res = '{0:d}'.format(int(val)) if val <= ALERT else ALERT_SPAN
-    except:
-        res = ALERT_SPAN
-    return res
-
-@register.filter(is_safe=True)
-def aspct(value):
-    "Devuelve un porcentaje a partir del tanto por uno"
-    if ((not value) and (value != 0)):
-        return '-'
-    try:
-        val = 100.0 * float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
-    except:
-        res = ALERT_SPAN
-    return res
-
-@register.filter(is_safe=True)
-def difwith(valuedest, valueorig):
-    if (not valuedest) and (not valueorig):
-        return '-'
-    try:
-        res1 = float(valueorig) - float(valuedest)
-        res2 = 100.0 * res1 / float(valueorig)
-        return '{:0.2f}<br />({:+0.2f}%)'.format(res1, res2).replace('.', ',')
-    except:
-        return ALERT_SPAN
-
-
-TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
 @register.simple_tag(takes_context=True)
-def get_uso(context):
+def get_alcance(context):
     try:
         report = context['report']
-        tipo = report.data.IdentificacionEdificio.TipoDeEdificio
-        context["es_vivienda"] = tipo in TIPOS_RESIDENCIALES
+        context["es_nuevo"] = "Nuevo" in report.data.IdentificacionEdificio.AlcanceInformacionXML 
     except:
         pass
 
     return ""
+
