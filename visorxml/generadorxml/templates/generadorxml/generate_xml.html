@@ -11,8 +11,6 @@
 {% get_alcance %} {#  es_nuevo <= [True o False] #}
 
 <div class="page">
-
-<div class="page">
   <div class="well bg-info hidden-print" style="margin-top:5px; margin-bottom:5px">
     {% trans "La generación manual del Certificado Energético en formato XML o PDF+XML está prevista únicamente para el caso que deba emplear procedimientos previos a la vigencia del Real Decreto 235/2013 que no permitan la generación del archivo XML." %}
     <br>
@@ -357,11 +355,11 @@
       <p>{% trans "Registro del Órgano Territorial Competente:" %}</p>
     </div>
     <!-- Falta tabla de pie de página (ver modelo )-->
-  <div class="page-break"></div>
+    <div class="page-break"></div>
 
 
 
-     <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
+    <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
 
     <p>
       {% blocktrans %}
@@ -387,7 +385,7 @@
         <td class="title col-md-6">{% trans "Plano de situación" %}</td>
       </tr>
       <tr>
-          <td class="gray" colspan="2">&nbsp;</td>
+        <td class="gray" colspan="2">&nbsp;</td>
       </tr>
     </table>
 
@@ -662,8 +660,8 @@
       <tr>
         <td class="title">{% trans "Zona Climática" %}</td>
         <td><a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
-              {{ report.data.IdentificacionEdificio.ZonaClimatica }}
-            </a>
+            {{ report.data.IdentificacionEdificio.ZonaClimatica }}
+          </a>
         </td>
         <td class="title">{% trans "Uso" %}</td>
         <td width="40%">
@@ -692,7 +690,8 @@
               <a href="#" class="editable3 " data-type="number" data-step="any" id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
-              [kgCO<sub>2</sub>e/m<sup>2</sup>·año] </p></div>
+              [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
+            </div>
           </td>
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
@@ -712,12 +711,12 @@
         <tr>
           <td class="info">
             <a href="#" class="editable" data-type="number" data-step="any" id="EmisionesCO2.Calefaccion">
-                {{ report.data.EmisionesCO2.Calefaccion|default:'' }}
+              {{ report.data.EmisionesCO2.Calefaccion|default:'' }}
             </a>
           </td>
           <td class="info">
             <a href="#" class="editable" data-type="number" data-step="any" id="EmisionesCO2.ACS">
-                {{ report.data.EmisionesCO2.ACS|default:'' }}
+              {{ report.data.EmisionesCO2.ACS|default:'' }}
             </a>
           </td>
         </tr>
@@ -745,13 +744,13 @@
         <tr>
           <td class="info">
             <a href="#" class="editable" data-type="number" data-step="any" id="EmisionesCO2.Refrigeracion">
-                {{ report.data.EmisionesCO2.Refrigeracion|default:'' }}
+              {{ report.data.EmisionesCO2.Refrigeracion|default:'' }}
             </a>
           </td>
           <td class="info">
             {% if not es_vivienda %}
             <a href="#" class="editable" data-type="number" data-step="any"  id="EmisionesCO2.Iluminacion">
-                {{ report.data.EmisionesCO2.Iluminacion|default:'' }}
+              {{ report.data.EmisionesCO2.Iluminacion|default:'' }}
             </a>
             {% endif %}
           </td>
@@ -765,8 +764,8 @@
 
       <p>
         {% blocktrans %}
-          Por energía primara no renovable se entiende la energía consumida por el edificio procedente de fuentes no
-          renovables que no ha sufrido ningún proceso de conversión o transformación.
+        Por energía primara no renovable se entiende la energía consumida por el edificio procedente de fuentes no
+        renovables que no ha sufrido ningún proceso de conversión o transformación.
         {% endblocktrans %}
       </p>
 
@@ -808,12 +807,12 @@
         <tr>
           <td class="info">
             <a href="#" data-type="number" data-step="any" class="editable"  id="Consumo.EnergiaPrimariaNoRenovable.Calefaccion">
-                {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|default:'' }}
+              {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|default:'' }}
             </a>
           </td>
           <td class="info">
             <a href="#" data-type="number" data-step="any" class="editable"  id="Consumo.EnergiaPrimariaNoRenovable.ACS">
-                {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|default:'' }}
+              {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|default:'' }}
             </a>
           </td>
         </tr>
@@ -843,13 +842,13 @@
         <tr>
           <td class="info">
             <a href="#" data-type="number" data-step="any" class="editable"  id="Consumo.EnergiaPrimariaNoRenovable.Refrigeracion">
-                {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|default:'' }}
+              {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|default:'' }}
             </a>
           </td>
           <td class="info solo-terciario">
             {% if not es_vivienda %}
             <a href="#"  data-type="number" data-step="any" class="editable"  id="Consumo.EnergiaPrimariaNoRenovable.Iluminacion">
-                {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default:'' }}
+              {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default:'' }}
             </a>
             {% endif %}
           </td>
@@ -890,16 +889,16 @@
             </tr>
             <tr>
               <td class="info" colspan="2">{% trans "Demanda de calefacción" %}:
-              <a href="#" data-type="number" data-step="any" class="editable3" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
-                {{ report.data.Demanda.EdificioObjeto.Calefaccion|default:'' }}
-              </a>
-              [kWh/m<sup>2</sup>·año]
+                <a href="#" data-type="number" data-step="any" class="editable3" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
+                  {{ report.data.Demanda.EdificioObjeto.Calefaccion|default:'' }}
+                </a>
+                [kWh/m<sup>2</sup>·año]
               </td>
               <td class="info" colspan="2">{% trans "Demanda de refrigeración" %}:
-              <a href="#" data-type="number" data-step="any" class="editable3"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
-                {{ report.data.Demanda.EdificioObjeto.Refrigeracion|default:'' }}
-              </a>
-              [kWh/m<sup>2</sup>·año]
+                <a href="#" data-type="number" data-step="any" class="editable3"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
+                  {{ report.data.Demanda.EdificioObjeto.Refrigeracion|default:'' }}
+                </a>
+                [kWh/m<sup>2</sup>·año]
               </td>
             </tr>
           </table>
@@ -933,11 +932,7 @@
         </td>
       </tr>
     </table>
-
-
   </div>
-  <br>
-
 
 
 
@@ -945,14 +940,10 @@
     var generation_date = '{{ report.data.DatosDelCertificador.Fecha }}';
     var reference = '{{ report.data.IdentificacionEdificio.ReferenciaCatastral }}';
   </script>
+  {% endblock %}
 
-</div>
-
-{% endblock %}
-
-{% block extra_js %}
+  {% block extra_js %}
   <script>
-
 
   $(function() {
 
