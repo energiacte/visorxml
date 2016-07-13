@@ -700,12 +700,12 @@
         <tr>
           <td class="info">{% trans "Emisiones calefacción" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
           <td rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Calefaccion" data-value="{{report.data.Calificacion.EmisionesCO2.Calefaccion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.Calefaccion" data-value="{{report.data.Calificacion.EmisionesCO2.Calefaccion}}" data-type="select">
             </a>
           </td>
           <td class="info">{% trans "Emisiones ACS" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
           <td rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.ACS" data-value="{{report.data.Calificacion.EmisionesCO2.ACS}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.ACS" data-value="{{report.data.Calificacion.EmisionesCO2.ACS}}" data-type="select">
             </a>
           </td>
         </tr>
@@ -729,17 +729,15 @@
         <tr>
           <td class="info">{% trans "Emisiones Refrigeración" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
           <td rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Refrigeracion" data-value="{{report.data.Calificacion.EmisionesCO2.Refrigeracion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.Refrigeracion" data-value="{{report.data.Calificacion.EmisionesCO2.Refrigeracion}}" data-type="select">
             </a>
           </td>
           <td class="info">
-            {% if not es_vivienda %}
             {% trans "Emisiones Iluminación" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
-            {% endif %}
           </td>
           <td class="solo-terciario" rowspan="2" class="calificacion-cell">
             {% if not es_vivienda %}
-            <a href="#" class="editable-calificacion2" id="Calificacion.EmisionesCO2.Iluminacion" data-value="{{report.data.Calificacion.EmisionesCO2.Iluminacion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.Iluminacion" data-value="{{report.data.Calificacion.EmisionesCO2.Iluminacion}}" data-type="select">
             </a>
             {% endif %}
           </td>
@@ -797,12 +795,12 @@
         <tr>
           <td class="info">{% trans "Energía primaria calefacción" %} [kWh/m<sup>2</sup>·año]</td>
           <td  rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Calefaccion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.Calefaccion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion}}" data-type="select">
             </a>
           </td>
           <td class="info">{% trans "Energía primaria ACS" %} [kWh/m<sup>2</sup>·año]</td>
           <td rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.ACS" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.ACS" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS}}" data-type="select">
             </a>
           </td>
         </tr>
@@ -827,18 +825,16 @@
         <tr>
           <td class="info">{% trans "Energía primaria refrigeración" %} [kWh/m<sup>2</sup>·año]</td>
           <td rowspan="2" class="calificacion-cell">
-            <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion}}" data-type="select">
             </a>
 
           </td>
           <td class="info">
-            {% if not es_vivienda %}
             {% trans "Energía primaria iluminación" %} [kWh/m<sup>2</sup>·año]
-            {% endif %}
           </td>
           <td rowspan="2" class="calificacion-cell">
             {% if not es_vivienda %}
-            <a href="#" class="editable-calificacion2" id="Calificacion.EnergiaPrimariaNoRenovable.Iluminacion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion}}" data-type="select">
+            <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.Iluminacion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Iluminacion}}" data-type="select">
             </a>
             {% endif %}
           </td>
@@ -878,12 +874,12 @@
             <tr>
               <td class="title">{% trans "DEMANDA DE CALEFACCIÓN" %}</td>
               <td class="calificacion-cell">
-                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Calefaccion" data-value="{{report.data.Calificacion.Demanda.Calefaccion}}" data-type="select">
+                <a href="#" class="editable-calificacion-cannull" id="Calificacion.Demanda.Calefaccion" data-value="{{report.data.Calificacion.Demanda.Calefaccion}}" data-type="select">
                 </a>
               </td>
               <td class="title">{% trans "DEMANDA DE REFRIGERACIÓN" %}</td>
               <td class="calificacion-cell">
-                <a href="#" class="editable-calificacion" id="Calificacion.Demanda.Refrigeracion" data-value="{{report.data.Calificacion.Demanda.Refrigeracion}}" data-type="select" >
+                <a href="#" class="editable-calificacion-cannull" id="Calificacion.Demanda.Refrigeracion" data-value="{{report.data.Calificacion.Demanda.Refrigeracion}}" data-type="select" >
                 </a>
               </td>
             </tr>
@@ -985,37 +981,10 @@
       },
     });
 
-
-    $('.editable-calificacion').editable({
-      url: '{% url "update-xml-mini" %}',
-      pk: 1,
-      source :[
-        {value: "", text: ''},
-        {value: "A", text: 'A'},
-        {value: "B", text: 'B'},
-        {value: "C", text: 'C'},
-        {value: "D", text: 'D'},
-        {value: "E", text: 'E'},
-        {value: "F", text: 'F'},
-        {value: "G", text: 'G'},
-
-      ],
-      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
-      onblur: "submit",
-      success: function(response, newValue) {
-          document.location.reload(true)
-      },
-      error: function(response, newValue) {
-        alert("Ha occurrido un error inesperado!");
-      },
-    });
-
-
     $('.editable-clima').editable({
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
-        {value: "", text: ''},
         {value: "alfa1", text: 'alfa1'},
         {value: "alfa2", text: 'alfa2'},
         {value: "alfa3", text: 'alfa3'},
@@ -1054,11 +1023,34 @@
       },
     });
 
-    $('.editable-calificacion2').editable({
+    $('.editable-calificacion-cannull').editable({
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       source :[
         {value: "", text: ''},
+        {value: "A", text: 'A'},
+        {value: "B", text: 'B'},
+        {value: "C", text: 'C'},
+        {value: "D", text: 'D'},
+        {value: "E", text: 'E'},
+        {value: "F", text: 'F'},
+        {value: "G", text: 'G'},
+
+      ],
+      emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
+      onblur: "submit",
+      success: function(response, newValue) {
+          document.location.reload(true)
+      },
+      error: function(response, newValue) {
+        alert("Ha occurrido un error inesperado!");
+      },
+    });
+
+    $('.editable-calificacion').editable({
+      url: '{% url "update-xml-mini" %}',
+      pk: 1,
+      source :[
         {value: "A", text: 'A'},
         {value: "B", text: 'B'},
         {value: "C", text: 'C'},
