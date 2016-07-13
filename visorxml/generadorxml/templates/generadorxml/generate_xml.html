@@ -179,7 +179,7 @@
           <td>
             <span style="margin-left:20px" />
 
-            <span class="glyphicon glyphicon-bordered glyphicon-remove" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-bordered glyphicon-{% if not es_vivienda %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
             {% trans "Terciario" %}<br />
             <span style="margin-left:40px" />
 
@@ -188,7 +188,7 @@
             <span style="margin-left:40px" />
 
             <span class="glyphicon glyphicon-bordered glyphicon-{% if es_local %}remove{% else %}empty{% endif%}" aria-hidden="true"></span>
-            {% trans "Local" %} {{es_local}}
+            {% trans "Local" %}
           </td>
         </tr>
       </table>
