@@ -136,7 +136,7 @@
         <br />
       </div>
 
-      <table>
+      <table class="visible-print-block">
         <tr><td class="title" colspan="2">{% trans "Tipo de edificio o parte del edificio que se certifica:" %}</td></tr>
         <tr>
           <td width="50%">
@@ -333,322 +333,322 @@
         </table>
       </div>
       <br>
-      <p>
-        {% blocktrans %}
-        El técnico certificador abajo firmante certifica que ha realizado la calificación energética del edificio o de la parte que se certifica
-        de acuerdo con el procedimiento establecido por la normativa vigente y que son ciertos los datos que figuran en el presente
-        documento, y sus anexos:
-        {% endblocktrans %}
-      </p>
+      <div class="visible-print-block">
+        <p>
+          {% blocktrans %}
+          El técnico certificador abajo firmante certifica que ha realizado la calificación energética del edificio o de la parte que se certifica
+          de acuerdo con el procedimiento establecido por la normativa vigente y que son ciertos los datos que figuran en el presente
+          documento, y sus anexos:
+          {% endblocktrans %}
+        </p>
 
-      <p>{% trans "Fecha:" %} {{ report.data.DatosDelCertificador.Fecha }}</p>
-      <br />
-      <p class="text-center">{% trans "Firma del técnico certificador:" %} {{ report.data.DatosDelCertificador.NombreyApellidos}} - {{ report.data.DatosDelCertificador.NIF}}</p>
+        <p>{% trans "Fecha:" %} {{ report.data.DatosDelCertificador.Fecha }}</p>
+        <br />
+        <p class="text-center">{% trans "Firma del técnico certificador:" %} {{ report.data.DatosDelCertificador.NombreyApellidos}} - {{ report.data.DatosDelCertificador.NIF}}</p>
 
-      <ol>
-        <li><strong>{% trans "Anexo I." %}</strong> {% trans "Descripción de las características energéticas del edificio." %}</li>
-        <li><strong>{% trans "Anexo II." %}</strong> {% trans "Calificación energética del edificio." %}</li>
-        <li><strong>{% trans "Anexo III." %}</strong> {% trans "Recomendaciones para la mejora de la eficiencia energética." %}</li>
-        <li><strong>{% trans "Anexo IV." %}</strong> {% trans "Pruebas, comprobaciones e inspecciones realizadas por el técnico certificador." %}</li>
-      </ol>
+        <ol>
+          <li><strong>{% trans "Anexo I." %}</strong> {% trans "Descripción de las características energéticas del edificio." %}</li>
+          <li><strong>{% trans "Anexo II." %}</strong> {% trans "Calificación energética del edificio." %}</li>
+          <li><strong>{% trans "Anexo III." %}</strong> {% trans "Recomendaciones para la mejora de la eficiencia energética." %}</li>
+          <li><strong>{% trans "Anexo IV." %}</strong> {% trans "Pruebas, comprobaciones e inspecciones realizadas por el técnico certificador." %}</li>
+        </ol>
 
-      <p>{% trans "Registro del Órgano Territorial Competente:" %}</p>
+        <p>{% trans "Registro del Órgano Territorial Competente:" %}</p>
+      </div>
     </div>
     <!-- Falta tabla de pie de página (ver modelo )-->
     <div class="page-break"></div>
 
 
+    <div class="visible-print-block">
+      <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
 
-    <h3 class="text-center" id="anexo-I">{% trans "ANEXO I" %}<br />{% trans "DESCRIPCIÓN DE LAS CARACTERÍSTICAS ENERGÉTICAS DEL EDIFICIO" %}</h3>
+      <p>
+        {% blocktrans %}
+        En este apartado se describen las características energéticas del edificio, envolvente térmica, instalaciones,
+        condiciones de funcionamiento y ocupación y demás datos utilizados para obtener la calificación energética del edificio.
+        {% endblocktrans %}
+      </p>
 
-    <p>
-      {% blocktrans %}
-      En este apartado se describen las características energéticas del edificio, envolvente térmica, instalaciones,
-      condiciones de funcionamiento y ocupación y demás datos utilizados para obtener la calificación energética del edificio.
-      {% endblocktrans %}
-    </p>
-
-    <h4>{% trans "1. SUPERFICIE, IMAGEN Y SITUACIÓN" %}</h4>
-
-    <table>
-      <tr>
-        <td class="title col-md-5">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
-        <td class="col-md-7">{{ report.data.DatosGeneralesyGeometria.SuperficieHabitable}}</td>
-      </tr>
-    </table>
-
-    <br />
-
-    <table class="fotos">
-      <tr>
-        <td class="title col-md-6">{% trans "Imagen del Edificio" %}</td>
-        <td class="title col-md-6">{% trans "Plano de situación" %}</td>
-      </tr>
-      <tr>
-        <td class="gray" colspan="2">&nbsp;</td>
-      </tr>
-    </table>
-
-    <div class="section">
-      <h4>{% trans "2. ENVOLVENTE TÉRMICA" %}</h4>
-
-      <h5>{% trans "Cerramientos opacos" %}</h5>
-
-      <table class="table-hover">
-        <tr>
-          <td width="30%" class="title">{% trans "Nombre" %}</td>
-          <td width="10%" class="title">{% trans "Tipo" %}</td>
-          <td width="17%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
-          <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
-          <td width="20%" class="title">{% trans "Modo de obtención" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="5">&nbsp;</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h5>{% trans "Huecos y lucernarios" %}</h5>
+      <h4>{% trans "1. SUPERFICIE, IMAGEN Y SITUACIÓN" %}</h4>
 
       <table>
         <tr>
-          <td width="30%" class="title">{% trans "Nombre" %}</td>
-          <td width="8%" class="title">{% trans "Tipo" %}</td>
-          <td width="12%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
-          <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
-          <td width="8%" class="title">{% trans "Factor solar" %}</td>
-          <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Transmitancia" %}</td>
-          <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Factor solar" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="7">&nbsp;</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h4>{% trans "3. INSTALACIONES TÉRMICAS" %}</h4>
-
-      <h5>{% trans "Generadores de calefacción" %}</h5>
-
-      <table>
-        <tr>
-          <td width="23%" class="title">{% trans "Nombre" %}</td>
-          <td width="20%" class="title">{% trans "Tipo" %}</td>
-          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
-          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
-          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
-          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="6">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="shade"></td>
-          <td class="total num calc"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h5>{% trans "Generadores de refrigeración" %}</h5>
-
-      <table>
-        <tr>
-          <td width="23%" class="title">{% trans "Nombre" %}</td>
-          <td width="20%" class="title">{% trans "Tipo" %}</td>
-          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
-          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
-          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
-          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="6">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="shade"></td>
-          <td class="total num calc"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h5>{% trans "Instalaciones de Agua Caliente Sanitaria" %}</h5>
-
-      <table style="width:65%">
-        <tr>
-          <td width="45%" class="title">{% trans "Demanda diaria de ACS a 60ºC (litros/dia)" %}</td>
-          <td width="20%" class="num gray">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="2">&nbsp;</td>
+          <td class="title col-md-5">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td class="col-md-7">{{ report.data.DatosGeneralesyGeometria.SuperficieHabitable}}</td>
         </tr>
       </table>
 
       <br />
 
-      <table>
+      <table class="fotos col-md-12">
         <tr>
-          <td width="23%" class="title">{% trans "Nombre" %}</td>
-          <td width="20%" class="title">{% trans "Tipo" %}</td>
-          <td class="title">{% trans "Potencia nominal" %} [kW]</td>
-          <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
-          <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
-          <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+          <td class="title col-md-6">{% trans "Imagen del Edificio" %}</td>
+          <td class="title col-md-6">{% trans "Plano de situación" %}</td>
         </tr>
         <tr>
-          <td class="gray" colspan="6">&nbsp;</td>
+          <td class="gray col-md-6" align="center">&nbsp;</td>
+          <td class="gray col-md-6" align="center">&nbsp;</td>
         </tr>
       </table>
+
+      <div class="section">
+        <h4>{% trans "2. ENVOLVENTE TÉRMICA" %}</h4>
+
+        <h5>{% trans "Cerramientos opacos" %}</h5>
+
+        <table class="table-hover">
+          <tr>
+            <td width="30%" class="title">{% trans "Nombre" %}</td>
+            <td width="10%" class="title">{% trans "Tipo" %}</td>
+            <td width="17%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+            <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
+            <td width="20%" class="title">{% trans "Modo de obtención" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="5">&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h5>{% trans "Huecos y lucernarios" %}</h5>
+
+        <table>
+          <tr>
+            <td width="30%" class="title">{% trans "Nombre" %}</td>
+            <td width="8%" class="title">{% trans "Tipo" %}</td>
+            <td width="12%" class="title">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+            <td class="title">{% trans "Transmitancia" %} [{% trans "W/m<sup>2</sup>·K" %}]</td>
+            <td width="8%" class="title">{% trans "Factor solar" %}</td>
+            <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Transmitancia" %}</td>
+            <td width="14%" class="title">{% trans "Modo de obtención." %}<br />{% trans "Factor solar" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="7">&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h4>{% trans "3. INSTALACIONES TÉRMICAS" %}</h4>
+
+        <h5>{% trans "Generadores de calefacción" %}</h5>
+
+        <table>
+          <tr>
+            <td width="23%" class="title">{% trans "Nombre" %}</td>
+            <td width="20%" class="title">{% trans "Tipo" %}</td>
+            <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+            <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+            <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+            <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="6">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="shade"></td>
+            <td class="total num calc"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h5>{% trans "Generadores de refrigeración" %}</h5>
+
+        <table>
+          <tr>
+            <td width="23%" class="title">{% trans "Nombre" %}</td>
+            <td width="20%" class="title">{% trans "Tipo" %}</td>
+            <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+            <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+            <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+            <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="6">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="shade"></td>
+            <td class="total num calc"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h5>{% trans "Instalaciones de Agua Caliente Sanitaria" %}</h5>
+
+        <table style="width:65%">
+          <tr>
+            <td width="45%" class="title">{% trans "Demanda diaria de ACS a 60ºC (litros/dia)" %}</td>
+            <td width="20%" class="num gray">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="2">&nbsp;</td>
+          </tr>
+        </table>
+
+        <br />
+
+        <table>
+          <tr>
+            <td width="23%" class="title">{% trans "Nombre" %}</td>
+            <td width="20%" class="title">{% trans "Tipo" %}</td>
+            <td class="title">{% trans "Potencia nominal" %} [kW]</td>
+            <td class="title">{% trans "Rendimiento estacional" %} [%]</td>
+            <td width="20%" class="title">{% trans "Tipo de energía" %}</td>
+            <td width="12%" class="title">{% trans "Modo de obtención" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="6">&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section solo-terciario">
+        <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
+
+      </div>
+
+      <div class="section solo-terciario">
+        <h5>{% trans "Torres de refrigeración (sólo edificios terciarios)" %}</h5>
+
+        <table>
+          <tr>
+            <td class="title" width="25%">{% trans "Nombre" %}</td>
+            <td class="title" width="25%">{% trans "Tipo" %}</td>
+            <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
+            <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="4">&nbsp;</td>
+          </tr>
+
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="total num calc"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section solo-terciario">
+        <h5>{% trans "Ventilación y bombeo (sólo edificios terciarios)" %}</h5>
+
+        <table>
+          <tr>
+            <td class="title" width="25%">{% trans "Nombre" %}</td>
+            <td class="title" width="25%">{% trans "Tipo" %}</td>
+            <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
+            <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="4">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="total num calc"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section solo-terciario">
+        <h4>{% trans "4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)" %}</h4>
+
+        <table>
+          <tr>
+            <td class="title" width="30%">{% trans "Espacio" %}</td>
+            <td class="title">{% trans "Potencia instalada" %} [{% trans "W/m<sup>2</sup>" %}]</td>
+            <td class="title">{% trans "VEEI" %} [{% trans "W/m<sup>2</sup>·100lux" %}]</td>
+            <td class="title">{% trans "Iluminancia media" %} [{% trans "lux" %}]</td>
+            <td class="title">{% trans "Modo de obtención" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="5">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="total num"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section solo-terciario">
+        <h4>{% trans "5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)" %}</h4>
+
+        <table>
+          <tr>
+            <td class="title" width="33%">{% trans "Espacio" %}</td>
+            <td class="title" width="33%">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
+            <td class="title" width="33%">{% trans "Perfil de uso" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="3">&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h4>{% trans "6. ENERGÍAS RENOVABLES" %}</h4>
+
+        <h5>{% trans "Térmica" %}</h5>
+        <table>
+          <tr>
+            <td class="title" width="20%" rowspan="2">{% trans "Nombre" %}</td>
+            <td class="title" colspan="3">{% trans "Consumo de Energía Final cubierto, en función del servicio asociado [%]" %}</td>
+            <td class="title" width="20%" align="center" rowspan="2">{% trans "Demanda de ACS cubierta [%]" %}</td>
+          </tr>
+          <tr>
+            <td class="title" width="20%">{% trans "Calefacción" %}</td>
+            <td class="title" width="20%">{% trans "Refrigeración" %}</td>
+            <td class="title" width="20%">{% trans "ACS" %}</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="5">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTALES" %}</td>
+            <td class="total num">&nbsp;</td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+            <td class="shade"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <h5>{% trans "Eléctrica" %}</h5>
+
+        <table style="width:75%" align="center">
+          <tr>
+            <td class="title">{% trans "Nombre" %}</td>
+            <td class="title">{% trans "Energía eléctrica generada y autoconsumida" %} [{% trans "kWh/año" %}]</td>
+          </tr>
+          <tr>
+            <td class="gray" colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="total text-center">{% trans "TOTAL" %}</td>
+            <td class="total num"></td>
+          </tr>
+        </table>
+      </div>
     </div>
-
-    <div class="section solo-terciario">
-      <h5>{% trans "Sistemas secundarios de calefacción y/o refrigeración (sólo edificios terciarios)" %}</h5>
-
-    </div>
-
-    <div class="section solo-terciario">
-      <h5>{% trans "Torres de refrigeración (sólo edificios terciarios)" %}</h5>
-
-      <table>
-        <tr>
-          <td class="title" width="25%">{% trans "Nombre" %}</td>
-          <td class="title" width="25%">{% trans "Tipo" %}</td>
-          <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
-          <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="4">&nbsp;</td>
-        </tr>
-
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="total num calc"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section solo-terciario">
-      <h5>{% trans "Ventilación y bombeo (sólo edificios terciarios)" %}</h5>
-
-      <table>
-        <tr>
-          <td class="title" width="25%">{% trans "Nombre" %}</td>
-          <td class="title" width="25%">{% trans "Tipo" %}</td>
-          <td class="title" width="25%">{% trans "Servicio asociado" %}</td>
-          <td class="title" width="25%">{% trans "Consumo de energía" %} [{% trans "kWh/año" %}]</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="4">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="total num calc"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section solo-terciario">
-      <h4>{% trans "4. INSTALACIÓN DE ILUMINACIÓN (sólo edificios terciarios)" %}</h4>
-
-      <table>
-        <tr>
-          <td class="title" width="30%">{% trans "Espacio" %}</td>
-          <td class="title">{% trans "Potencia instalada" %} [{% trans "W/m<sup>2</sup>" %}]</td>
-          <td class="title">{% trans "VEEI" %} [{% trans "W/m<sup>2</sup>·100lux" %}]</td>
-          <td class="title">{% trans "Iluminancia media" %} [{% trans "lux" %}]</td>
-          <td class="title">{% trans "Modo de obtención" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="5">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="total num"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section solo-terciario">
-      <h4>{% trans "5. CONDICIONES DE FUNCIONAMIENTO Y OCUPACIÓN (sólo edificios terciarios)" %}</h4>
-
-      <table>
-        <tr>
-          <td class="title" width="33%">{% trans "Espacio" %}</td>
-          <td class="title" width="33%">{% trans "Superficie" %} [{% trans "m<sup>2</sup>" %}]</td>
-          <td class="title" width="33%">{% trans "Perfil de uso" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="3">&nbsp;</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h4>{% trans "6. ENERGÍAS RENOVABLES" %}</h4>
-
-      <h5>{% trans "Térmica" %}</h5>
-      <table>
-        <tr>
-          <td class="title" width="20%" rowspan="2">{% trans "Nombre" %}</td>
-          <td class="title" colspan="3">{% trans "Consumo de Energía Final cubierto, en función del servicio asociado [%]" %}</td>
-          <td class="title" width="20%" align="center" rowspan="2">{% trans "Demanda de ACS cubierta [%]" %}</td>
-        </tr>
-        <tr>
-          <td class="title" width="20%">{% trans "Calefacción" %}</td>
-          <td class="title" width="20%">{% trans "Refrigeración" %}</td>
-          <td class="title" width="20%">{% trans "ACS" %}</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="5">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTALES" %}</td>
-          <td class="total num">&nbsp;</td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-          <td class="shade"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="section">
-      <h5>{% trans "Eléctrica" %}</h5>
-
-      <table style="width:75%" align="center">
-        <tr>
-          <td class="title">{% trans "Nombre" %}</td>
-          <td class="title">{% trans "Energía eléctrica generada y autoconsumida" %} [{% trans "kWh/año" %}]</td>
-        </tr>
-        <tr>
-          <td class="gray" colspan="2">&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="total text-center">{% trans "TOTAL" %}</td>
-          <td class="total num"></td>
-        </tr>
-      </table>
-    </div>
-
-
-
-
 
     <!-- ANEXO II - Calificación energética -->
     <h3 class="text-center">
@@ -656,7 +656,7 @@
       {% trans "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO" %}
     </h3>
 
-    <table>
+    <table class="visible-print-block">
       <tr>
         <td class="title">{% trans "Zona Climática" %}</td>
         <td><a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
@@ -906,34 +906,36 @@
       </div>
     </div>
 
-    <h3 class="text-center">{% trans "ANEXO III" %}<br />{% trans "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA" %}</h3>
-    <table>
-      <tr>
-        <td class="gray">
-          {% trans "Sin medidas de mejora de la eficiencia energética" %}
-        </td>
-      </tr>
-    </table>
+    <div class="section visible-print-block">
+      <h3 class="text-center">{% trans "ANEXO III" %}<br />{% trans "RECOMENDACIONES PARA LA MEJORA DE LA EFICIENCIA ENERGÉTICA" %}</h3>
+      <table>
+        <tr>
+          <td class="gray">
+            {% trans "Sin medidas de mejora de la eficiencia energética" %}
+          </td>
+        </tr>
+      </table>
 
-    <h3 class="text-center">ANEXO IV<br />{% trans "PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR" %}</h3>
-    <table>
-      <tr>
-        <td class="gray">
-          {% trans "Sin pruebas, comprobaciones o inspecciones." %}
-        </td>
-      </tr>
-    </table>
+      <h3 class="text-center">ANEXO IV<br />{% trans "PRUEBAS, COMPROBACIONES E INSPECCIONES REALIZADAS POR EL TÉCNICO CERTIFICADOR" %}</h3>
+      <table>
+        <tr>
+          <td class="gray">
+            {% trans "Sin pruebas, comprobaciones o inspecciones." %}
+          </td>
+        </tr>
+      </table>
 
-    <h3 class="text-center">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
-    <table>
-      <tr>
-        <td class="gray">
-          {% trans "Sin medidas soluciones singulares." %}
-        </td>
-      </tr>
-    </table>
+      <h3 class="text-center">{% trans "ANEXO V" %}<br />{% trans "Justificación de Soluciones Singulares" %}</h3>
+      <table>
+        <tr>
+          <td class="gray">
+            {% trans "Sin soluciones singulares." %}
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
-
+  <br />
 
 
   <script>
@@ -954,7 +956,6 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.AlcanceInformacionXML}}',
       source :[
-        {value: "", text: ''},
         {value: "CertificacionExistente", text: 'Certificacion Existente'},
         {value: "VerificacionExistente", text: 'Verificacion Existente'},
         {value: "CertificacionVerificacionExistente", text: 'Certificacion Verificacion Existente'},
@@ -1076,7 +1077,6 @@
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.TipoDeEdificio}}',
       source :[
-        {value: "", text: ''},
         {value: "ViviendaUnifamiliar", text: 'Vivienda Unifamiliar'},
         {value: "BloqueDeViviendaCompleto", text: 'Bloque De Vivienda Completo'},
         {value: "ViviendaIndividualEnBloque", text: 'Vivienda Indvidual En Bloque'},
