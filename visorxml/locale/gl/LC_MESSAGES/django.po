@@ -29,7 +29,10 @@ msgid ""
 "está prevista únicamente para el caso que deba emplear procedimientos "
 "previos a la vigencia del Real Decreto 235/2013 que no permitan la "
 "generación del archivo XML."
-msgstr ""
+msgstr "A xeración manual do Certificado Enerxético en formato XML ou PDF+XML "
+"está prevista só no caso de que teña que empregar procedementos "
+"previos á vixencia do Real Decreto 235/2013 que non permiten a "
+"xeración do arquivo XML."
 
 #: generadorxml/templates/generadorxml/generate_xml.html:22
 #: templates/energy-performance-certificate.html:141
@@ -946,11 +949,6 @@ msgid "Informe Complementario"
 msgstr "Informe Complementario"
 
 #: templates/energy-performance-certificate.html:17
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    Seleccione un archivo de informe de eficiencia energética en XML \n"
-#| "    "
 msgid ""
 "\n"
 "    Seleccione un archivo de informe de eficiencia energética en XML para su "
@@ -958,7 +956,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"    Escolla un arquivo de informe de eficiencia enerxética en XML \n"
+"    Escolla un arquivo de informe de eficiencia enerxética en XML para a súa visualización e/ou edición\n"
 "    "
 
 #: templates/energy-performance-certificate.html:25
@@ -1353,7 +1351,7 @@ msgstr "Está seguro de que desexa eliminar este elemento?"
 
 #: templates/home.html:14
 msgid "Visualización y edición de informes"
-msgstr ""
+msgstr "visualización e edición de informes"
 
 #: templates/home.html:16
 msgid ""
@@ -1377,10 +1375,14 @@ msgid ""
 "\"%(the_certificate)s\">Certificado de Eficiencia Energética</a>.\n"
 "        "
 msgstr ""
+"\n"
+"        Pode comezar a traballar accedendo ao apartado <a href="
+"\"%(the_certificate)s\">Certificado de Eficiencia Enerxética</a>.\n"
+"        "
 
 #: templates/home.html:28
 msgid "Descripción del formato"
-msgstr ""
+msgstr "Descrición do formato"
 
 #: templates/home.html:31
 #, python-format
