@@ -107,8 +107,8 @@
         <tr>
           <td class="title" width="30%">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
           <td colspan="3">
-            <a href="#" class="editable" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
-              {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|default:""  }}
+            <a href="#" class="editable3" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
+              {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|asnum  }}
             </a>
           </td>
         </tr>
@@ -301,29 +301,33 @@
         <table>
           <tr>
             <td class="title">{% trans "CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE" %}</td>
+            {% if not pdf %}
             <td class="calificacion-cell">
               <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
               </a>
             </td>
+            {% endif %}
             <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br /></td>
+            {% if not pdf %}
             <td class="calificacion-cell">
               <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
               </a>
             </td>
+            {% endif %}
           </tr>
           <tr>
-            <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global  report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" /></td>
+            <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global  report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" /></td>
 
-            <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" /></td>
+            <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" /></td>
           </tr>
           <tr>
-            <td colspan="2">
-              <a href="#" class="editable3" data-type="number" data-step="any"  id="Consumo.EnergiaPrimariaNoRenovable.Global">
+            <td {% if not pdf %}colspan="2"{% endif %}>
+              <a href="#" class="editable3" data-type="number" data-step="0.01"  id="Consumo.EnergiaPrimariaNoRenovable.Global">
                 {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|default:'' }}
               </a>
               [kWh/m<sup>2</sup>·año]
             </td>
-            <td colspan="2">
+            <td {% if not pdf %}colspan="2"{% endif %}>
               <a href="#" class="editable3" data-type="number" data-step="any"  id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
@@ -375,7 +379,11 @@
       <table>
         <tr>
           <td class="title col-md-5">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
-          <td class="col-md-7">{{ report.data.DatosGeneralesyGeometria.SuperficieHabitable}}</td>
+          <td class="col-md-7">
+            <a href="#" class="editable3" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
+              {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|asnum  }}
+            </a>
+          </td>
         </tr>
       </table>
 
@@ -872,29 +880,33 @@
           <table>
             <tr>
               <td class="title">{% trans "DEMANDA DE CALEFACCIÓN" %}</td>
+              {% if not pdf %}
               <td class="calificacion-cell">
                 <a href="#" class="editable-calificacion-cannull" id="Calificacion.Demanda.Calefaccion" data-value="{{report.data.Calificacion.Demanda.Calefaccion}}" data-type="select">
                 </a>
               </td>
+              {% endif %}
               <td class="title">{% trans "DEMANDA DE REFRIGERACIÓN" %}</td>
+              {% if not pdf %}
               <td class="calificacion-cell">
                 <a href="#" class="editable-calificacion-cannull" id="Calificacion.Demanda.Refrigeracion" data-value="{{report.data.Calificacion.Demanda.Refrigeracion}}" data-type="select" >
                 </a>
               </td>
+              {% endif %}
             </tr>
             <tr>
               <!-- XXX: ver aquí los casos de terciario con 08 ren/h -->
-              <td colspan="2"><img class="escala"  src="{% escalasvg report.data.Calificacion.Demanda.Calefaccion report.data.Demanda.EdificioObjeto.Calefaccion %}" /></td>
-              <td colspan="2"><img class="escala" src="{% escalasvg report.data.Calificacion.Demanda.Refrigeracion report.data.Demanda.EdificioObjeto.Refrigeracion %}" /></td>
+              <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.Demanda.Calefaccion report.data.Demanda.EdificioObjeto.Calefaccion %}" /></td>
+              <td {% if not pdf %}colspan="2"{% endif %}><img class="escala" src="{% escalasvg report.data.Calificacion.Demanda.Refrigeracion report.data.Demanda.EdificioObjeto.Refrigeracion %}" /></td>
             </tr>
             <tr>
-              <td class="info" colspan="2">{% trans "Demanda de calefacción" %}:
+              <td class="info" {% if not pdf %}colspan="2"{% endif %}>{% trans "Demanda de calefacción" %}:
                 <a href="#" data-type="number" data-step="any" class="editable3" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
                   {{ report.data.Demanda.EdificioObjeto.Calefaccion|default:'' }}
                 </a>
                 [kWh/m<sup>2</sup>·año]
               </td>
-              <td class="info" colspan="2">{% trans "Demanda de refrigeración" %}:
+              <td class="info" {% if not pdf %}colspan="2"{% endif %}>{% trans "Demanda de refrigeración" %}:
                 <a href="#" data-type="number" data-step="any" class="editable3"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
                   {{ report.data.Demanda.EdificioObjeto.Refrigeracion|default:'' }}
                 </a>
