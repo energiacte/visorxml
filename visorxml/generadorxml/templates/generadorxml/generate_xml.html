@@ -136,7 +136,8 @@
         <br />
       </div>
 
-      <table class="visible-print-block">
+      <div class="visible-print-block">
+      <table>
         <tr><td class="title" colspan="2">{% trans "Tipo de edificio o parte del edificio que se certifica:" %}</td></tr>
         <tr>
           <td width="50%">
@@ -190,6 +191,7 @@
           </td>
         </tr>
       </table>
+      </div>
     </div>
 
     <div class="section">
@@ -294,50 +296,24 @@
     </div>
     <br />
 
-    <div class="section">
+    <div class="section visible-print-block">
       <h4>{% trans "CALIFICACIÓN ENERGÉTICA OBTENIDA:" %}</h4>
 
       <div class="calif">
         <table>
           <tr>
-            <td class="title">{% trans "CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE" %}</td>
-            {% if not pdf %}
-            <td class="calificacion-cell">
-              <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
-              </a>
-            </td>
-            {% endif %}
-            <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br /></td>
-            {% if not pdf %}
-            <td class="calificacion-cell">
-              <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
-              </a>
-            </td>
-            {% endif %}
+            <td class="title">{% trans "CONSUMO DE ENERGÍA PRIMARIA NO RENOVABLE" %}<br />[{% trans "kWh/m<sup>2</sup>·año" %}]</td>
+            <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br />[{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           </tr>
           <tr>
-            <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global  report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" /></td>
+            <td><img class="escala"  src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global  report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" /></td>
 
-            <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" /></td>
-          </tr>
-          <tr>
-            <td {% if not pdf %}colspan="2"{% endif %}>
-              <a href="#" class="editable3" data-type="number" data-step="0.01"  id="Consumo.EnergiaPrimariaNoRenovable.Global">
-                {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|default:'' }}
-              </a>
-              [kWh/m<sup>2</sup>·año]
-            </td>
-            <td {% if not pdf %}colspan="2"{% endif %}>
-              <a href="#" class="editable3" data-type="number" data-step="any"  id="EmisionesCO2.Global">
-                {{ report.data.EmisionesCO2.Global|default:'' }}
-              </a>
-              [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
-            </td>
+            <td><img class="escala"  src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" /></td>
           </tr>
         </table>
       </div>
       <br>
-      <div class="visible-print-block">
+      <div>
         <p>
           {% blocktrans %}
           El técnico certificador abajo firmante certifica que ha realizado la calificación energética del edificio o de la parte que se certifica
@@ -658,26 +634,38 @@
       </div>
     </div>
 
-    <!-- ANEXO II - Calificación energética -->
-    <h3 class="text-center">
-      {% trans "ANEXO II" %} <br>
-      {% trans "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO" %}
-    </h3>
+    <div class="visible-print-block">
+      <!-- ANEXO II - Calificación energética -->
+      <h3 class="text-center">
+        {% trans "ANEXO II" %} <br>
+        {% trans "CALIFICACIÓN ENERGÉTICA DEL EDIFICIO" %}
+      </h3>
+    </div>
 
-    <table class="visible-print-block">
-      <tr>
-        <td class="title">{% trans "Zona Climática" %}</td>
-        <td><a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
+    <div class="visible-print-block">
+      <table>
+        <tr>
+          <td class="title">{% trans "Zona Climática" %}</td>
+          <td>
+            {% if not pdf %}
+            <a href="#" data-type="select" class="editable-clima"  id="IdentificacionEdificio.ZonaClimatica">
+              {{ report.data.IdentificacionEdificio.ZonaClimatica }}
+            </a>
+            {% else %}
             {{ report.data.IdentificacionEdificio.ZonaClimatica }}
-          </a>
-        </td>
-        <td class="title">{% trans "Uso" %}</td>
-        <td width="40%">
-          <a href="#" class="editable-tipo" id="IdentificacionEdificio.TipoDeEdificio" data-type="select">
-          </a>
-        </td>
-      </tr>
-    </table>
+            {% endif %}
+          </td>
+          <td class="title">{% trans "Uso" %}</td>
+          <td width="40%">
+            {% if not pdf %}
+            <a href="#" class="editable-tipo" id="IdentificacionEdificio.TipoDeEdificio" data-type="select"></a>
+            {% else %}
+            {{ report.data.IdentificacionEdificio.TipoDeEdificio }}
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
 
     <div class="section">
       <h4>{% trans "1. CALIFICACIÓN ENERGÉTICA DEL EDIFICIO EN EMISIONES" %}</h4>
@@ -685,32 +673,38 @@
       <table class="no-fixed">
         <tr>
           <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
+          {% if not pdf %}
           <td>
             <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
             </a>
           </td>
-          <td class="title" width="50%"colspan="4">{% trans "INDICADORES PARCIALES" %}</td>
+          {% endif %}
+          <td class="title" width="50%" colspan="4">{% trans "INDICADORES PARCIALES" %}</td>
         </tr>
         <tr>
-          <td rowspan="6" colspan="2" align="center" class="info">
+          <td rowspan="6" {% if not pdf %}colspan="2"{% endif %} align="center" class="info">
             <img class="escala" src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" />
-            <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Emisiones globales" %}:
+            {% if not pdf %}
+            <div style="font-size: 14px;">{% trans "Emisiones globales" %}:
               <a href="#" class="editable3 " data-type="number" data-step="any" id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
-              [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
+              [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]
             </div>
+            {% else %}
+            <div>{% trans "Emisiones globales" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</div>
+            {% endif %}
           </td>
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
         </tr>
         <tr>
-          <td class="info">{% trans "Emisiones calefacción" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Emisiones calefacción" %}  [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.Calefaccion" data-value="{{report.data.Calificacion.EmisionesCO2.Calefaccion}}" data-type="select">
             </a>
           </td>
-          <td class="info">{% trans "Emisiones ACS" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Emisiones ACS" %}  [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.ACS" data-value="{{report.data.Calificacion.EmisionesCO2.ACS}}" data-type="select">
             </a>
@@ -734,13 +728,13 @@
           <td class="title"  colspan="2">{% trans "ILUMINACIÓN" %}</td>
         </tr>
         <tr>
-          <td class="info">{% trans "Emisiones Refrigeración" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Emisiones Refrigeración" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EmisionesCO2.Refrigeracion" data-value="{{report.data.Calificacion.EmisionesCO2.Refrigeracion}}" data-type="select">
             </a>
           </td>
           <td class="info">
-            {% trans "Emisiones Iluminación" %} [kgCO<sub>2</sub>e/m<sup>2</sup>·año]
+            {% trans "Emisiones Iluminación" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]
           </td>
           <td class="solo-terciario" rowspan="2" class="calificacion-cell">
             {% if not es_vivienda %}
@@ -780,13 +774,16 @@
       <table class="no-fixed">
         <tr>
           <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
+          {% if not pdf %}
           <td>
             <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
             </a>
           </td>
+          {% endif %}
           <td class="title" width="50%" colspan="4">{% trans "INDICADORES PARCIALES" %}</td>
         </tr>
         <tr>
+          {% if not pdf %}
           <td rowspan="6" colspan="2"  align="center" class="info">
             <img  class="escala" id="Calificacion.EnergiaPrimariaNoRenovable.Global" src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" />
             <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Consumo global de energía primaria no renovable" %}:
@@ -795,17 +792,23 @@
               </a>
               [{% trans "kWh/m<sup>2</sup>·año" %}]</div>
           </td>
+          {% else %}
+          <td rowspan="6" align="center" class="info">
+            <img class="escala" src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" />
+            <div>{% trans "Consumo global de energía primaria no renovable" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</div>
+          </td>
+          {% endif %}
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
         </tr>
 
         <tr>
-          <td class="info">{% trans "Energía primaria calefacción" %} [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria calefacción" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
           <td  rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.Calefaccion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Calefaccion}}" data-type="select">
             </a>
           </td>
-          <td class="info">{% trans "Energía primaria ACS" %} [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria ACS" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.ACS" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.ACS}}" data-type="select">
             </a>
@@ -830,14 +833,14 @@
           <td class="title"  colspan="2">{% trans "ILUMINACIÓN" %}</td>
         </tr>
         <tr>
-          <td class="info">{% trans "Energía primaria refrigeración" %} [kWh/m<sup>2</sup>·año]</td>
+          <td class="info">{% trans "Energía primaria refrigeración" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
           <td rowspan="2" class="calificacion-cell">
             <a href="#" class="editable-calificacion-cannull" id="Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Refrigeracion}}" data-type="select">
             </a>
 
           </td>
           <td class="info">
-            {% trans "Energía primaria iluminación" %} [kWh/m<sup>2</sup>·año]
+            {% trans "Energía primaria iluminación" %} [{% trans "kWh/m<sup>2</sup>·año" %}]
           </td>
           <td rowspan="2" class="calificacion-cell">
             {% if not es_vivienda %}
@@ -899,20 +902,27 @@
               <td {% if not pdf %}colspan="2"{% endif %}><img class="escala"  src="{% escalasvg report.data.Calificacion.Demanda.Calefaccion report.data.Demanda.EdificioObjeto.Calefaccion %}" /></td>
               <td {% if not pdf %}colspan="2"{% endif %}><img class="escala" src="{% escalasvg report.data.Calificacion.Demanda.Refrigeracion report.data.Demanda.EdificioObjeto.Refrigeracion %}" /></td>
             </tr>
+            {% if not pdf %}
             <tr>
-              <td class="info" {% if not pdf %}colspan="2"{% endif %}>{% trans "Demanda de calefacción" %}:
+              <td class="info" colspan="2">{% trans "Demanda de calefacción" %}:
                 <a href="#" data-type="number" data-step="any" class="editable3" data-type="number" data-step="any" id="Demanda.EdificioObjeto.Calefaccion">
                   {{ report.data.Demanda.EdificioObjeto.Calefaccion|default:'' }}
                 </a>
-                [kWh/m<sup>2</sup>·año]
+                {% trans "kWh/m<sup>2</sup>·año" %}
               </td>
-              <td class="info" {% if not pdf %}colspan="2"{% endif %}>{% trans "Demanda de refrigeración" %}:
+              <td class="info" colspan="2">{% trans "Demanda de refrigeración" %}:
                 <a href="#" data-type="number" data-step="any" class="editable3"  data-type="number" data-step="any" id="Demanda.EdificioObjeto.Refrigeracion">
                   {{ report.data.Demanda.EdificioObjeto.Refrigeracion|default:'' }}
                 </a>
-                [kWh/m<sup>2</sup>·año]
+                {% trans "kWh/m<sup>2</sup>·año" %}
               </td>
             </tr>
+            {% else %}
+            <tr>
+              <td class="info">{% trans "Demanda de calefacción" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
+              <td class="info">{% trans "Demanda de refrigeración" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</td>
+            </tr>
+            {% endif %}
           </table>
         </div>
       </div>
