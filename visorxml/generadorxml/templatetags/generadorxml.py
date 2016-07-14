@@ -98,7 +98,7 @@ ALERT_SPAN = mark_safe("<span class='alert'>-</span>")
 def asnum(value):
     "Devuelve un valor numérico con dos decimales"
     if ((not value) and (value != 0)):
-        return '-'
+        return ''
     try:
         val = float(value)
         res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
