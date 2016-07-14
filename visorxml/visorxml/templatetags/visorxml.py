@@ -141,7 +141,7 @@ def asnum(value):
         return '-'
     try:
         val = float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
@@ -153,7 +153,7 @@ def asint(value):
         return '-'
     try:
         val = int(value)
-        res = '{0:d}'.format(int(val)) if val <= ALERT else ALERT_SPAN
+        res = '{0:d}'.format(int(val)) if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
@@ -165,14 +165,14 @@ def aspct(value):
         return '-'
     try:
         val = 100.0 * float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val <= ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
 
 @register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
-    if (not valuedest) and (not valueorig):
+    if (not valuedest) or (not valueorig):
         return '-'
     try:
         res1 = float(valueorig) - float(valuedest)

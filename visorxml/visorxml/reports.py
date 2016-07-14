@@ -46,7 +46,6 @@ VECTORES = ('GasNatural GasoleoC GLP Carbon BiomasaPellet BiomasaOtros '
 SERVICIOS = 'Global Calefaccion Refrigeracion ACS Iluminacion'.split()
 NIVELESESCALA = 'A B C D E F'.split()
 ALERTINT = 9999999999
-ALERTFLOAT = ALERTINT + 0.99
 ALERT = ALERTINT / 100
 
 
@@ -308,6 +307,10 @@ class XMLReport(object):
                 servicios[servicio] += Decimal(self.get_XML_value(improvement_xml_tree,
                                                                   './Consumo/EnergiaFinalVectores/%s/%s' % (vec, servicio)))
 
+        # Si no hay Global definido (vivienda) sumamos resto de servicios
+        if not servicios.get('Global', None):
+            servicios['Global'] = sum(servicios.get(servicio, 0) for servicio in servicios if servicio is not 'Global')
+
         element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaFinal')
         for servicio, valor in servicios.items():
             lxml.etree.SubElement(element, servicio).text = '%s' % valor
@@ -323,6 +326,7 @@ class XMLReport(object):
         energia_refrigeracion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Refrigeracion'))
         energia_acs = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/ACS'))
         energia_iluminacion = Decimal(self.get_XML_value(improvement_xml_tree, './Consumo/EnergiaPrimariaNoRenovable/Iluminacion'))
+
         diff = energia_global - energia_global_base
 
         lxml.etree.SubElement(element, 'Global').text = '%s' % energia_global
@@ -410,6 +414,14 @@ class XMLReport(object):
         if self._data is None:
             self._data = self._parsetree()
         return self._data
+
+    @property
+    def esvivienda(self):
+        """Es un edificio de uso Vivienda?"""
+        try:
+            return 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
+        except:
+            return False
 
     def _parsetree(self):
         data = Bunch()
@@ -647,7 +659,7 @@ class XMLReport(object):
             generadores_de_calefaccion.append(obj)
 
         total_potencia_generadores_de_calefaccion = sum(
-            e.PotenciaNominal for e in generadores_de_calefaccion if e.PotenciaNominal <= ALERT)
+            e.PotenciaNominal for e in generadores_de_calefaccion if e.PotenciaNominal < ALERT)
 
         return generadores_de_calefaccion, total_potencia_generadores_de_calefaccion
 
@@ -666,7 +678,7 @@ class XMLReport(object):
             generadores_de_refrigeracion.append(obj)
 
         total_potencia_generadores_de_refrigeracion = sum(
-            e.PotenciaNominal for e in generadores_de_refrigeracion if e.PotenciaNominal <= ALERT)
+            e.PotenciaNominal for e in generadores_de_refrigeracion if e.PotenciaNominal < ALERT)
 
         return generadores_de_refrigeracion, total_potencia_generadores_de_refrigeracion
 
@@ -945,6 +957,10 @@ class XMLReport(object):
                 cval = getattr(energia_final_por_servicios, servicio, 0.0)
                 cval = 0.0 if cval is None else cval
                 setattr(energia_final_por_servicios, servicio, cval + veccval)
+        if not getattr(energia_final_por_servicios, 'Global', None):
+            globalservicios = sum(getattr(energia_final_por_servicios, servicio, 0.0)
+                                  for servicio in SERVICIOS if servicio != 'Global')
+            setattr(energia_final_por_servicios, 'Global', globalservicios)
 
         return energia_final_por_servicios
 
@@ -1131,16 +1147,18 @@ class XMLReport(object):
 
         zci = self.data.IdentificacionEdificio.ZonaClimatica[:-1]
         zcv = self.data.IdentificacionEdificio.ZonaClimatica[-1]
-        esvivienda = 'Vivienda' in self.data.IdentificacionEdificio.TipoDeEdificio
+        esvivienda = self.esvivienda
 
         info = self.errors['info']
         if self.data.IdentificacionEdificio.AnoConstruccion == '-':
             info.append(('AVISO', 'No se ha definido el año de construcción', "IdentificacionEdificio.AnoConstruccion"))
         if self.data.IdentificacionEdificio.ReferenciaCatastral == '-':
             info.append(('AVISO', 'No se ha definido la referencia catastral',"IdentificacionEdificio.ReferenciaCatastral"))
+        if self.data.DatosGeneralesyGeometria.DemandaDiariaACS <= 0.0:
+            info.append(('AVISO', 'Demanda diaria de ACS nula',"DatosGeneralesyGeometria.DemandaDiariaACS"))
 
         if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
-            info.append(('ERROR', 'Superficies habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
+            info.append(('ERROR', 'Superficie habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
         if zcv not in '1234':
             info.append(('ERROR', 'Zona climática de verano incorrecta', "IdentificacionEdificio.ZonaClimatica"))
         if zci not in ['A', 'B', 'C', 'D', 'E', 'alfa', 'alpha']:

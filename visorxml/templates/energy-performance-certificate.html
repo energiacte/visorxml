@@ -15,7 +15,7 @@
   <hr>
   <p class="lead">
     {% blocktrans %}
-    Seleccione un archivo de informe de eficiencia energética en XML 
+    Seleccione un archivo de informe de eficiencia energética en XML para su visualización y/o edición
     {% endblocktrans %}
   </p>
 
@@ -48,7 +48,12 @@
       {% endif %}
     </form>
     <br>
-    <a href="{% url 'generate-report' %}" class="btn btn-info">Introducción manual de datos</a>
+    <div class="well small">
+      {% url "generate-report" as the_generate_report_url %}
+      {% blocktrans %}
+      Si ha empleado procedimientos reconocidos previos a la entrada en vigor del Real Decreto 235/2013, que no permitan la generación del informe en formato XML, puede <a href="{{ the_generate_report_url }}">generar manualmente el Certificado Energético en formato XML o PDF+XML.</a>
+      {% endblocktrans %}
+    </div>
   </div></div>
 <hr>
 {% endif %}
@@ -1074,7 +1079,7 @@
       <a href="#" data-index="{{forloop.counter}}" data-type="measure" class="hidden-print delete-element">
         <img src="{% static "img/remove-button.png"%}" /> {% trans "Eliminar medida" %}
       </a>
-  </h4>
+    </h4>
     <table>
       <tr>
         <td width="20%" class="title">{% trans "Denominación:" %}</td>
@@ -1154,8 +1159,12 @@
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
-        <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}</td>
+        <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}{{ report.data.Consumo.EnergiaFinal.Iluminacion }}</td>
+        {% if report.esvivienda %}
+        <td class="num calc small dif solo-terciario">-</td>
+        {% else %}
         <td class="num calc small dif solo-terciario">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
+        {% endif %}
         <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:report.data.Consumo.EnergiaFinal.Global|safe }}</td>
       </tr>
@@ -1244,7 +1253,7 @@
       <a href="#" class="green-button add-measures">
         <img src="{% static "img/add-button.png"%}" />
         <span>
-          {% trans "Añadir medida de mejora desde archivo XML (o XML+PDF)" %}
+          {% trans "Añadir medida de mejora desde archivo XML (o PDF+XML)" %}
         </span>
         <input type="file" class="measures-xml hidden" name="measures-xml"/>
       </a>

@@ -123,11 +123,10 @@ def measures_xml_upload(request):
     base_xml = request.session['report_xml_name']
     with open(os.path.join(settings.MEDIA_ROOT, base_xml), "rb") as base_file:
         base_str = base_file.read()
-        
+
     xml = request.FILES["measures-xml"]
 
     xml_strings = [(base_xml, base_str),] + get_xml_strings(xml)
-    
 
     report = XMLReport(xml_strings)
     if len(report.errors.get('validation_errors', None)) == 0:
