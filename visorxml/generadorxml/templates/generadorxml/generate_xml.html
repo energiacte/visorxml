@@ -961,14 +961,7 @@
       url: '{% url "update-xml-mini" %}',
       pk: 1,
       value: '{{report.data.IdentificacionEdificio.AlcanceInformacionXML}}',
-      source :[
-        {value: "CertificacionExistente", text: 'Certificacion Existente'},
-        {value: "VerificacionExistente", text: 'Verificacion Existente'},
-        {value: "CertificacionVerificacionExistente", text: 'Certificacion Verificacion Existente'},
-        {value: "CertificacionNuevo", text: 'Certificacion Nuevo'},
-        {value: "VerificacionNuevo", text: 'Verificacion Nuevo'},
-        {value: "CertificacionVerificacionNuevo", text: 'Certificacion Verificacion Nuevo'},
-      ],
+      source :[{value: "CertificacionNuevo", text: 'Certificacion Nuevo'}],
       emptytext: '<span class="hidden-print">Pulse para editar...</span><span class="visible-print-block"><br /></span>',
       onblur: "submit",
       success: function(response, newValue) {
