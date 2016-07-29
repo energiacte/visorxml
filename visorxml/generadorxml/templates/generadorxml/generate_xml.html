@@ -12,7 +12,11 @@
 
 <div class="page">
   <div class="well bg-info hidden-print" style="margin-top:5px; margin-bottom:5px">
-    {% trans "La generación manual del Certificado Energético en formato XML o PDF+XML está prevista únicamente para el caso que deba emplear procedimientos previos a la vigencia del Real Decreto 235/2013 que no permitan la generación del archivo XML." %}
+    {% blocktrans %}
+    <p>La generación manual del Certificado Energético en formato XML reducido, o PDF+XML reducido, está prevista únicamente para el caso particular de edificios de nueva construcción en los que la certificación de eficiencia energética del proyecto se haya realizado con procedimientos antiguos y de acuerdo con las instrucciones del organismo competente del registro de certificados energéticos de cada CCAA (<u>nota informativa</u>).</p>
+    <p>Para obtener el archivo xml reducido será necesario pulsar el icono que aparecerá en la parte superior derecha de la pantalla conforme se vayan rellenando datos.</p>
+    <p>El archivo XML reducido generado manualmente tiene una estructura diferente a la del Certificado Energético en formato XML por lo que no superará la validación del Visor CTE_XML.</p>
+    {% endblocktrans %}
     <br>
     <br>
     <a class="btn btn-info" href="{% url 'clean-report' %}">Limpiar formulario</a>
