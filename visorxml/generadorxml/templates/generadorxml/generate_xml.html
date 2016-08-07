@@ -13,9 +13,11 @@
 <div class="page">
   <div class="well bg-info hidden-print" style="margin-top:5px; margin-bottom:5px">
     {% blocktrans %}
-    <p>La generación manual del Certificado Energético en formato XML reducido, o PDF+XML reducido, está prevista únicamente para el caso particular de edificios de nueva construcción en los que la certificación de eficiencia energética del proyecto se haya realizado con procedimientos antiguos y de acuerdo con las instrucciones del organismo competente del registro de certificados energéticos de cada CCAA (<u>nota informativa</u>).</p>
+    <p>La generación manual del Certificado Energético en formato XML reducido, o PDF+XML reducido, está prevista únicamente para el caso particular de edificios de nueva construcción en los que la certificación de eficiencia energética del proyecto se haya realizado con procedimientos antiguos y de acuerdo con las instrucciones del organismo competente del registro de certificados energéticos de cada CCAA (<a href="http://www.minetur.gob.es/energia/desarrollo/EficienciaEnergetica/CertificacionEnergetica/DocumentosReconocidos/Documents/2016-0804_NOTA%20INFORMATIVA.pdf">nota informativa</a>).</p>
     <p>Para obtener el archivo xml reducido será necesario pulsar el icono que aparecerá en la parte superior derecha de la pantalla conforme se vayan rellenando datos.</p>
     <p>El archivo XML reducido generado manualmente tiene una estructura diferente a la del Certificado Energético en formato XML por lo que no superará la validación del Visor CTE_XML.</p>
+    {% static "docs/Informe_evaluacion_energ_XMLreducido.pdf" as xmlmini_spec_url %}
+    <p>Las especificaciones del Informe de evaluación energética en formato XML reducido se describen en <a href="{{ xmlmini_spec_url }}">este documento</a></p>
     {% endblocktrans %}
     <br>
     <br>
