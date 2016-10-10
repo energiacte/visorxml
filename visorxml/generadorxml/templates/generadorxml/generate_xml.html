@@ -32,7 +32,7 @@
 
       <table class="top">
         <tr>
-          <td class="title" width="30%">{% trans "Nombre del Edificio" %}</td>
+            <td class="title" width="30%">{% trans "Nombre del Edificio" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="IdentificacionEdificio.NombreDelEdificio">
               {{ report.data.IdentificacionEdificio.NombreDelEdificio }}
@@ -40,7 +40,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Dirección" %}</td>
+          <td class="title">{% trans "Dirección" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="IdentificacionEdificio.Direccion">
               {{ report.data.IdentificacionEdificio.Direccion }}
@@ -48,13 +48,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Municipio" %}</td>
+          <td class="title">{% trans "Municipio" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="IdentificacionEdificio.Municipio">
               {{ report.data.IdentificacionEdificio.Municipio }}
             </a>
           </td>
-          <td class="title" width="15%">{% trans "Código Postal" %}</td>
+          <td class="title" width="15%">{% trans "Código Postal" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable"  data-type="number"  data-step="any" id="IdentificacionEdificio.CodigoPostal">
               {{ report.data.IdentificacionEdificio.CodigoPostal }}
@@ -62,13 +62,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Provincia" %}</td>
+          <td class="title">{% trans "Provincia" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="IdentificacionEdificio.Provincia">
               {{ report.data.IdentificacionEdificio.Provincia }}
             </a>
           </td>
-          <td class="title" width="15%">{% trans "Comunidad Autónoma" %}</td>
+          <td class="title" width="15%">{% trans "Comunidad Autónoma" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="IdentificacionEdificio.ComunidadAutonoma">
               {{ report.data.IdentificacionEdificio.ComunidadAutonoma }}
@@ -76,13 +76,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Zona climática" %}</td>
+          <td class="title">{% trans "Zona climática" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" data-type="select" class="editable-clima" id="IdentificacionEdificio.ZonaClimatica">
               {{ report.data.IdentificacionEdificio.ZonaClimatica }}
             </a>
           </td>
-          <td class="title" width="15%">{% trans "Año construcción" %}</td>
+          <td class="title" width="15%">{% trans "Año construcción" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="IdentificacionEdificio.AnoConstruccion">
               {{ report.data.IdentificacionEdificio.AnoConstruccion }}
@@ -90,7 +90,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Normativa vigente (construcción / rehabilitación)" %}</td>
+          <td class="title">{% trans "Normativa vigente (construcción / rehabilitación)" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="IdentificacionEdificio.NormativaVigente">
               {{ report.data.IdentificacionEdificio.NormativaVigente }}
@@ -98,7 +98,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Referencia/s catastral/es" %}</td>
+          <td class="title">{% trans "Referencia/s catastral/es" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="IdentificacionEdificio.ReferenciaCatastral">
               {{ report.data.IdentificacionEdificio.ReferenciaCatastral }}
@@ -111,7 +111,7 @@
 
       <table class="top">
         <tr>
-          <td class="title" width="30%">{% trans "Superficie habitable" %} [{% trans "m<sup>2</sup>" %}]</td>
+          <td class="title" width="30%">{% trans "Superficie habitable" %}{% if not pdf %}*{% endif %} [{% trans "m<sup>2</sup>" %}]</td>
           <td colspan="3">
             <a href="#" class="editable3" data-type="number" data-step="any" id="DatosGeneralesyGeometria.SuperficieHabitable">
               {{ report.data.DatosGeneralesyGeometria.SuperficieHabitable|asnum  }}
@@ -125,13 +125,13 @@
       {% if not pdf %}
       <table>
         <tr>
-          <td class="title">{% trans "Alcance" %}</td>
+          <td class="title">{% trans "Alcance" %}{% if not pdf %}*{% endif %}</td>
           <td >
             <a href="#" class="editable-alcance" id="IdentificacionEdificio.AlcanceInformacionXML" data-type="select">
             </a>
 
           </td>
-          <td class="title">{% trans "Tipo de edificio o parte del edificio certificado" %}</td>
+          <td class="title">{% trans "Tipo de edificio o parte del edificio certificado" %}{% if not pdf %}*{% endif %}</td>
           <td >
             <a href="#" class="editable-tipo" id="IdentificacionEdificio.TipoDeEdificio" data-type="select">
             </a>
@@ -204,13 +204,13 @@
 
       <table class="top">
         <tr>
-          <td class="title" width="30%">{% trans "Nombre y Apellidos" %}</td>
+          <td class="title" width="30%">{% trans "Nombre y Apellidos" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="DatosDelCertificador.NombreyApellidos">
               {{ report.data.DatosDelCertificador.NombreyApellidos }}
             </a>
           </td>
-          <td class="title" width="17%">{% trans "NIF/NIE" %}</td>
+          <td class="title" width="17%">{% trans "NIF/NIE" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="DatosDelCertificador.NIF">
               {{ report.data.DatosDelCertificador.NIF }}
@@ -232,7 +232,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Domicilio" %}</td>
+          <td class="title">{% trans "Domicilio" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="DatosDelCertificador.Domicilio">
               {{ report.data.DatosDelCertificador.Domicilio }}
@@ -240,13 +240,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Municipio" %}</td>
+          <td class="title">{% trans "Municipio" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="DatosDelCertificador.Municipio">
               {{ report.data.DatosDelCertificador.Municipio }}
             </a>
           </td>
-          <td class="title">{% trans "Código Postal" %}</td>
+          <td class="title">{% trans "Código Postal" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" data-type="number"  id="DatosDelCertificador.CodigoPostal">
               {{ report.data.DatosDelCertificador.CodigoPostal }}
@@ -254,13 +254,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Provincia" %}</td>
+          <td class="title">{% trans "Provincia" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="DatosDelCertificador.Provincia">
               {{ report.data.DatosDelCertificador.Provincia }}
             </a>
           </td>
-          <td class="title">{% trans "Comunidad Autónoma" %}</td>
+          <td class="title">{% trans "Comunidad Autónoma" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" id="DatosDelCertificador.ComunidadAutonoma">
               {{ report.data.DatosDelCertificador.ComunidadAutonoma }}
@@ -268,13 +268,13 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "e-mail" %}</td>
+          <td class="title">{% trans "e-mail" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable"  id="DatosDelCertificador.Email">
               {{ report.data.DatosDelCertificador.Email }}
             </a>
           </td>
-          <td class="title">{% trans "Teléfono" %}</td>
+          <td class="title">{% trans "Teléfono" %}{% if not pdf %}*{% endif %}</td>
           <td>
             <a href="#" class="editable" data-type="number" id="DatosDelCertificador.Telefono">
               {{ report.data.DatosDelCertificador.Telefono }}
@@ -282,7 +282,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title">{% trans "Titulación habilitante según normativa vigente" %}</td>
+          <td class="title">{% trans "Titulación habilitante según normativa vigente" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="3">
             <a href="#" class="editable" id="DatosDelCertificador.Titulacion">
               {{ report.data.DatosDelCertificador.Titulacion }}
@@ -290,7 +290,7 @@
           </td>
         </tr>
         <tr>
-          <td class="title" colspan="2">{% trans "Procedimiento reconocido de calificación energética utilizado y versión:" %}</td>
+          <td class="title" colspan="2">{% trans "Procedimiento reconocido de calificación energética utilizado y versión:" %}{% if not pdf %}*{% endif %}</td>
           <td colspan="2" class="procedimiento">
             <a href="#" class="editable" id="IdentificacionEdificio.Procedimiento">
               {{ report.data.IdentificacionEdificio.Procedimiento }}
@@ -662,7 +662,7 @@
 
       <table class="no-fixed">
         <tr>
-          <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
+          <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}{% if not pdf %}*{% endif %}</td>
           {% if not pdf %}
           <td>
             <a href="#" class="editable-calificacion" id="Calificacion.EmisionesCO2.Global" data-value="{{report.data.Calificacion.EmisionesCO2.Global}}" data-type="select" >
@@ -675,7 +675,7 @@
           <td rowspan="6" {% if not pdf %}colspan="2"{% endif %} align="center" class="info">
             <img class="escala" src="{% escalasvg report.data.Calificacion.EmisionesCO2.Global report.data.EmisionesCO2.Global %}" />
             {% if not pdf %}
-            <div style="font-size: 14px;">{% trans "Emisiones globales" %}:
+            <div style="font-size: 14px;">{% trans "Emisiones globales" %}{% if not pdf %}*{% endif %}:
               <a href="#" class="editable3 " data-type="number" data-step="any" id="EmisionesCO2.Global">
                 {{ report.data.EmisionesCO2.Global|default:'' }}
               </a>
@@ -763,7 +763,7 @@
 
       <table class="no-fixed">
         <tr>
-          <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}</td>
+          <td class="title" width="50%">{% trans "INDICADOR GLOBAL" %}{% if not pdf %}*{% endif %}</td>
           {% if not pdf %}
           <td>
             <a href="#" class="editable-calificacion" id="Calificacion.EnergiaPrimariaNoRenovable.Global" data-value="{{report.data.Calificacion.EnergiaPrimariaNoRenovable.Global}}" data-type="select" >
@@ -776,7 +776,7 @@
           {% if not pdf %}
           <td rowspan="6" colspan="2"  align="center" class="info">
             <img  class="escala" id="Calificacion.EnergiaPrimariaNoRenovable.Global" src="{% escalasvg report.data.Calificacion.EnergiaPrimariaNoRenovable.Global report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}" />
-            <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Consumo global de energía primaria no renovable" %}:
+            <div {% if not pdf %}style="font-size: 14px;"{% endif %}>{% trans "Consumo global de energía primaria no renovable" %}{% if not pdf %}*{% endif %}:
               <a href="#" class="editable3" data-type="number" data-step="any" id="Consumo.EnergiaPrimariaNoRenovable.Global">
                 {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Global|default:'' }}
               </a>

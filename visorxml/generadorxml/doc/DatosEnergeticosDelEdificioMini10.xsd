@@ -5,6 +5,7 @@
 
 <!-- Definición de tipos de datos simples -->
 <xs:simpleType name="dectype2digits"><xs:restriction base="xs:decimal"><xs:pattern value="[+-]?\d*(\.\d{1,2})?"/></xs:restriction></xs:simpleType>
+<xs:simpleType name="NonEmptyString"><xs:restriction base="xs:string"><xs:pattern value=".*[^\s].*"/><xs:minLength value="1"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeCalificacion"><xs:restriction base="xs:string"><xs:pattern value="([A-G])"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeTipoDeEdificio"><xs:restriction base="xs:string"><xs:pattern value="ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque|EdificioUsoTerciario|LocalUsoTerciario"/></xs:restriction></xs:simpleType>
 <xs:simpleType name="stringtypeAlcanceInformacionXML"><xs:restriction base="xs:string"><xs:pattern value="CertificacionExistente|VerificacionExistente|CertificacionVerificacionExistente|CertificacionNuevo|VerificacionNuevo|CertificacionVerificacionNuevo"/></xs:restriction></xs:simpleType>
@@ -31,37 +32,37 @@
 <!-- DatosDelCertificador-->
 <xs:complexType name="DatosDelCertificadorType">
   <xs:all>
-    <xs:element type="xs:string" name="NombreyApellidos"/><!-- Nombre y apellidos del técnico certificador -->
-    <xs:element type="xs:string" name="NIF"/><!-- NIF o NIE del técnico certificador -->
+    <xs:element type="NonEmptyString" name="NombreyApellidos"/><!-- Nombre y apellidos del técnico certificador -->
+    <xs:element type="NonEmptyString" name="NIF"/><!-- NIF o NIE del técnico certificador -->
     <xs:element type="xs:string" name="RazonSocial" minOccurs="0"/><!--Razón social de la entidad certificadora-->
     <xs:element type="xs:string" name="NIFEntidad" minOccurs="0"/><!--NIF de la entidad certificadora-->
-    <xs:element type="xs:string" name="Domicilio"/><!-- Dirección postal correspondiente al domicilio del certificador o entidad certificadora  -->
-    <xs:element type="xs:string" name="Municipio"/><!-- Municipio del domicilio -->
-    <xs:element type="xs:string" name="CodigoPostal"/><!-- Código postal del domicilio -->
-    <xs:element type="xs:string" name="Provincia"/><!-- Provincia del domicilio -->
-    <xs:element type="xs:string" name="ComunidadAutonoma"/><!-- Comunidad autónoma del domicilio -->
-    <xs:element type="xs:string" name="Email"/><!-- Correo electrónico de contacto -->
-    <xs:element type="xs:string" name="Telefono"/><!-- Teléfono de contacto (v2) -->
-    <xs:element type="xs:string" name="Titulacion"/><!-- Titulación del certificador -->
-    <xs:element type="xs:string" name="Fecha"/><!-- Fecha de emisión del certificado -->
+    <xs:element type="NonEmptyString" name="Domicilio"/><!-- Dirección postal correspondiente al domicilio del certificador o entidad certificadora  -->
+    <xs:element type="NonEmptyString" name="Municipio"/><!-- Municipio del domicilio -->
+    <xs:element type="NonEmptyString" name="CodigoPostal"/><!-- Código postal del domicilio -->
+    <xs:element type="NonEmptyString" name="Provincia"/><!-- Provincia del domicilio -->
+    <xs:element type="NonEmptyString" name="ComunidadAutonoma"/><!-- Comunidad autónoma del domicilio -->
+    <xs:element type="NonEmptyString" name="Email"/><!-- Correo electrónico de contacto -->
+    <xs:element type="NonEmptyString" name="Telefono"/><!-- Teléfono de contacto (v2) -->
+    <xs:element type="NonEmptyString" name="Titulacion"/><!-- Titulación del certificador -->
+    <xs:element type="NonEmptyString" name="Fecha"/><!-- Fecha de emisión del certificado -->
   </xs:all>
 </xs:complexType>
 
 <!-- IdentificacionDelEdificio-->
 <xs:complexType name="IdentificacionEdificioType">
   <xs:all>
-    <xs:element name="NombreDelEdificio" type="xs:string" /><!-- Identificación del edificio -->
-    <xs:element name="Direccion" type="xs:string" /><!-- Dirección postal del edificio -->
-    <xs:element name="Municipio" type="xs:string" /><!-- Municipio correspondiente al edificio -->
-    <xs:element name="CodigoPostal" type="xs:string" /><!-- Código postal correspondiente al edificio -->
-    <xs:element name="Provincia" type="xs:string" /><!-- Provincia de localización del edificio -->
-    <xs:element name="ComunidadAutonoma" type="xs:string" /><!-- Comunidad autónoma de localización del edificio -->
-    <xs:element name="ZonaClimatica" type="xs:string" /><!-- Zona climática en la que se sitúa el edificio -->
-    <xs:element name="AnoConstruccion" type="xs:string" /><!-- Año de construcción del edificio -->
-    <xs:element name="ReferenciaCatastral" type="xs:string" /><!-- Referencia o referencias catastrales, separadas por comas -->
+    <xs:element name="NombreDelEdificio" type="NonEmptyString" /><!-- Identificación del edificio -->
+    <xs:element name="Direccion" type="NonEmptyString" /><!-- Dirección postal del edificio -->
+    <xs:element name="Municipio" type="NonEmptyString" /><!-- Municipio correspondiente al edificio -->
+    <xs:element name="CodigoPostal" type="NonEmptyString" /><!-- Código postal correspondiente al edificio -->
+    <xs:element name="Provincia" type="NonEmptyString" /><!-- Provincia de localización del edificio -->
+    <xs:element name="ComunidadAutonoma" type="NonEmptyString" /><!-- Comunidad autónoma de localización del edificio -->
+    <xs:element name="ZonaClimatica" type="NonEmptyString" /><!-- Zona climática en la que se sitúa el edificio -->
+    <xs:element name="AnoConstruccion" type="NonEmptyString" /><!-- Año de construcción del edificio -->
+    <xs:element name="ReferenciaCatastral" type="NonEmptyString" /><!-- Referencia o referencias catastrales, separadas por comas -->
     <xs:element name="TipoDeEdificio" type="stringtypeTipoDeEdificio"/><!-- Tipo de edificio o parte del edificio certificado -->
-    <xs:element name="NormativaVigente" type="xs:string" /><!-- Normativa vigente en el momento de construcción o rehabilitación del edificio o local -->
-    <xs:element name="Procedimiento" type="xs:string" /><!-- Procedimiento aplicado para la calificación energética y verificación del DB-HE -->
+    <xs:element name="NormativaVigente" type="NonEmptyString" /><!-- Normativa vigente en el momento de construcción o rehabilitación del edificio o local -->
+    <xs:element name="Procedimiento" type="NonEmptyString" /><!-- Procedimiento aplicado para la calificación energética y verificación del DB-HE -->
     <xs:element name="AlcanceInformacionXML" type="stringtypeAlcanceInformacionXML"/><!-- Alcance de la información incluida en el XML: verificación del DB-HE y/o certificación energética -->
   </xs:all>
 </xs:complexType>
