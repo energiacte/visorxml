@@ -71,7 +71,8 @@ class XMLReport(object):
         self.xml_parser = lxml.etree.XMLParser(resolve_entities=False,  # no sustituye unicode a entidades
                                                remove_blank_text=True,
                                                ns_clean=True,  # limpia namespaces
-                                               remove_comments=True)
+                                               remove_comments=True,
+                                               encoding='UTF-8')
 
         self.xmlschema = None
         self.errors = {
@@ -90,7 +91,7 @@ class XMLReport(object):
             self.analize()
 
     def save_to_file(self, filename=None):
-        xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
+        xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True, xml_declaration = True, encoding='UTF-8')
         if filename is None:
             filename = random_name()
 

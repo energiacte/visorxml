@@ -72,7 +72,7 @@ class XMLReport(object):
         '''
         xml_strings es una lista de tuplas. Las tuplas son de la forma (nombre_fichero, contenido)
         '''
-        self.xml_parser = lxml.etree.XMLParser(resolve_entities=False, remove_blank_text=True, ns_clean=True, remove_comments=True)
+        self.xml_parser = lxml.etree.XMLParser(resolve_entities=False, remove_blank_text=True, ns_clean=True, remove_comments=True, encoding='UTF-8')
 
         self.xmlschema = None
         self.errors = {
@@ -88,7 +88,7 @@ class XMLReport(object):
             self.validate()
 
     def save_to_file(self, filename=None):
-        xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True)
+        xml_string = lxml.etree.tostring(self.xmltree, pretty_print=True, xml_declaration = True, encoding='UTF-8')
         if filename is None:
             filename = random_name()
 
