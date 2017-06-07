@@ -72,6 +72,7 @@ class XMLReport(object):
                                                remove_blank_text=True,
                                                ns_clean=True,  # limpia namespaces
                                                remove_comments=True,
+                                               recover=True,
                                                encoding='UTF-8')
 
         self.xmlschema = None

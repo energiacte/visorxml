@@ -72,7 +72,7 @@ class XMLReport(object):
         '''
         xml_strings es una lista de tuplas. Las tuplas son de la forma (nombre_fichero, contenido)
         '''
-        self.xml_parser = lxml.etree.XMLParser(resolve_entities=False, remove_blank_text=True, ns_clean=True, remove_comments=True, encoding='UTF-8')
+        self.xml_parser = lxml.etree.XMLParser(resolve_entities=False, remove_blank_text=True, ns_clean=True, remove_comments=True, recover=True, encoding='UTF-8')
 
         self.xmlschema = None
         self.errors = {
