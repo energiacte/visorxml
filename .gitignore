@@ -16,4 +16,5 @@ visorxml/static/img/clear.png
 visorxml/static/img/loading.gif
 visorxml/serve-static/*
 visorxml/served-static/*
+visorxml/*.pdf
 *.mo
