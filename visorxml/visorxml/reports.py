@@ -1159,7 +1159,8 @@ class XMLReport(object):
         if self.data.DatosGeneralesyGeometria.DemandaDiariaACS <= 0.0:
             info.append(('AVISO', 'Demanda diaria de ACS nula',"DatosGeneralesyGeometria.DemandaDiariaACS"))
 
-        if sum(self.data.superficies.values()) > self.data.DatosGeneralesyGeometria.SuperficieHabitable:
+        suphabitable = sum([obj.Superficie for obj in self.data.CondicionesFuncionamientoyOcupacion if obj.NivelDeAcondicionamiento != 'NoHabitable'])
+        if suphabitable > 1.1 * self.data.DatosGeneralesyGeometria.SuperficieHabitable:
             info.append(('ERROR', 'Superficie habitable menor que suma de la superficie de los espacios', "DatosGeneralesyGeometria.SuperficieHabitable"))
         if zcv not in '1234':
             info.append(('ERROR', 'Zona climática de verano incorrecta', "IdentificacionEdificio.ZonaClimatica"))
