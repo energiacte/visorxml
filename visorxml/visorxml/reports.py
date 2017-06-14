@@ -434,7 +434,7 @@ class XMLReport(object):
         data.DatosEnvolventeTermica = self.get_datos_envolvente_termica()
         data.InstalacionesTermicas = self.get_instalaciones_termicas()
         data.CondicionesFuncionamientoyOcupacion, data.superficies = self.get_condiciones_funcionamiento_y_ocupacion()
-        data.InstalacionesIluminacion = self.get_instalaciones_iluminacion(data.superficies)
+        data.InstalacionesIluminacion = self.get_instalaciones_iluminacion()
         data.EnergiasRenovables = self.get_energias_renovables()
         data.Demanda = self.get_demanda()
         data.Consumo = self.get_consumo()
@@ -769,7 +769,7 @@ class XMLReport(object):
 
         return condiciones_funcionamiento_y_ocupacion, superficies
 
-    def get_instalaciones_iluminacion(self, superficies):
+    def get_instalaciones_iluminacion(self):
         instalaciones_iluminacion = Bunch()
 
         instalaciones_iluminacion.PotenciaTotalInstalada = self.asfloat(self.xmltree,
@@ -786,19 +786,6 @@ class XMLReport(object):
             for attr in ['PotenciaInstalada', 'VEEI', 'IluminanciaMedia']:
                 setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             instalaciones_iluminacion.Espacios.append(obj)
-        _eiluminados = dict((e.Nombre, e) for e in instalaciones_iluminacion.Espacios)
-
-        try:
-            _supiluminada = sum(superficies[e] for e in _eiluminados)
-            potmedia = sum(1.0 * superficies[e] * _eiluminados[e].PotenciaInstalada / _supiluminada
-                           for e in _eiluminados)
-        except KeyError:
-            error = (None, 'Espacio(s) iluminado(s) no definido(s) en las condiciones operacionales.'
-                     ' No se puede calcular la potencia media de iluminación.')
-            self.errors['validation_errors'].append(error)
-            potmedia = None
-        instalaciones_iluminacion.totalpotenciamedia = potmedia
-
         return instalaciones_iluminacion
 
     def get_energias_renovables(self):
