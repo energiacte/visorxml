@@ -497,7 +497,7 @@ class XMLReport(object):
         return self.xmltree.find('./DatosPersonalizados/SolucionesSingulares').text
 
 
-    def new_visit(self, date = datetime.date.today().strftime("%d/%m/%y"), text = ""):
+    def new_visit(self, date = datetime.date.today().strftime("%d/%m/%Y"), text = ""):
         visits = self.xmltree.find('./PruebasComprobacionesInspecciones')
         if visits == None:
            visits = lxml.etree.Element("PruebasComprobacionesInspecciones")

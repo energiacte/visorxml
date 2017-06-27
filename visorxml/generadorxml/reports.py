@@ -107,9 +107,9 @@ class XMLReport(object):
                 procedimiento.text += ' + [Generador VisorXML 1.0]'
         except:
                 procedimiento.text = '[Generador VisorXML 1.0]'
-        
+
         fecha = self.xmltree.find('./DatosDelCertificador/Fecha')
-        fecha.text  = datetime.date.today().strftime("%d/%m/%y")
+        fecha.text  = datetime.date.today().strftime("%d/%m/%Y")
 
     def remove_node(self, node):
         node = self.xmltree.find(node)
