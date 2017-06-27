@@ -478,7 +478,7 @@ class XMLReport(object):
     def add_singular_solutions(self, text="DESCRIPCIÓN"):
         if self.xmltree.find('./DatosPersonalizados/SolucionesSingulares') is None:
             new_node = lxml.etree.Element("SolucionesSingulares")
-            new_node.text = lxml.etree.CDATA(text)    
+            new_node.text = lxml.etree.CDATA(text)
             datos_p = self.xmltree.find('./DatosPersonalizados')
 
             #if ./DatosPersonalizados doesn't exist, create it.
