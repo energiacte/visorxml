@@ -123,10 +123,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'served-static')
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'served-static') # A donde va collectstatic
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, '..', 'static'),
-)
+) # Donde se buscan cosas para collectstatic
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
 MEDIA_URL = '/media/'
