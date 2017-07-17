@@ -299,8 +299,10 @@ class XMLReport(object):
         refrigeracion = self.get_XML_value(improvement_xml_tree, './Calificacion/Demanda/Refrigeracion')
 
         element = lxml.etree.SubElement(improvement_xml_fragment, 'CalificacionDemanda')
-        lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % calefaccion
-        lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % refrigeracion
+        if calefaccion:
+            lxml.etree.SubElement(element, 'Calefaccion').text = '%s' % calefaccion
+        if refrigeracion:
+            lxml.etree.SubElement(element, 'Refrigeracion').text = '%s' % refrigeracion
 
     def improvement_fragment_add_energia_final(self, improvement_xml_tree, improvement_xml_fragment):
         servicios = defaultdict(int)
