@@ -160,15 +160,8 @@ def validate(request):
             if len(report.errors.get('validation_errors', None)) == 0:
                 validated = True
             validation_data = report.errors
-    except UnicodeDecodeError:
-        error = (None, 'El archivo "<strong>%s</strong>" no parece tener la codificación correcta (utf-8) '
-                % xml_file.name)
-        validation_data['validation_errors'] = [error,]
-        if request.session.get('report_xml_name', False):
-            os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
-            request.session.pop("report_xml_name")
     except:
-        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado '
+        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado, tiene una codifiación incorrecta '
                 'o no incluye información energética del edificio en formato XML' % xml_file.name)
         validation_data['validation_errors'] = [error,]
         if request.session.get('report_xml_name', False):
