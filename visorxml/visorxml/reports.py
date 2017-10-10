@@ -589,7 +589,7 @@ class XMLReport(object):
             for attr in ['Superficie', 'Transmitancia']:
                 setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             obj.Capas = []
-            for ecapa in elemento.findall('./Capas'):
+            for ecapa in elemento.find('./Capas'):
                 capa = Bunch()
                 capa.Material = self.astext(ecapa, './Material')
                 setattr(capa, 'Espesor',
