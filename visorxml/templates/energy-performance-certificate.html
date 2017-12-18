@@ -1104,8 +1104,8 @@
             <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br />[{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           </tr>
           <tr>
-            <td><img class="escala" src="{% escalasvg medida.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" /></td>
-            <td><img class="escala" src="{% escalasvg medida.EmisionesCO2.Global report 'EmisionesCO2' %}" /></td>
+            <td><img class="escala" src="{% escalasvg medida.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' True %}" /></td>
+            <td><img class="escala" src="{% escalasvg medida.EmisionesCO2.Global report 'EmisionesCO2' True %}" /></td>
           </tr>
         </table>
       </div>
@@ -1121,8 +1121,8 @@
             <td class="title">{% trans "DEMANDA DE REFRIGERACIÓN" %}<br />[{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           </tr>
           <tr>
-            <td><img class="escala" src="{% escalasvg medida.Demanda.Calefaccion report 'DemandaCalefaccion' %}" /></td>
-            <td><img class="escala" src="{% escalasvg medida.Demanda.Refrigeracion report 'DemandaRefrigeracion' %}" /></td>
+            <td><img class="escala" src="{% escalasvg medida.Demanda.Calefaccion report 'DemandaCalefaccion' True %}" /></td>
+            <td><img class="escala" src="{% escalasvg medida.Demanda.Refrigeracion report 'DemandaRefrigeracion' True %}" /></td>
           </tr>
         </table>
       </div>

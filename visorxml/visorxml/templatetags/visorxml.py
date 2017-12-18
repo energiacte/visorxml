@@ -65,7 +65,7 @@ def scalevalue(value, report, scale_type='EnergiaPrimariaNoRenovable'):
 
 
 @register.simple_tag
-def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
+def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable', hidelimits=False):
     """Devuelve imagen de la escala y su calificación como SVG inline"""
 
     SVGTEXT = """<svg xmlns='http://www.w3.org/2000/svg' width="185" height="120">
@@ -81,21 +81,23 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
 <path d="m 0,85 102,0 7,7 -7,7 -102,0 z" fill="#f36f23" />
 <path d="m 0,102 109,0 7,7 -7,7 -109,0 z" fill="#ee1c25" />
 <text x="55" y="11" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">A</text>
-<text x="5" y="11" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">&#60; {limits[A]:.2f}</text>
 <text x="62" y="28" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">B</text>
-<text x="5" y="28" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[A]:.2f} - {limits[B]:.2f}</text>
 <text x="69" y="45" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">C</text>
-<text x="5" y="45" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[B]:.2f} - {limits[C]:.2f}</text>
 <text x="76" y="62" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">D</text>
-<text x="5" y="62" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[C]:.2f} - {limits[D]:.2f}</text>
 <text x="83" y="79" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">E</text>
-<text x="5" y="79" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[D]:.2f} - {limits[E]:.2f}</text>
 <text x="90" y="96" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">F</text>
-<text x="5" y="96" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[E]:.2f} - {limits[F]:.2f}</text>
 <text x="97" y="113" style="font-size:12px;font-weight:bold;fill:white;font-family:Arial">G</text>
-<text x="5" y="113" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">&#8805; {limits[F]:.2f}</text>
+{svglimits}
 </g>
 </svg>"""
+
+    SVGLIMITS = """<text x="5" y="11" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">&#60; {limits[A]:.2f}</text>
+<text x="5" y="28" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[A]:.2f} - {limits[B]:.2f}</text>
+<text x="5" y="45" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[B]:.2f} - {limits[C]:.2f}</text>
+<text x="5" y="62" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[C]:.2f} - {limits[D]:.2f}</text>
+<text x="5" y="79" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[D]:.2f} - {limits[E]:.2f}</text>
+<text x="5" y="96" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">{limits[E]:.2f} - {limits[F]:.2f}</text>
+<text x="5" y="113" style="font-size:9px;font-weight:bold;fill:white;font-family:Arial">&#8805; {limits[F]:.2f}</text>"""
 
     SVGERROR = """<svg xmlns='http://www.w3.org/2000/svg' width="175" height="120">
 <g id="layer1" stroke="none">
@@ -120,11 +122,13 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable'):
             'F': 5,
             'G': 6
         }[calif]
+        svglimits = "" if hidelimits is True else SVGLIMITS.format(limits=catlimits)
+        print("SVGLIMITS: ", hidelimits, svglimits)
         svgdata = SVGTEXT.format(ypos=ypos,
                                  ypostxt=ypos + 11,
                                  califnum=califnum,
                                  calif=calif,
-                                 limits=catlimits)
+                                 svglimits=svglimits)
     except:
         ypos, ypostxt, califnum, calif = None, None, None, None
         svgdata = SVGERROR
