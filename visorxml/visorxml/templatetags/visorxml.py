@@ -123,7 +123,6 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable', hidelimits
             'G': 6
         }[calif]
         svglimits = "" if hidelimits is True else SVGLIMITS.format(limits=catlimits)
-        print("SVGLIMITS: ", hidelimits, svglimits)
         svgdata = SVGTEXT.format(ypos=ypos,
                                  ypostxt=ypos + 11,
                                  califnum=califnum,
