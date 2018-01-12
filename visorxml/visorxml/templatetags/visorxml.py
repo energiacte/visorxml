@@ -175,12 +175,16 @@ def aspct(value):
 
 @register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
-    if (not valuedest) or (not valueorig):
+    "Muestra cadena con diferencia absoluta y porcentaje entre dos valores"
+    if ((not valuedest) and (valuedest != 0)) or ((not valueorig) and (valueorig != 0)):
         return '-'
     try:
-        res1 = float(valueorig) - float(valuedest)
-        res2 = 100.0 * res1 / float(valueorig)
-        return '{:0.2f}<br />({:+0.2f}%)'.format(res1, res2).replace('.', ',')
+        val = float(valueorig) - float(valuedest)
+        pct = '-'
+        if float(valueorig) != 0:
+            res2 = 100.0 * val / float(valueorig)
+            pct = '{:+0.2f}'.format(res2)
+        return '{:0.2f}<br />({}%)'.format(val, pct).replace('.', ',')
     except:
         return ALERT_SPAN
 
@@ -188,6 +192,7 @@ def difwith(valuedest, valueorig):
 TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
 @register.simple_tag(takes_context=True)
 def get_uso(context):
+    "Guarda en el contexto si es un uso de tipo vivienda"
     try:
         report = context['report']
         tipo = report.data.IdentificacionEdificio.TipoDeEdificio

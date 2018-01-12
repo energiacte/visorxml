@@ -1154,16 +1154,32 @@
       <tr>
         <td class="title">{% trans "Consumo Energía final" %}<br /><small>[{% trans "kWh/m<sup>2</sup>·año" %}]</small></td>
         <td class="num">{{ medida.EnergiaFinal.Calefaccion|asnum }}</td>
+        {% if report.data.Consumo and report.data.Consumo.Calefaccion %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:report.data.Consumo.EnergiaFinal.Calefaccion|safe }}</td>
+        {% else %}
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:0|safe }}</td>
+        {% endif %}
         <td class="num">{{ medida.EnergiaFinal.Refrigeracion|asnum }}</td>
+        {% if report.data.Consumo and report.data.Consumo.Refrigeracion %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
+        {% else %}
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:0|safe }}</td>
+        {% endif %}
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
+        {% if report.data.Consumo and report.data.Consumo.ACS %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
+        {% else %}
+        <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:0|safe }}</td>
+        {% endif %}
         <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}{{ report.data.Consumo.EnergiaFinal.Iluminacion }}</td>
         {% if report.esvivienda %}
         <td class="num calc small dif solo-terciario">-</td>
         {% else %}
+        {% if report.data.Consumo and report.data.Consumo.Iluminacion %}
         <td class="num calc small dif solo-terciario">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
+        {% else %}
+        <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:0|safe }}</td>
+        {% endif %}
         {% endif %}
         <td class="num">{{ medida.EnergiaFinal.Global|asnum }}</td>
         <td class="num calc small dif">{{ medida.EnergiaFinal.Global|difwith:report.data.Consumo.EnergiaFinal.Global|safe }}</td>
