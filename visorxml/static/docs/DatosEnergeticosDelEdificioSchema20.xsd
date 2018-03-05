@@ -26,7 +26,7 @@
       <xs:element name="IdentificacionEdificio" type="IdentificacionEdificioType"/>
       <xs:element name="DatosGeneralesyGeometria" type="DatosGeneralesyGeometriaType"/>
       <xs:element name="DatosEnvolventeTermica" type="DatosEnvolventeTermicaType"/>
-      <xs:element name="InstalacionesTermicas" type="InstalacionesTermicasType"/>
+      <xs:element name="InstalacionesTermicas" type="InstalacionesTermicasType" minOccurs="0"/>
       <xs:element name="InstalacionesIluminacion" type="InstalacionesIluminacionType" minOccurs="0"/><!--Solo terciario-->
       <xs:element name="CondicionesFuncionamientoyOcupacion" type="CondicionesFuncionamientoyOcupacionType" minOccurs="0"/><!--Solo terciario-->
       <xs:element name="EnergiasRenovables" type="EnergiasRenovablesType" minOccurs="0"/><!-- (v2) -->

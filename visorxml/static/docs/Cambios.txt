@@ -58,3 +58,7 @@
 - Se permiten valores decimales con signo (p.e., para transmitancias negativas)
 - La etiqueta que define el nombre de los espacios en condiciones operacionales es Nombre, no Espacio
 
+05-03-2018
+----------
+
+- Se permiten casos sin definición de instalaciones (sin ACS ni calefacción y/o refrigeración)
