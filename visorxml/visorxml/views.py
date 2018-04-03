@@ -54,8 +54,12 @@ def load_report(session):
     """ Load current report from filesystem if it exists
     else: return None
     """
-    file_name = session['report_xml_name']
-    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+    #TODO: en /update-xml hay casos (no reproducidos) en los que no existe 'report_xml_name'
+    file_name = session.get('report_xml_name')
+    if file_name:
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+    else:
+        return None
     try:
         with open(file_path, 'rb') as xmlfile:
             report = XMLReport([(file_name, xmlfile.read())])
