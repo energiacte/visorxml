@@ -165,7 +165,8 @@ def validate(request):
                 validated = True
             validation_data = report.errors
     except:
-        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado, tiene una codificación incorrecta (no es utf-8)'
+        error = (None, 'El archivo "<strong>%s</strong>" no está bien formado. '
+                'Puede tener un tamaño excesivo (imágenes demasiado grandes), una codificación incorrecta (no es utf-8)'
                 'o no incluye información energética del edificio en formato XML' % xml_file.name)
         validation_data['validation_errors'] = [error,]
         if request.session.get('report_xml_name', False):
