@@ -107,7 +107,7 @@
 
       <table>
         <tr class="header">
-          <td width="30%">{% trans "Indicador" %}</td>
+          <td width="32%">{% trans "Indicador" %}</td>
           <td><b>{% trans "Cal." %}</b><br>(1)</td>
           <td><b>{% trans "Ref." %}</b><br>(2)</td>
           <td><b>{% trans "Conjunta" %}</b><br>(1) + k·(2)</td>
@@ -117,12 +117,12 @@
         </tr>
         <tr>
           <td>{% trans "Consumo Energía final [kWh/m<sup>2</sup>·año]" %}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Calefaccion|asnum }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Refrigeracion|asnum }}</td>
+          <td>{{ report.data.Consumo.EnergiaFinal.Calefaccion|asnum }}</td>
+          <td>{{ report.data.Consumo.EnergiaFinal.Refrigeracion|asnum }}</td>
           <td></td>
-          <td>{{ report.data.Demanda.EdificioObjeto.ACS|asnum }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Iluminacion|asnum }}</td>
-          <td>{{ report.data.Demanda.EdificioObjeto.Global|asnum }}</td>
+          <td>{{ report.data.Consumo.EnergiaFinal.ACS|asnum }}</td>
+          <td>{{ report.data.Consumo.EnergiaFinal.Iluminacion|asnum }}</td>
+          <td>{{ report.data.Consumo.EnergiaFinal.Global|asnum }}</td>
         </tr>
         <tr>
           <td>{% trans "Consumo Energía primaria no renovable [kWh/m<sup>2</sup>·año]" %}</td>
@@ -212,9 +212,9 @@
               [{{ report.data.Demanda.Exigencias.LimiteAhorroOtrosUsos|asnum }}%]**
             {% endif %}
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{ report.data.Demanda.EdificioObjeto.ACS|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Iluminacion|asnum }}</td>
+          <td>{{ report.data.Demanda.EdificioObjeto.Global|asnum }}</td>
         </tr>
       </table>
       * {% trans "Los valores entre corchetes corresponden a los valores límite del DB-HE" %}<br>
