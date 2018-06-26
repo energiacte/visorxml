@@ -924,7 +924,7 @@
         <tr>
           <td rowspan="6" align="center" class="info">
             <img class="escala" src="{% escalasvg report.data.EmisionesCO2.Global report 'EmisionesCO2' %}" />
-            <div>{% trans "Emisiones globales" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</div>
+            <div>{% trans "Emisiones globales" %} [{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]<sup>1</sup></div>
           </td>
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
@@ -998,7 +998,7 @@
         <tr>
           <td rowspan="6" align="center" class="info">
             <img class="escala" src="{% escalasvg report.data.Consumo.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" />
-            <div>{% trans "Consumo global de energía primaria no renovable" %} [{% trans "kWh/m<sup>2</sup>·año" %}]</div>
+            <div>{% trans "Consumo global de energía primaria no renovable" %} [{% trans "kWh/m<sup>2</sup>·año" %}]<sup>1</sup></div>
           </td>
           <td class="title" colspan="2">{% trans "CALEFACCIÓN" %}</td>
           <td class="title" colspan="2">{% trans "ACS" %}</td>
@@ -1058,6 +1058,9 @@
             </tr>
           </table>
         </div>
+      </div>
+      <div class="section" style="margin-top:20px;font-size:75%">
+        <sup>1</sup> - {% trans "El indicador global es resultado de la suma de los indicadores parciales más el valor del indicador para consumos auxiliares, si los hubiera (sólo edificios terciarios, ventilación, bombeo, etc...). La energía eléctrica autoconsumida se descuenta únicamente del indicador global, no así de los valores parciales." %}
       </div>
     </div>
 
