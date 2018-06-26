@@ -604,18 +604,18 @@
 		</FactoresdePaso>
 		<EnergiaFinalVectores>
           <GasNatural>
-			<Calefaccion>12.13</Calefaccion>
-			<ACS>4.50</ACS>
+			<Calefaccion>13.48</Calefaccion>
+			<ACS>5.00</ACS>
           </GasNatural>
           <ElectricidadPeninsular>
-			<Refrigeracion>12.82</Refrigeracion>
+			<Refrigeracion>5.13</Refrigeracion>
           </ElectricidadPeninsular>
 		</EnergiaFinalVectores>
 		<EnergiaPrimariaNoRenovable>
-			<Global>36.54</Global>
-			<Calefaccion>13.28</Calefaccion>
-			<Refrigeracion>6.45</Refrigeracion>
-			<ACS>2.43</ACS>
+			<Global>32.04</Global>
+			<Calefaccion>13.63</Calefaccion>
+			<Refrigeracion>13.35</Refrigeracion>
+			<ACS>5.06</ACS>
 		</EnergiaPrimariaNoRenovable>
 		<Exigencias>
 			<LimiteViviendaGlobalEPNR>51.08</LimiteViviendaGlobalEPNR>
