@@ -1,4 +1,4 @@
-Django==1.8.19
+Django==1.11.23
 lxml==4.4.1
 Pillow==2.9.0
 django-extra-views==0.7.1
