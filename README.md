@@ -30,7 +30,6 @@ Requisitos de instalación (paquetes de sistema suponiendo Debian/jessie(stable)
 
 * nodejs (`$ sudo aptitude install nodejs`)
     * npm (`$ sudo aptitude install npm`)
-    * bower (`$ npm install -g bower`)
     * grunt (`$ npm install -g grunt-cli`)
 
 * python (>= 3.4) (`$ sudo aptitude install python3`)
@@ -42,10 +41,6 @@ Pasos de instalación:
     * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlib1g-dev libjpeg-dev libopenjp-2-7-dev`)
     * `$ pyvenv venvvisorxml` # suponemos usuario `usuariovisorxml`
     * `$ pip install -r requirements.txt`
-* Instalar las dependencias de bower:
-    * git para acceso a repositorios (`$ sudo aptitude install git`)
-        * NOTA: si un firewall bloquea URLs de git, indicar uso de https: (`$ git config --global url."https://".insteadOf git://`)
-    * `$ bower install`
 * Instalar las dependencias de npm:
     * `$ npm install`
 * Ejecutar grunt para construir la aplicación:
