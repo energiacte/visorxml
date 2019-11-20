@@ -15,12 +15,11 @@ createlang:
 	cd visorxml && ../venv/bin/django-admin makemessages -l es -l gl -l ca -l eu
 
 install:
-	python3 -m pyvenv venv
+	python3 -m venv venv
 	venv/bin/python -m pip install -Ur requirements.txt
-	mkdir visorxml/media/
-	mkdir visorxml/served-static/
+	mkdir -p visorxml/media/
+	mkdir -p visorxml/served-static/
 	npm install
-	bower install
 	grunt
 
 installpackages:

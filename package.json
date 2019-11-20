@@ -4,12 +4,16 @@
   "license": "MIT",
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-bowercopy": "^1.2.4",
+    "grunt-npmcopy": "^0.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0"
   },
   "dependencies": {
-    "phantomjs-prebuilt": "^2.1.7"
+    "bootstrap": "^3.3.5",
+    "bootstrap-fileinput": "^4.2.8",
+    "jquery": "^3.4.1",
+    "phantomjs-prebuilt": "^2.1.7",
+    "x-editable": "^1.5.1"
   }
 }

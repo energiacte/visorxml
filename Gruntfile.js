@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
   var defaultTasks = [
-    'bowercopy',
+    'npmcopy',
     'concat',
     'clean'
   ];
@@ -35,10 +35,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    bowercopy: {
-      options: {
-        srcPrefix: 'bower_components'
-      },
+    npmcopy: {
       js: {
         options: {
           destPrefix: 'vendor/js'
@@ -131,7 +128,7 @@ module.exports = function(grunt) {
     ]
   });
 
-  grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-npmcopy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
