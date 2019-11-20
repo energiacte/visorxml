@@ -589,17 +589,19 @@ class XMLReport(object):
             for attr in ['Superficie', 'Transmitancia']:
                 setattr(obj, attr, self.asfloat(elemento, './%s' % attr, prec=2))
             obj.Capas = []
-            for ecapa in elemento.find('./Capas'):
-                capa = Bunch()
-                capa.Material = self.astext(ecapa, './Material')
-                setattr(capa, 'Espesor',
-                        self.asfloat(ecapa, './Espesor', prec=4))
-                setattr(capa, 'ConductividadTermica',
-                        self.asfloat(ecapa, './ConductividadTermica', prec=3))
-                for attr in ['ResistenciaTermica', 'Densidad',
-                             'FactorResistenciaVapor', 'CalorEspecifico']:
-                    setattr(capa, attr, self.asfloat(ecapa, './%s' % attr, prec=2))
-                obj.Capas.append(capa)
+            capas = elemento.find('./Capas')
+            if capas is not None:
+                for ecapa in elemento.find('./Capas'):
+                    capa = Bunch()
+                    capa.Material = self.astext(ecapa, './Material')
+                    setattr(capa, 'Espesor',
+                            self.asfloat(ecapa, './Espesor', prec=4))
+                    setattr(capa, 'ConductividadTermica',
+                            self.asfloat(ecapa, './ConductividadTermica', prec=3))
+                    for attr in ['ResistenciaTermica', 'Densidad',
+                                'FactorResistenciaVapor', 'CalorEspecifico']:
+                        setattr(capa, attr, self.asfloat(ecapa, './%s' % attr, prec=2))
+                    obj.Capas.append(capa)
             cerramientos_opacos.append(obj)
 
         return cerramientos_opacos
