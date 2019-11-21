@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.4",
     "grunt-npmcopy": "^0.2.0",
-    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-contrib-watch": "^1.1.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.5",
-    "bootstrap-fileinput": "^4.2.8",
+    "bootstrap-fileinput": "^5.0.7",
     "jquery": "^3.4.1",
-    "phantomjs-prebuilt": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.16",
     "x-editable": "^1.5.1"
   }
 }
