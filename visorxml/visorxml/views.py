@@ -30,7 +30,7 @@ import os.path
 from datetime import date, datetime
 from io import BytesIO, StringIO
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt

@@ -34,7 +34,7 @@ from .views import (GetXMLView,
                     UploadImageView)
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^$', home, name='home'),
     url(r'^validator/?$', validate, name='validator'),
     url(r'^visits/new/?$', new_visit, name='new_visit'),

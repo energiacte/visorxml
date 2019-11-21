@@ -10,7 +10,7 @@ from datetime import datetime,date
 from visorxml.pdf_utils import render_to_pdf
 from django.template.loader import render_to_string
 from generadorxml.templatetags.generadorxml import escalasvg
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 def load_report(session):
