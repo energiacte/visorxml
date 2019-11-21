@@ -484,7 +484,7 @@
         <td class="title col-md-6">{% trans "Plano de situación" %}</td>
       </tr>
       <tr>
-        <td class="col-md-6" align="center">
+        <td class="col-md-6" text-align="center">
           {% if pdf %}
             <img src="{{ report.data.DatosGeneralesyGeometria.Imagen }}" alt="">
           {% else %}
@@ -500,7 +500,7 @@
           {% endif %}
         </td>
 
-        <td class="col-md-6" align="center">
+        <td class="col-md-6" text-align="center">
           {% if pdf %}
             <img src="{{ report.data.DatosGeneralesyGeometria.Plano }}" alt="">
           {% else %}
@@ -1395,7 +1395,7 @@
 
 {% block extra_js %}
 
-  <script src="{%  static "js/jquery.formset.js" %}"></script>
+  <script src="{%  static 'js/jquery.formset.js' %}"></script>
 
   <script>
 

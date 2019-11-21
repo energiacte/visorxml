@@ -25,6 +25,9 @@
 
 from django.conf.urls import include, url
 from django.contrib import admin
+from visorxml.views import (home, validate, new_visit, delete_element,
+                            measures_xml_upload, view_certificate, download_pdf,
+                            view_suplementary_report, download_pdf_suplementary)
 
 from .views import (GetXMLView,
                     UpdateXMLView,
@@ -32,16 +35,16 @@ from .views import (GetXMLView,
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'visorxml.views.home', name='home'),
-    url(r'^validator/?$', 'visorxml.views.validate', name='validator'),
-    url(r'^visits/new/?$', 'visorxml.views.new_visit', name='new_visit'),
-    url(r'^element/delete/?$', 'visorxml.views.delete_element', name='delete_element'),
-    url(r'^measures-xml/?$', 'visorxml.views.measures_xml_upload', name='measures_xml_upload'),
+    url(r'^$', home, name='home'),
+    url(r'^validator/?$', validate, name='validator'),
+    url(r'^visits/new/?$', new_visit, name='new_visit'),
+    url(r'^element/delete/?$', delete_element, name='delete_element'),
+    url(r'^measures-xml/?$', measures_xml_upload, name='measures_xml_upload'),
     url(r'^xml$', GetXMLView.as_view(), name='get-xml'),
-    url(r'^certificate$', 'visorxml.views.view_certificate', name='certificate'),
-    url(r'^certificate-pdf$', 'visorxml.views.download_pdf', name='certificate-pdf'),
-    url(r'^supplementary-report$', 'visorxml.views.view_suplementary_report', name='supplementary-report'),
-    url(r'^supplementary-report-pdf$', 'visorxml.views.download_pdf_suplementary', name='supplementary-report-pdf'),
+    url(r'^certificate$', view_certificate, name='certificate'),
+    url(r'^certificate-pdf$', download_pdf, name='certificate-pdf'),
+    url(r'^supplementary-report$', view_suplementary_report, name='supplementary-report'),
+    url(r'^supplementary-report-pdf$', download_pdf_suplementary, name='supplementary-report-pdf'),
     url(r'^update-xml$', UpdateXMLView.as_view(), name='update-xml'),
     url(r'^upload-image$', UploadImageView.as_view(), name='upload-image'),
     url(r'^i18n/', include('django.conf.urls.i18n')),

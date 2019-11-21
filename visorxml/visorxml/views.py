@@ -43,7 +43,7 @@ from .reports import XMLReport
 from .pdf_utils import render_to_pdf, get_xml_string_from_pdf
 import string
 import random
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.forms import formset_factory
 
 
@@ -83,7 +83,7 @@ def home(request):
         validated = True
     else:
         validated = False
-    return render_to_response("home.html", {"validated":validated}, RequestContext(request))
+    return render(request, "home.html", {"validated":validated})
 
 
 class GetXMLView(View):
@@ -143,7 +143,7 @@ def measures_xml_upload(request):
         validated = False
     validation_data = report.errors
 
-    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+    return render(request, "energy-performance-certificate.html", locals())
 
 
 
@@ -173,7 +173,7 @@ def validate(request):
             os.remove(os.path.join(settings.MEDIA_ROOT, request.session['report_xml_name']))
             request.session.pop("report_xml_name")
 
-    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+    return render(request, "energy-performance-certificate.html", locals())
 
 
 def view_certificate(request):
@@ -189,7 +189,7 @@ def view_certificate(request):
     except:
         validated = False
 
-    return render_to_response("energy-performance-certificate.html", locals(), RequestContext(request))
+    return render(request, "energy-performance-certificate.html", locals())
 
 
 def view_suplementary_report(request):
@@ -200,7 +200,7 @@ def view_suplementary_report(request):
         espacios = zip(report.data.CondicionesFuncionamientoyOcupacion,
                        report.data.InstalacionesIluminacion.Espacios)
         validated = True
-        return render_to_response("supplementary-report.html", locals(), RequestContext(request))
+        return render(request, "supplementary-report.html", locals())
 
     else:
         return HttpResponseRedirect(reverse_lazy("certificate"))
