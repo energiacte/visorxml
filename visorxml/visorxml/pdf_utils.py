@@ -44,8 +44,8 @@ def render_to_pdf(html, filename, xml_filename, env={}):
     fd_pdf2, filename_pdf2 = tempfile.mkstemp(suffix=".pdf")
     os.close(fd_pdf)
     try:
-        os.write(fd_html, html.encode('utf8'))
-        os.close(fd_html)
+        with open(fd_html, 'wb') as f:
+            f.write(html.encode('utf8'))
         path = os.path.join(os.path.dirname(__file__), '..', 'webkit', 'webkit2pdf')
 
         try:
