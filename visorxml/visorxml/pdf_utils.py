@@ -51,6 +51,8 @@ def render_to_pdf(html, filename, xml_filename, env={}):
         try:
             if not debug:
                 env['DISPLAY'] = ':1'
+                # Fake empty SSL Confif file to be able to run phantomjs in Buster
+                env['OPENSSL_CONF'] = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'webkit', 'openssl.cnf'))
         except KeyError:
             pass
 
