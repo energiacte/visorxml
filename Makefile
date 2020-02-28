@@ -23,6 +23,6 @@ install:
 	grunt
 
 installpackages:
-	sudo aptitude install python3 python3-pip nodejs npm poppler-utils gettext build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlig1g-dev  libjpeg-dev libopenjp-2-7-dev
+	sudo aptitude install python3 python3-pip python3-venv nodejs npm poppler-utils gettext build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlig1g-dev  libjpeg-dev libopenjp-2-7-dev
 	sudo npm install -g grunt-cli
 
