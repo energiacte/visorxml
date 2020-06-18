@@ -1,16 +1,18 @@
-from django.shortcuts import render
+"""View rendering of reports
+"""
 import os
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.views.generic import TemplateView, View
-from .reports import XMLReport, BASE_XML_MINI, random_name
+from datetime import datetime
+
+from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from datetime import datetime,date
-from visorxml.pdf_utils import render_to_pdf
 from django.template.loader import render_to_string
-from generadorxml.templatetags.generadorxml import escalasvg
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+
+from visorxml.pdf_utils import render_to_pdf
+from .reports import XMLReport, BASE_XML_MINI, random_name
 
 
 def load_report(session):
