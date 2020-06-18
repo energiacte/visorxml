@@ -1,6 +1,7 @@
 {
   "name": "visorxml",
   "version": "1.0.0",
+  "repository": "https://github.com/energiacte/visorxml",
   "license": "MIT",
   "devDependencies": {
     "grunt": "^1.0.4",
