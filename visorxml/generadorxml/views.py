@@ -1,4 +1,4 @@
-"""View rendering of reports
+"""View rendering of minixml reports
 """
 import os
 from datetime import datetime
