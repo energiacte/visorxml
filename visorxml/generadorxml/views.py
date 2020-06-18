@@ -57,17 +57,15 @@ def validate(request):
     report = load_report(request.session)
     if len(report.errors["validation_errors"]) == 0:
         return HttpResponse("Yes")
-    else:
-        return HttpResponse("No")
+    return HttpResponse("No")
 
 def generate_report(request):
     """ View for the mini xml form. If not exists, new mini-xml is created
     """
     if request.session.get('new_xml_name', False):
-    	report = load_report(request.session)
-    	
+        load_report(request.session)
     else:
-    	report = new_report(request.session)
+        new_report(request.session)
 
     return render(request, "generadorxml/generate_xml.html", locals())
 
@@ -85,17 +83,17 @@ def update_xml_mini(request):
 
 
 def download_xml(request):
-        """ Download mini-XML
-        """
-        session = request.session
-        file_name = session['new_xml_name']
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
+    """ Download mini-XML
+    """
+    session = request.session
+    file_name = session['new_xml_name']
+    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+    output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
 
-        with open(file_path, 'rb') as xmlfile:
-            response = HttpResponse(xmlfile.read(), content_type='application/xml')
-            response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
-            return response
+    with open(file_path, 'rb') as xmlfile:
+        response = HttpResponse(xmlfile.read(), content_type='application/xml')
+        response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
+        return response
 
 
 def download_pdf(request):
@@ -107,7 +105,6 @@ def download_pdf(request):
     session = request.session
     filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
     report = load_report(session)
-    pdf = True
     html = render_to_string('generadorxml/generate_xml.html', locals())
 
     env = os.environ.copy()
