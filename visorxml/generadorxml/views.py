@@ -30,6 +30,7 @@ def load_report(session):
         return None
 
 def clean_report(request):
+    "Remove report data from session and file backup"
     if "new_xml_name" in request.session:
         file_name = request.session['new_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
@@ -52,7 +53,7 @@ def new_report(session):
 
 
 def validate(request):
-    report = load_report(request.session)
+    "validate report"
     report = load_report(request.session)
     if len(report.errors["validation_errors"]) == 0:
         return HttpResponse("Yes")
