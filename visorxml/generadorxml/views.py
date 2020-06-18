@@ -105,6 +105,7 @@ def download_pdf(request):
     session = request.session
     filename = 'certificado-%s.pdf' % datetime.now().strftime('%Y%m%d%H%M')
     report = load_report(session)
+    pdf = True
     html = render_to_string('generadorxml/generate_xml.html', locals())
 
     env = os.environ.copy()
