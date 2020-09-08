@@ -110,7 +110,8 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable', hidelimits
 
     try:
         value = float(value)
-        califnum = "{0:.2f}".format(value).replace('.', ',') if value else ''
+        califnum = "{0:.2f}".format(value).replace(
+            '.', ',') if value is not None else ''
         calif, catlimits = _getcalif(report, value, scale_type)
 
         ypos = 17 * {
