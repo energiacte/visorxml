@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#encoding:utf-8
+# encoding:utf-8
 #
 # Copyright (c) 2015 Ministerio de Fomento
 #                    Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
@@ -32,6 +32,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 def _getcalif(report, value, scale_type):
     """Calcula letra para el valor, dentro de una escala"""
 
@@ -51,7 +52,8 @@ def _getcalif(report, value, scale_type):
             calif = letra
             break
 
-    catlimits = {letra: getattr(scale, letra) for letra in 'A B C D E F'.split()}
+    catlimits = {letra: getattr(scale, letra)
+                 for letra in 'A B C D E F'.split()}
 
     return calif, catlimits
 
@@ -123,7 +125,8 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable', hidelimits
             'F': 5,
             'G': 6
         }[calif]
-        svglimits = "" if hidelimits is True else SVGLIMITS.format(limits=catlimits)
+        svglimits = "" if hidelimits is True else SVGLIMITS.format(
+            limits=catlimits)
         svgdata = SVGTEXT.format(ypos=ypos,
                                  ypostxt=ypos + 11,
                                  califnum=califnum,
@@ -136,7 +139,9 @@ def escalasvg(value, report, scale_type='EnergiaPrimariaNoRenovable', hidelimits
     encoded_string = base64.b64encode(svgdata.encode('utf-8'))
     return "data:image/svg+xml;charset=utf-8;base64,{}".format(encoded_string.decode())
 
+
 ALERT_SPAN = mark_safe("<span class='alert'>-</span>")
+
 
 @register.filter(is_safe=True)
 def asnum(value):
@@ -145,10 +150,12 @@ def asnum(value):
         return '-'
     try:
         val = float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace(
+            '.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
+
 
 @register.filter(is_safe=True)
 def asint(value):
@@ -162,6 +169,7 @@ def asint(value):
         res = ALERT_SPAN
     return res
 
+
 @register.filter(is_safe=True)
 def aspct(value):
     "Devuelve un porcentaje a partir del tanto por uno"
@@ -169,10 +177,12 @@ def aspct(value):
         return '-'
     try:
         val = 100.0 * float(value)
-        res = '{:0.2f}'.format(val).replace('.', ',') if val < ALERT else ALERT_SPAN
+        res = '{:0.2f}'.format(val).replace(
+            '.', ',') if val < ALERT else ALERT_SPAN
     except:
         res = ALERT_SPAN
     return res
+
 
 @register.filter(is_safe=True)
 def difwith(valuedest, valueorig):
@@ -190,7 +200,10 @@ def difwith(valuedest, valueorig):
         return ALERT_SPAN
 
 
-TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split("|")
+TIPOS_RESIDENCIALES = "ViviendaUnifamiliar|BloqueDeViviendaCompleto|ViviendaIndividualEnBloque".split(
+    "|")
+
+
 @register.simple_tag(takes_context=True)
 def get_uso(context):
     "Guarda en el contexto si es un uso de tipo vivienda"
