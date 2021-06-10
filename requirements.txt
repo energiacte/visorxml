@@ -1,5 +1,5 @@
 wheel==0.34.2
-Django==2.2.10
+Django==2.2.24
 lxml==4.4.1
 Pillow==6.2.1
 django-extra-views==0.12.0
