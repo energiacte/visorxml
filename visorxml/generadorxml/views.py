@@ -1,16 +1,18 @@
-from django.shortcuts import render
+"""View rendering of minixml reports
+"""
 import os
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.views.generic import TemplateView, View
-from .reports import XMLReport, BASE_XML_MINI, random_name
+from datetime import datetime
+
+from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from datetime import datetime,date
-from visorxml.pdf_utils import render_to_pdf
 from django.template.loader import render_to_string
-from generadorxml.templatetags.generadorxml import escalasvg
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+
+from visorxml.pdf_utils import render_to_pdf
+from .reports import XMLReport, BASE_XML_MINI, random_name
 
 
 def load_report(session):
@@ -28,6 +30,7 @@ def load_report(session):
         return None
 
 def clean_report(request):
+    "Remove report data from session and file backup"
     if "new_xml_name" in request.session:
         file_name = request.session['new_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
@@ -50,21 +53,19 @@ def new_report(session):
 
 
 def validate(request):
-    report = load_report(request.session)
+    "validate report"
     report = load_report(request.session)
     if len(report.errors["validation_errors"]) == 0:
         return HttpResponse("Yes")
-    else:
-        return HttpResponse("No")
+    return HttpResponse("No")
 
 def generate_report(request):
     """ View for the mini xml form. If not exists, new mini-xml is created
     """
     if request.session.get('new_xml_name', False):
-    	report = load_report(request.session)
-    	
+        load_report(request.session)
     else:
-    	report = new_report(request.session)
+        new_report(request.session)
 
     return render(request, "generadorxml/generate_xml.html", locals())
 
@@ -82,17 +83,17 @@ def update_xml_mini(request):
 
 
 def download_xml(request):
-        """ Download mini-XML
-        """
-        session = request.session
-        file_name = session['new_xml_name']
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
+    """ Download mini-XML
+    """
+    session = request.session
+    file_name = session['new_xml_name']
+    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+    output_file_name = 'certificado-%s.xml' % datetime.now().strftime('%Y%m%d%H%M')
 
-        with open(file_path, 'rb') as xmlfile:
-            response = HttpResponse(xmlfile.read(), content_type='application/xml')
-            response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
-            return response
+    with open(file_path, 'rb') as xmlfile:
+        response = HttpResponse(xmlfile.read(), content_type='application/xml')
+        response['Content-Disposition'] = 'attachment;filename=%s' % output_file_name
+        return response
 
 
 def download_pdf(request):

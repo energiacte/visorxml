@@ -34,6 +34,7 @@ from PyPDF2 import PdfFileWriter as PdfWriter
 from PyPDF2 import PdfFileReader as PdfReader
 
 def render_to_pdf(html, filename, xml_filename, env={}):
+    "Render html file to pdf using the given filename and environment. Embed xml data if available"
     debug = settings.DEBUG
     debug = False
     if debug:
@@ -41,7 +42,7 @@ def render_to_pdf(html, filename, xml_filename, env={}):
 
     fd_html, filename_html = tempfile.mkstemp()
     fd_pdf, filename_pdf = tempfile.mkstemp(suffix=".pdf")
-    fd_pdf2, filename_pdf2 = tempfile.mkstemp(suffix=".pdf")
+    _, filename_pdf2 = tempfile.mkstemp(suffix=".pdf")
     os.close(fd_pdf)
     try:
         with open(fd_html, 'wb') as f:
@@ -52,7 +53,8 @@ def render_to_pdf(html, filename, xml_filename, env={}):
             if not debug:
                 env['DISPLAY'] = ':1'
                 # Fake empty SSL Confif file to be able to run phantomjs in Buster
-                env['OPENSSL_CONF'] = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'webkit', 'openssl.cnf'))
+                env['OPENSSL_CONF'] = os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), '..', 'webkit', 'openssl.cnf'))
         except KeyError:
             pass
 
@@ -113,6 +115,7 @@ def render_to_pdf(html, filename, xml_filename, env={}):
 
 
 def get_xml_string_from_pdf(file):
+    "Detach xml data embedded in pdf file"
     pdf_name = random_name(ext=".pdf")
     xml_name = random_name()
 
@@ -133,4 +136,5 @@ def get_xml_string_from_pdf(file):
 
 
 def random_name(size=20, ext=".xml"):
+    "Create random name with ascci letters and string with given size + extension"
     return "".join([random.choice(string.ascii_letters + string.digits) for n in range(size)]) + ext

@@ -427,8 +427,8 @@
             <td class="title">{% trans "EMISIONES DE DIÓXIDO DE CARBONO" %}<br />[{% trans "kgCO<sub>2e</sub>/m<sup>2</sup>·año" %}]</td>
           </tr>
           <tr>
-            <td>{% if report.data.Consumo.EnergiaPrimariaNoRenovable.Global %}<img class="escala" src="{% escalasvg report.data.Consumo.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" />{% endif %}</td>
-            <td>{% if report.data.EmisionesCO2.Global %}<img class="escala" src="{% escalasvg report.data.EmisionesCO2.Global report 'EmisionesCO2' %}" />{% endif %}</td>
+            <td>{% if report.data.Consumo.EnergiaPrimariaNoRenovable.Global is not None %}<img class="escala" src="{% escalasvg report.data.Consumo.EnergiaPrimariaNoRenovable.Global report 'EnergiaPrimariaNoRenovable' %}" />{% endif %}</td>
+            <td>{% if report.data.EmisionesCO2.Global is not None %}<img class="escala" src="{% escalasvg report.data.EmisionesCO2.Global report 'EmisionesCO2' %}" />{% endif %}</td>
           </tr>
         </table>
       </div>

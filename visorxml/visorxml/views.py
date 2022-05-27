@@ -24,28 +24,26 @@
 #
 
 import base64
+from datetime import datetime
+from io import BytesIO
 import logging
 import os
 import os.path
-from datetime import date, datetime
-from io import BytesIO, StringIO
+import random
+import string
+
 from django.conf import settings
-from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView, View
-from extra_views import FormSetView
+from django.views.generic import View
+
 from PIL import Image
-from django.template import RequestContext
-from .forms import XMLFileForm
+
 from .reports import XMLReport
 from .pdf_utils import render_to_pdf, get_xml_string_from_pdf
-import string
-import random
-from django.shortcuts import render, get_object_or_404
-from django.forms import formset_factory
-
 
 logger = logging.getLogger(__name__)
 
@@ -79,17 +77,19 @@ def random_name(size=20, ext=".xml"):
 
 
 def home(request):
+    "Render home page"
     if request.session.get('report_xml_name', False):
         validated = True
     else:
         validated = False
-    return render(request, "home.html", {"validated":validated})
+    return render(request, "home.html", {"validated": validated})
 
 
 class GetXMLView(View):
     """CBV that serve the current centificate info as XML
     """
     def get(self, request, *args, **kwargs):
+        "Get xml certificate"
         session = self.request.session
         file_name = session['report_xml_name']
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
@@ -280,6 +280,7 @@ class UpdateXMLView(View):
     POST: receives name and value from the attr to update
     """
     def post(self, request, *args, **kwargs):
+        "Update current energy certificate"
         element = request.POST['name']
         value = request.POST['value']
 

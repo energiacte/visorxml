@@ -2,7 +2,7 @@ run:
 	DJANGO_SETTINGS_MODULE=visorxml.settings.development PATH=$(abspath ./node_modules/.bin):${PATH} venv/bin/python visorxml/manage.py runserver
 
 collectstatic:
-	grunt
+	npx grunt
 	DJANGO_SETTINGS_MODULE=visorxml.settings.development venv/bin/python visorxml/manage.py collectstatic --noinput --clear
 
 compilelang:
@@ -20,9 +20,7 @@ install:
 	mkdir -p visorxml/media/
 	mkdir -p visorxml/served-static/
 	npm install
-	grunt
+	npx grunt
 
 installpackages:
-	sudo aptitude install python3 python3-pip python3-venv nodejs npm poppler-utils gettext build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlig1g-dev  libjpeg-dev libopenjp-2-7-dev
-	sudo npm install -g grunt-cli
-
+	sudo aptitude install python3 python3-pip python3-venv python3-wheel nodejs npm poppler-utils gettext build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlig1g-dev  libjpeg-dev libopenjp-2-7-dev

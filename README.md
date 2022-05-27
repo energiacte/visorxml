@@ -26,31 +26,36 @@ La aplicación está desarrollada en lenguaje Python y Javascript para algunos a
 
 Requisitos de instalación (paquetes de sistema suponiendo Debian/jessie(stable)):
 
-* pdfdetach (`$ sudo aptitude install poppler-utils`)
+* pdfdetach (`$ sudo apt install poppler-utils`)
 
-* nodejs (`$ sudo aptitude install nodejs`)
-    * npm (`$ sudo aptitude install npm`)
+* nodejs (`$ sudo apt install nodejs`)
+    * npm (`$ sudo apt install npm`)
     * grunt (`$ npm install -g grunt-cli`)
 
-* python (>= 3.4) (`$ sudo aptitude install python3`)
-    * pip (`$ sudo aptitude install python3-pip`)
+* python (>= 3.4) (`$ sudo apt install python3 python3-pip python3-venv python3-dev`)
+    * pip
+    * venv
+    * dev
 
 Pasos de instalación:
 
-* Instalar las dependencias de PIP en un entorno virtual (llamado `venvvisorxml`):
-    * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential python3-dev libxml2-dev libxslt-dev libffi-dev zlib1g-dev libjpeg-dev libopenjp-2-7-dev`)
-    * `$ pyvenv venvvisorxml` # suponemos usuario `usuariovisorxml`
-    * `$ pip install -r requirements.txt`
+* Instalación de las dependencias de PIP en un entorno virtual (llamado `venv`):
+    * Dependencias para compilación de módulos (`$ sudo aptitude install build-essential libxml2-dev libxslt-dev libffi-dev zlib1g-dev libjpeg-dev libopenjp2-7-dev`)
+    * `$ python3 -m venv venv` # suponemos usuario `usuariovisorxml`
+    * `$ venv/bin/python -m pip install -Ur requirements.txt`
+* Crea directorios de contenido de usuario y estático
+    * `$ mkdir -p visorxml/media/`
+    * `$ mkdir -p visorxml/served-static/`
 * Instalar las dependencias de npm:
     * `$ npm install`
-* Ejecutar grunt para construir la aplicación:
-    * `$ grunt`
+* Ejecutar grunt (instalada por npm) para construir la aplicación:
+    * `$ npx grunt`
 * Configuración del servidor web para ejecutar la aplicación WSGI
-    * apache-mod-wsgi (`$ sudo aptitude install apache2 libapache2-mod-wsgi-py3`)
+    * apache-mod-wsgi (`$ sudo apt install apache2 libapache2-mod-wsgi-py3`)
     * Ejemplo de configuración para apache2 bajo la ruta `/visorxml` de la URL base:
         ```
         # Visor XML
-        WSGIDaemonProcess visorxml python-path=/var/www/visorxml:/home/usuariovisorxml/venvvisorxml/lib/python3.4/site-packages user=www-data group=www-data threads=5
+        WSGIDaemonProcess visorxml python-path=/var/www/visorxml:/home/usuariovisorxml/venv/lib/python3.4/site-packages user=www-data group=www-data threads=5
         WSGIScriptReloading On
         WSGIScriptAlias /visorxml /var/www/visorxml/visorxml.wsgi process-group=visorxml
 
