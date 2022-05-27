@@ -481,18 +481,20 @@
 
       var primary_energy_data = google.visualization.arrayToDataTable([
           ['', ''],
-          ['{% trans "Calefacción" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|unlocalize }}],
-          ['{% trans "Refrigeración" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|unlocalize }}],
-          ['{% trans "ACS" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|unlocalize }}],
+          ['{% trans "Calefacción" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Calefaccion|default_if_none:"0"|unlocalize }}],
+          ['{% trans "Refrigeración" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Refrigeracion|default_if_none:"0"|unlocalize }}],
+          ['{% trans "ACS" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.ACS|default_if_none:"0"|unlocalize }}],
           {% if not report.esvivienda %}
-          ['{% trans "Iluminación" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|unlocalize }}],
+          ['{% trans "Iluminación" %}', {{ report.data.Consumo.EnergiaPrimariaNoRenovable.Iluminacion|default_if_none:"0"|unlocalize }}],
           {% endif %}
       ]);
 
       var consumption_per_vector_data = google.visualization.arrayToDataTable([
           ['', ''],
           {% for vector, value in report.data.Consumo.EnergiaFinalPorVector.items  %}
-            ['{{ vector }}', {{ value|unlocalize }}],
+          {% if value %}
+            ['{{ vector }}', {{ value|default_if_none:"0"|unlocalize }}],
+          {% endif %}
           {% endfor %}
       ]);
 
@@ -500,7 +502,7 @@
           ['', ''],
           {% for servicio, value in report.data.Consumo.EnergiaFinalPorServicio.items  %}
           {% if value %}
-            ['{{ servicio }}', {{ value|unlocalize }}],
+            ['{{ servicio }}', {{ value|default_if_none:"0"|unlocalize }}],
           {% endif %}
           {% endfor %}
       ]);
