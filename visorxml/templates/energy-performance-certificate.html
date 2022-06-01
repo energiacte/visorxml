@@ -1157,28 +1157,32 @@
       <tr>
         <td class="title">{% trans "Consumo Energía final" %}<br /><small>[{% trans "kWh/m<sup>2</sup>·año" %}]</small></td>
         <td class="num">{{ medida.EnergiaFinal.Calefaccion|asnum }}</td>
-        {% if report.data.Consumo and report.data.Consumo.Calefaccion %}
+        {% if report.data.Consumo is not None and report.data.Consumo.EnergiaFinal is not None and report.data.Consumo.EnergiaFinal.Calefaccion is not None %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:report.data.Consumo.EnergiaFinal.Calefaccion|safe }}</td>
         {% else %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Calefaccion|difwith:0|safe }}</td>
         {% endif %}
         <td class="num">{{ medida.EnergiaFinal.Refrigeracion|asnum }}</td>
-        {% if report.data.Consumo and report.data.Consumo.Refrigeracion %}
+        {% if report.data.Consumo is not None and report.data.Consumo.EnergiaFinal is not None and report.data.Consumo.EnergiaFinal.Refrigeracion is not None %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:report.data.Consumo.EnergiaFinal.Refrigeracion|safe }}</td>
         {% else %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Refrigeracion|difwith:0|safe }}</td>
         {% endif %}
         <td class="num">{{ medida.EnergiaFinal.ACS|asnum }}</td>
-        {% if report.data.Consumo and report.data.Consumo.ACS %}
+        {% if report.data.Consumo is not None and report.data.Consumo.EnergiaFinal is not None and report.data.Consumo.EnergiaFinal.ACS is not None %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:report.data.Consumo.EnergiaFinal.ACS|safe }}</td>
         {% else %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.ACS|difwith:0|safe }}</td>
         {% endif %}
+        {% if report.esvivienda %}
+        <td class="num solo-terciario">-</td>
+        {% else %}
         <td class="num solo-terciario">{{ medida.EnergiaFinal.Iluminacion|asnum }}{{ report.data.Consumo.EnergiaFinal.Iluminacion }}</td>
+        {% endif %}
         {% if report.esvivienda %}
         <td class="num calc small dif solo-terciario">-</td>
         {% else %}
-        {% if report.data.Consumo and report.data.Consumo.Iluminacion %}
+        {% if report.data.Consumo is not None and report.data.Consumo.EnergiaFinal is not None and report.data.Consumo.EnergiaFinal.Iluminacion is not None %}
         <td class="num calc small dif solo-terciario">{{ medida.EnergiaFinal.Iluminacion|difwith:report.data.Consumo.EnergiaFinal.Iluminacion|safe }}</td>
         {% else %}
         <td class="num calc small dif">{{ medida.EnergiaFinal.Iluminacion|difwith:0|safe }}</td>
