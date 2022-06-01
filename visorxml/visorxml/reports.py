@@ -313,7 +313,7 @@ class XMLReport(object):
 
         # Si no hay Global definido (vivienda) sumamos resto de servicios
         if not servicios.get('Global', None):
-            servicios['Global'] = sum(servicios.get(servicio, 0) for servicio in servicios if servicio is not 'Global')
+            servicios['Global'] = sum(servicios.get(servicio, 0) for servicio in servicios if servicio.strip() is not 'Global')
 
         element = lxml.etree.SubElement(improvement_xml_fragment, 'EnergiaFinal')
         for servicio, valor in servicios.items():
