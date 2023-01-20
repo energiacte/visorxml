@@ -8,6 +8,7 @@ node_modules
 vendor
 venv
 
+package-lock.json
 visorxml/visorxml.log
 visorxml/media/*
 visorxml/static/css
