@@ -16,6 +16,7 @@ createlang:
 
 install:
 	python3 -m venv venv
+	venv/bin/python -m pip install wheel
 	venv/bin/python -m pip install -Ur requirements.txt
 	mkdir -p visorxml/media/
 	mkdir -p visorxml/served-static/
